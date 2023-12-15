@@ -1,0 +1,31 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: ""
+  sidebar:  
+     search: true
+     collapse-level: 2
+     contents:
+       - section: "Course information"
+         contents:
+           - href: index.qmd
+             text: Posts
+  favicon: images/DACSS_Round_Network.png
+  navbar:
+    background: "#881c1c"
+    logo: images/UMass White Wordmark Horiz.png
+
+execution:
+  freeze: auto
+
+
+format:
+  html:
+    mainfont: Open Sans
+    linkcolor: "#881c1c"
+    toc: true
+    theme: 
+      light: [flatly, styles.scss]
+      dark: [darkly, styles.scss]

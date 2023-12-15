@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "DACSS 601: Data Science Fundamentals",
+    "section": "",
+    "text": "Order By\n       Default\n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Title\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nDate\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nDec 15, 2024\n\n\nChallenge 1 Instructions\n\n\nSean Conway\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Welcome To My Blog",
+    "section": "",
+    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This blog contains challenges, solutions, and demonstration scripts for DACSS 601."
+  },
+  {
+    "objectID": "posts/challenge1_instructions.html",
+    "href": "posts/challenge1_instructions.html",
+    "title": "Challenge 1 Instructions",
+    "section": "",
+    "text": "Code\nknitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)"
+  },
+  {
+    "objectID": "posts/challenge1_instructions.html#challenge-overview",
+    "href": "posts/challenge1_instructions.html#challenge-overview",
+    "title": "Challenge 1 Instructions",
+    "section": "Challenge Overview",
+    "text": "Challenge Overview\nToday’s challenge is to\n\nread in a dataset, and\ndescribe the dataset using both words and any supporting information (e.g., tables, etc)"
+  },
+  {
+    "objectID": "posts/challenge1_instructions.html#read-in-the-data",
+    "href": "posts/challenge1_instructions.html#read-in-the-data",
+    "title": "Challenge 1 Instructions",
+    "section": "Read in the Data",
+    "text": "Read in the Data\nRead in one (or more) of the following data sets, using the correct R package and command.\nYou should have already downloaded the datasets from Google Classroom and stored them in a common directory on your computer.\nIn this challenge, as in all subsequent challenges, the number of stars corresponds to the difficulty of the dataset. You are only required to do the challenge on one dataset, though you are welcome to do it with multiple datasets.\nIn general, I encourage you to “challenge” yourself by trying to work with a dataset above your experience.\n\nrailroad_2012_clean_county.csv ⭐\nbirds.csv ⭐⭐\nFAOstat\\*.csv ⭐⭐\nwild_bird_data.xlsx ⭐⭐⭐\nStateCounty2012.xls ⭐⭐⭐⭐\n\nAdd any comments or documentation as needed. More challenging data sets may require additional code chunks and documentation."
+  },
+  {
+    "objectID": "posts/challenge1_instructions.html#describe-the-data",
+    "href": "posts/challenge1_instructions.html#describe-the-data",
+    "title": "Challenge 1 Instructions",
+    "section": "Describe the data",
+    "text": "Describe the data\nUsing a combination of words and results of R commands, can you provide a high level description of the data? Describe as efficiently as possible where/how the data was (likely) gathered, indicate the cases and variables (both the interpretation and any details you deem useful to the reader to fully understand your chosen data)."
+  }
+]

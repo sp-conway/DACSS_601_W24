@@ -1,0 +1,56 @@
+---
+title: "Challenge 1 Instructions"
+author: "Sean Conway"
+description: "Reading in data and creating a post"
+date: "12/15/2024"
+format:
+  html:
+    toc: true
+    code-fold: true
+    code-copy: true
+    code-tools: true
+categories:
+  - challenge_1
+  - railroads
+  - faostat
+  - wildbirds
+---
+
+```{r}
+#| label: setup
+#| warning: false
+#| message: false
+
+
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+## Challenge Overview
+
+Today's challenge is to
+
+1)  read in a dataset, and
+
+2)  describe the dataset using both words and any supporting information (e.g., tables, etc)
+
+## Read in the Data
+
+Read in one (or more) of the following data sets, using the correct R package and command.
+
+You should have already downloaded the datasets from Google Classroom and stored them in a common directory on your computer.
+
+In this challenge, as in all subsequent challenges, the number of stars corresponds to the difficulty of the dataset. You are only required to do the challenge on one dataset, though you are welcome to do it with multiple datasets.
+
+In general, I encourage you to "challenge" yourself by trying to work with a dataset above your experience.
+
+-   `railroad_2012_clean_county.csv` ⭐
+-   `birds.csv` ⭐⭐
+-   `FAOstat\*.csv` ⭐⭐
+-   `wild_bird_data.xlsx` ⭐⭐⭐
+-   `StateCounty2012.xls` ⭐⭐⭐⭐
+
+Add any comments or documentation as needed. More challenging data sets may require additional code chunks and documentation.
+
+## Describe the data
+
+Using a combination of words and results of R commands, can you provide a high level description of the data? Describe as efficiently as possible where/how the data was (likely) gathered, indicate the cases and variables (both the interpretation and any details you deem useful to the reader to fully understand your chosen data).

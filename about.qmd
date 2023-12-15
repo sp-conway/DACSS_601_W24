@@ -1,0 +1,8 @@
+---
+title: "About"
+image: images/
+about:
+  template: jolla
+---
+
+This blog contains challenges, solutions, and demonstration scripts for DACSS 601.
