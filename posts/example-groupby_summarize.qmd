@@ -1,0 +1,173 @@
+---
+title: "group_by() & summarise()"
+author: "Sean Conway"
+editor: visual
+description: "group_by() & summarise()"  
+date: "12/20/2023"
+editor_options: 
+  chunk_output_type: console
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: false
+    code-copy: true
+    code-tools: true
+    css: styles.scss
+categories:
+  - mutate()
+  - group_by()
+  - summarise()
+  - pipes
+---
+
+```{r}
+#| label: setup
+#| message: false
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(here)
+library(readr)
+```
+
+## Overview
+
+Today, we're going to read in the `poultry_tidy` data and use `group_by()`, `mutate()`, `summarise()` to perform simple operations. We will also discuss the use of the pipe (`%>%`) as a way to streamline data operations.
+
+## Importing the data
+
+```{r}
+poultry <- read_csv(here("posts","_data","poultry_tidy.csv"))
+poultry
+```
+
+## Summarise/Summarize
+
+`summarise()` is a function that allows you to perform multiple data summaries at once. It is one of several "workhorse" functions from the `dplyr` package, which we will use quite a bit this term. Note that you can also use `summarize()`, and it will work just the same.
+
+For example, imagine we want to you use the `mean()` function to calculate the average price of poultry in our dataset. However, we also want to calculate the standard deviation (using `sd()`) to get a sense of the variability in our data. Standard deviation is a measure of how much the values in a variable differ from the average.
+
+In Base `R`, we would need to do this in two separate lines.
+
+```{r}
+mean(poultry$Price_Dollar,na.rm=T) # there are some NA values we need to ignore
+sd(poultry$Price_Dollar,na.rm=T)
+```
+
+Using `summarise()`, we can calculate both of these at once, and without using the `$` syntax. That is, `dplyr` uses something called "data masking" to make working with variables in a tibble/data frame easier (this is sort of an advanced topic that I'll gloss over for now, but see [this link](https://dplyr.tidyverse.org/articles/programming.html#data-masking) if you would like to learn more).
+
+```{r}
+summarise(poultry,
+          mean_price=mean(Price_Dollar,na.rm=T),
+          sd_price=sd(Price_Dollar,na.rm=T))
+```
+
+This is handy because it creates a nice looking table for us. Notice that I was even allowed to give my "new" variables custom names. Without this, the column names will default to the code used to create them and it can look kind of ugly.
+
+```{r}
+summarise(poultry,
+          mean(Price_Dollar,na.rm=T),
+          sd(Price_Dollar,na.rm=T))
+```
+
+I can use many different functions within `summarise() .`Really any function that allows me to distill a variable down to a single value, including median, variance, etc.
+
+```{r}
+summarise(poultry,
+          mean_price=mean(Price_Dollar,na.rm=T),
+          median_price=median(Price_Dollar,na.rm=T),
+          var_price=var(Price_Dollar,na.rm=T),
+          sd_price=sd(Price_Dollar,na.rm=T))
+```
+
+Here we can see that the `mean_price` is higher than the `median_price`. You haven't yet gotten to the stats tutorials, but this suggests that there are some relatively high priced products that are driving the mean price up. The median will be fairly robust to these types of values, so it's a bit lower.
+
+## mutate()
+
+In addition to `summarise()`, there's another workhorse function used for creating new columns: `mutate()`.
+
+Imagine we want to convert price from dollars to cents[^1]. We can do so, using the `mutate()` function, which adds a new column to an existing data frame.[^2] Below we tell the `mutate()` function to create a new column, within the poultry data frame, called `Price_Cents`, which is computed as the price in dollars multiplied by 100.
+
+[^1]: I'm not actually sure why you would want to do so. This is just an example of how to use `mutate().`
+
+[^2]: `mutate()` can also modify an existing column, but we won't be using it for that here.
+
+```{r}
+mutate(poultry, Price_Cents=Price_Dollar*100)
+```
+
+We now see a new column, called `Price_Cents`, that is indeed `Price_Dollar` multiplied by 100.
+
+However, if I run the line below to take another look at the poultry, `Price_Cents` is gone.
+
+```{r}
+poultry
+```
+
+This is because we only ran that line of code creating the column. We didn't actually store it as an object[^3] in our environment. To do so, we need to use the `<-` operator. `<-` is also called the assignment operator, because it assigns `R` objects specific names. Generally speaking, `<-` creates a new object in your environment. We are going to call our new tibble `poultry_1`
+
+[^3]: An object is a generic term for any variable in your `R` environment.
+
+```{r}
+poultry_1 <- mutate(poultry, Price_Cents=Price_Dollar*100)
+```
+
+To take a look at this new data frame, we will just run the name as a separate line of code.
+
+```{r}
+poultry_1
+```
+
+Now we see `Price_Cents` stored as a column.
+
+We're going to move on to `group_by()` , where we'll discuss creating groups within a dataframe. We won't use `poultry_1` any more, because `Price_Cents` is redundant with `Price_Dollar`, and cents is probably less informative tha dollar to most people. However, `mutate()` is a powerful tool (and an alternative to the base `R` `$` syntax) for creating new variables in a data frame.
+
+## group_by()
+
+Often we don't just care about a single numerical summary of a variable - rather, we want to know how that variable changes (or remains constant) across another, categorical variable. For example, we may want to know how salary changes by gender or ethnicity, or how carbon emissions change by state.
+
+`group_by()` allows us to create "groups" in the data based on one or more variables (referred to as grouping variables). We can then use `summarise()` to calculate separate summary statistics for each group.
+
+Below, I use `group_by()` to tell `R` that I want to take the poultry dataset and group by the column `Product`. Then, I pass this grouped data frame to `summarise()`, where I again compute the mean price.
+
+```{r}
+summarise(group_by(poultry, Product),
+          mean_price=mean(Price_Dollar,na.rm=T))
+```
+
+It appears that boneless skinless breasts are by far the most expensive poultry product within this dataset.
+
+## Pipes
+
+You might have noticed that the above operation using `group_by()` and `summarise()` looked a little clunky. We wrapped the `group_by` code within the `summarise` function, and it was a bit hard to read.
+
+There's a way around this, however! We can use the [pipe](https://r4ds.had.co.nz/pipes.html) operator (`%>%`) to streamline our operations. The pipe allows us to pass a take a tibble/data frame and perform multiple intermediate operations on it, passing the modified data frame through on each step.
+
+```{r}
+poultry %>%
+  group_by(Product) %>%
+  summarise(mean_price=mean(Price_Dollar,na.rm=T))
+```
+
+Voila!
+
+Let's break that down a bit. First, I entered `poultry`, the name of the tibble I was working with. I then used the pipe, to pass `poultry` through to the `group_by()` function, where I created groups based on the column `Product`. If I run just these first two lines, we can see that `poultry` looks the same, but `R` now tells us that there are 5 groups present, based on the variable `Product`.
+
+```{r}
+poultry %>%
+  group_by(Product)
+```
+
+Finally, after we group by `Product`, we can then pass this through to the `summarise` function using a pipe, where we compute the mean price in the same way as before.
+
+```{r}
+poultry %>%
+  group_by(Product) %>%
+  summarise(mean_price=mean(Price_Dollar,na.rm=T))
+```
+
+The pipe is a powerful tool that we will use quite a bit in this class. It does take some getting used to, and I don't expect it to click right away. With practice, however, you will become proficient at using it.
+
+## Conclusion
+
+Now you've learned a little bit about how to summarize data, and in particular how to use `group_by()` to summarize it based on a grouping variable. We also learned how to create new columns within an existing data frame.
