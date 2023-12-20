@@ -2,7 +2,7 @@
 title: "Challenge 1 Instructions"
 author: "Sean Conway"
 description: "Reading in data and creating a post"
-date: "12/15/2024"
+date: "12/15/2023"
 format:
   html:
     toc: true
