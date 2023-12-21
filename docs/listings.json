@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/challenge2_instructions.html",
       "/posts/example-groupby_summarize.html",
       "/posts/example-data_import.html",
       "/posts/challenge1_instructions.html"

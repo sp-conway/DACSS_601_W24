@@ -32,7 +32,7 @@
     "href": "index.html",
     "title": "DACSS 601: Data Science Fundamentals",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Title\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nDate\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nDec 20, 2023\n\n\ngroup_by() & summarise()\n\n\nSean Conway\n\n\n\n\nDec 18, 2023\n\n\nData Import\n\n\nSean Conway\n\n\n\n\nDec 15, 2023\n\n\nChallenge 1 Instructions\n\n\nSean Conway\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Title\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nDate\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nDec 21, 2023\n\n\nChallenge 2 Instructions\n\n\nSean Conway\n\n\n\n\nDec 20, 2023\n\n\ngroup_by() & summarise()\n\n\nSean Conway\n\n\n\n\nDec 18, 2023\n\n\nData Import\n\n\nSean Conway\n\n\n\n\nDec 15, 2023\n\n\nChallenge 1 Instructions\n\n\nSean Conway\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -159,5 +159,40 @@
     "title": "group_by() & summarise()",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nI’m not actually sure why you would want to do so. This is just an example of how to use mutate().↩︎\nmutate() can also modify an existing column, but we won’t be using it for that here.↩︎\nAn object is a generic term for any variable in your R environment.↩︎"
+  },
+  {
+    "objectID": "posts/challenge2_instructions.html",
+    "href": "posts/challenge2_instructions.html",
+    "title": "Challenge 2 Instructions",
+    "section": "",
+    "text": "Code\nknitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)"
+  },
+  {
+    "objectID": "posts/challenge2_instructions.html#challenge-overview",
+    "href": "posts/challenge2_instructions.html#challenge-overview",
+    "title": "Challenge 2 Instructions",
+    "section": "Challenge Overview",
+    "text": "Challenge Overview\nToday’s challenge is to\n\nread in a data set, and describe the data using both words and any supporting information (e.g., tables, etc)\nprovide summary statistics for different interesting groups within the data, and interpret those statistics"
+  },
+  {
+    "objectID": "posts/challenge2_instructions.html#read-in-the-data",
+    "href": "posts/challenge2_instructions.html#read-in-the-data",
+    "title": "Challenge 2 Instructions",
+    "section": "Read in the Data",
+    "text": "Read in the Data\nRead in one (or more) of the following data sets, using the correct R package and command.\n\nrailroad*.csv or StateCounty2012.xls ⭐\nFAOstat*.csv or birds.csv ⭐⭐⭐\nhotel_bookings.csv ⭐⭐⭐⭐\n\nAdd any comments or documentation as needed. More challenging data may require additional code chunks and documentation."
+  },
+  {
+    "objectID": "posts/challenge2_instructions.html#describe-the-data",
+    "href": "posts/challenge2_instructions.html#describe-the-data",
+    "title": "Challenge 2 Instructions",
+    "section": "Describe the data",
+    "text": "Describe the data\nUsing a combination of words and results of R commands, can you provide a brief, high level description of the data? Describe as efficiently as possible where/how the data was (likely) gathered, indicate the cases and variables (both the interpretation and any details you deem useful to the reader to fully understand your chosen data)."
+  },
+  {
+    "objectID": "posts/challenge2_instructions.html#provide-grouped-summary-statistics",
+    "href": "posts/challenge2_instructions.html#provide-grouped-summary-statistics",
+    "title": "Challenge 2 Instructions",
+    "section": "Provide Grouped Summary Statistics",
+    "text": "Provide Grouped Summary Statistics\nConduct some exploratory data analysis, using dplyr commands such as group_by(), select(), filter(), and summarise(). Find the central tendency (mean, median, mode) and dispersion (standard deviation, mix/max/quantile) for different subgroups within the data set. Describe what you find."
   }
 ]
