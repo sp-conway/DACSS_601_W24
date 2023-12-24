@@ -55,4 +55,59 @@ livestock <- here("posts","_data","FAOSTAT_livestock.csv") %>%
 
 ## Pivoting
 
-We're going to practice with the `FAOSTAT_livestock.csv`
+We're going to practice with the `FAOSTAT_livestock.csv` dataset.
+
+```{r}
+livestock
+```
+
+First, we're going to remove the `Code` columns. We can get the same information out of the corresponding "non-code" columns, and this cleans things up for us. I will also remove the `Flag` Column.
+
+Finally, if we use the `unique()` function to identify all the unique values in a column, we see that every value of `Unit` is "Head", every value of `Domain` is "Live Animals", and every value of `Element` is "Stocks". If every value is the same, we can remove these columns.
+
+```{r}
+unique(livestock$Unit)
+unique(livestock$Domain)
+unique(livestock$Element)
+livestock_1 <- livestock %>%
+  select(c(-contains("Code"),
+           -contains("Flag"),
+           -Unit,
+           -Domain,
+           -Element)) # use the select() function to choose the columns I'm keeping, contains() to pick the columns containing the string "Code", and the - operator to tell select() that I want all the columns that DO NOT contain "Code" in their titles
+# also use - operator to remove Flag & Flag Description
+# also use - operator to remove Head
+# also use - operator to remove Domain
+livestock_1
+```
+
+Here, we notice that there are observations scattered across multiple rows. For example, if we sort by `Year`, we can see that each the `Item` column contains the livestock being measured, and `Value` contains the amount of livestock. This should probably be spread across columns - i.e,. one column for Camel counts, another for Goat counts, etc.
+
+```{r}
+livestock_1 %>%
+  arrange(Year)
+```
+
+That is, the data are too *long*. We can fix this by using `pivot_wider()` to take these observations and spread them across columns.
+
+```{r}
+livestock_2 <- livestock_1 %>%
+  pivot_wider(names_from = Item,
+              values_from = Value)
+livestock_2
+```
+
+Above, I used `pivot_wider()` to create columns for each unique type of livestock, where the rows contain the amounts of each livestock in a country during a specific year.
+
+I can use `pivot_longer()` to get it back to the previous format. Note that I'm always creating a data frame /tibble with a new name rather than modifying an existing one.
+
+```{r}
+livestock_3 <- livestock_2 %>%
+  pivot_longer(c(Asses,Camels,Cattle,Goats,Horses,Mules,Sheep,Buffaloes,Pigs), # oh my!
+  names_to = "Item", # the column containing these livestock names
+  values_to = "Value",# the column containing these livestock counts
+  values_drop_na = T) # drop NA values
+livestock_3               
+```
+
+There we are! If we compare
