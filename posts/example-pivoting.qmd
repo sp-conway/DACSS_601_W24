@@ -1,0 +1,35 @@
+---
+title: "group_by() & summarise()"
+author: "Sean Conway"
+editor: visual
+description: "group_by() & summarise()"  
+date: "12/24/2023"
+editor_options: 
+  chunk_output_type: console
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: false
+    code-copy: true
+    code-tools: true
+    css: ".../styles.scss"
+categories:
+  - pivot_longer()
+  - pivot_wider()
+  - tidy
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+knitr::opts_chunk$set(echo = T)
+library(here)
+library(tidyverse)
+library(readxl)
+```
+
+## Overview
+
+Today we're going to talk about tidy data, and how to use `pivot_longer()` and `pivot_wider()`. It may not be clear exactly why we're doing things this way, but it will become explicitly clear when we begin data visualization.

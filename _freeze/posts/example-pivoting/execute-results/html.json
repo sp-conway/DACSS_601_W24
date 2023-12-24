@@ -1,0 +1,18 @@
+{
+  "hash": "0c909613300d204f574401ea2b893602",
+  "result": {
+    "markdown": "---\ntitle: \"group_by() & summarise()\"\nauthor: \"Sean Conway\"\neditor: visual\ndescription: \"group_by() & summarise()\"  \ndate: \"12/24/2023\"\neditor_options: \n  chunk_output_type: console\nformat:\n  html:\n    df-print: paged\n    toc: true\n    code-fold: false\n    code-copy: true\n    code-tools: true\n    css: \".../styles.scss\"\ncategories:\n  - pivot_longer()\n  - pivot_wider()\n  - tidy\n---\n\n::: {.cell}\n\n```{.r .cell-code}\nknitr::opts_chunk$set(echo = T)\nlibrary(here)\nlibrary(tidyverse)\nlibrary(readxl)\n```\n:::\n\n\n## Overview\n\nToday we're going to talk about tidy data, and how to use `pivot_longer()` and `pivot_wider()`. The principles discussed here are\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"../site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"../site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

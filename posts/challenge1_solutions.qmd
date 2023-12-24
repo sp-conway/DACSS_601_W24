@@ -131,7 +131,7 @@ For now, we can focus on `birds`, `cattle`, `chickens`, and `livestock`.
 
 In all 4 of these datasets, the `Area` column indicates the location of the agricultural product. `Element` indicates the type of product, `Item` indicates the animal. `Year` indicates the year of estimate. `Unit` indicates the unit of measurement.
 
-These data are "long" or "tidy". Don't worry if you don't know what this means, yet - we haven't gotten there in the course. Each row appears to compromise a case - a single measurement. A single row will contain a measurement of an agricultural product from a single year and in a single country.  
+These data are in a long format - technically I might classify them as "extra long". Don't worry if you don't know what this means, yet - we haven't gotten there in the course. Each row appears to compromise a case - a single measurement. A single row will contain a measurement of an agricultural product from a single year and in a single country.  
 
 The `country` dataset is less interesting. It only contains the codes to match Country and Country groups. We may need to go to the FAOSTAT website to figure this out more. For now, we'll move on to the next dataset.  
 
