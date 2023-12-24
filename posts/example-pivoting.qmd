@@ -33,3 +33,26 @@ library(readxl)
 ## Overview
 
 Today we're going to talk about tidy data, and how to use `pivot_longer()` and `pivot_wider()`. It may not be clear exactly why we're doing things this way, but it will become explicitly clear when we begin data visualization.
+
+## tidy data
+
+According to [Wickham & Grolemund](https://r4ds.had.co.nz/tidy-data.html), there are three principles for tidy data.
+
+-   *Each variable must have its own column.*
+
+-   *Each observation must have its own row.*
+
+-   *Each value must have its own cell.*
+
+This is often easier said than done. However, we're going to get a little bit of practice tidying data using the `tidyr` functions `pivot_longer()` and `pivot_wider()`.
+
+## Read in data
+
+```{r}
+livestock <- here("posts","_data","FAOSTAT_livestock.csv") %>%
+  read_csv()
+```
+
+## Pivoting
+
+We're going to practice with the `FAOSTAT_livestock.csv`
