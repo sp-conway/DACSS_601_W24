@@ -105,9 +105,12 @@ I can use `pivot_longer()` to get it back to the previous format. Note that I'm 
 livestock_3 <- livestock_2 %>%
   pivot_longer(c(Asses,Camels,Cattle,Goats,Horses,Mules,Sheep,Buffaloes,Pigs), # oh my!
   names_to = "Item", # the column containing these livestock names
-  values_to = "Value",# the column containing these livestock counts
-  values_drop_na = T) # drop NA values
+  values_to = "Value")# the column containing these livestock counts # drop NA values
 livestock_3               
 ```
 
-There we are! If we compare
+There we are! However, note that if we compare `livestock_3` and `livestock_1`, the former has a lot more rows than the latter. This is because `livestock_1` had both explicit and implicit missing data. That is, some items were marked as `NA`, and others were not listed. When we pivoted wider, these implicit values became explicit, and this explicitness remained when we pivoted longer again.
+
+## Conclusion
+
+Now you know a little bit about pivoting & tidy data. It takes a lot of practice, and we'll work on it more this semester.
