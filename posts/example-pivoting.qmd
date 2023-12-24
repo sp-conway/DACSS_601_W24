@@ -2,7 +2,7 @@
 title: "group_by() & summarise()"
 author: "Sean Conway"
 editor: visual
-description: "group_by() & summarise()"  
+description: "pivoting/tidy data"  
 date: "12/24/2023"
 editor_options: 
   chunk_output_type: console
