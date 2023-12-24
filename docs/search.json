@@ -32,7 +32,7 @@
     "href": "index.html",
     "title": "DACSS 601: Data Science Fundamentals",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Title\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nDate\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nDec 24, 2023\n\n\nChallenge 3 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\ngroup_by() & summarise()\n\n\nSean Conway\n\n\n\n\nDec 23, 2023\n\n\nChallenge 1 Solution\n\n\nSean Conway\n\n\n\n\nDec 21, 2023\n\n\nChallenge 2 Instructions\n\n\nSean Conway\n\n\n\n\nDec 20, 2023\n\n\ngroup_by() & summarise()\n\n\nSean Conway\n\n\n\n\nDec 18, 2023\n\n\nData Import\n\n\nSean Conway\n\n\n\n\nDec 15, 2023\n\n\nChallenge 1 Instructions\n\n\nSean Conway\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Title\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nDate\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nDec 24, 2023\n\n\nChallenge 3 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\npivoting/tidy data\n\n\nSean Conway\n\n\n\n\nDec 23, 2023\n\n\nChallenge 1 Solution\n\n\nSean Conway\n\n\n\n\nDec 21, 2023\n\n\nChallenge 2 Instructions\n\n\nSean Conway\n\n\n\n\nDec 20, 2023\n\n\ngroup_by() & summarise()\n\n\nSean Conway\n\n\n\n\nDec 18, 2023\n\n\nData Import\n\n\nSean Conway\n\n\n\n\nDec 15, 2023\n\n\nChallenge 1 Instructions\n\n\nSean Conway\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -219,14 +219,14 @@
   {
     "objectID": "posts/example-pivoting.html",
     "href": "posts/example-pivoting.html",
-    "title": "group_by() & summarise()",
+    "title": "pivoting/tidy data",
     "section": "",
     "text": "knitr::opts_chunk$set(echo = T)\nlibrary(here)\nlibrary(tidyverse)\nlibrary(readxl)"
   },
   {
     "objectID": "posts/example-pivoting.html#overview",
     "href": "posts/example-pivoting.html#overview",
-    "title": "group_by() & summarise()",
+    "title": "pivoting/tidy data",
     "section": "Overview",
     "text": "Overview\nToday we’re going to talk about tidy data, and how to use pivot_longer() and pivot_wider(). It may not be clear exactly why we’re doing things this way, but it will become explicitly clear when we begin data visualization."
   },
@@ -275,28 +275,28 @@
   {
     "objectID": "posts/example-pivoting.html#tidy-data",
     "href": "posts/example-pivoting.html#tidy-data",
-    "title": "group_by() & summarise()",
+    "title": "pivoting/tidy data",
     "section": "tidy data",
     "text": "tidy data\nAccording to Wickham & Grolemund, there are three principles for tidy data.\n\nEach variable must have its own column.\nEach observation must have its own row.\nEach value must have its own cell.\n\nThis is often easier said than done. However, we’re going to get a little bit of practice tidying data using the tidyr functions pivot_longer() and pivot_wider()."
   },
   {
     "objectID": "posts/example-pivoting.html#read-in-data",
     "href": "posts/example-pivoting.html#read-in-data",
-    "title": "group_by() & summarise()",
+    "title": "pivoting/tidy data",
     "section": "Read in data",
     "text": "Read in data\n\nlivestock &lt;- here(\"posts\",\"_data\",\"FAOSTAT_livestock.csv\") %&gt;%\n  read_csv()\n\nRows: 82116 Columns: 14\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (8): Domain Code, Domain, Area, Element, Item, Unit, Flag, Flag Description\ndbl (6): Area Code, Element Code, Item Code, Year Code, Year, Value\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
   },
   {
     "objectID": "posts/example-pivoting.html#pivoting",
     "href": "posts/example-pivoting.html#pivoting",
-    "title": "group_by() & summarise()",
+    "title": "pivoting/tidy data",
     "section": "Pivoting",
     "text": "Pivoting\nWe’re going to practice with the FAOSTAT_livestock.csv dataset.\n\nlivestock\n\n\n\n  \n\n\n\nFirst, we’re going to remove the Code columns. We can get the same information out of the corresponding “non-code” columns, and this cleans things up for us. I will also remove the Flag Column.\nFinally, if we use the unique() function to identify all the unique values in a column, we see that every value of Unit is “Head”, every value of Domain is “Live Animals”, and every value of Element is “Stocks”. If every value is the same, we can remove these columns.\n\nunique(livestock$Unit)\n\n[1] \"Head\"\n\nunique(livestock$Domain)\n\n[1] \"Live Animals\"\n\nunique(livestock$Element)\n\n[1] \"Stocks\"\n\nlivestock_1 &lt;- livestock %&gt;%\n  select(c(-contains(\"Code\"),\n           -contains(\"Flag\"),\n           -Unit,\n           -Domain,\n           -Element)) # use the select() function to choose the columns I'm keeping, contains() to pick the columns containing the string \"Code\", and the - operator to tell select() that I want all the columns that DO NOT contain \"Code\" in their titles\n# also use - operator to remove Flag & Flag Description\n# also use - operator to remove Head\n# also use - operator to remove Domain\nlivestock_1\n\n\n\n  \n\n\n\nHere, we notice that there are observations scattered across multiple rows. For example, if we sort by Year, we can see that each the Item column contains the livestock being measured, and Value contains the amount of livestock. This should probably be spread across columns - i.e,. one column for Camel counts, another for Goat counts, etc.\n\nlivestock_1 %&gt;%\n  arrange(Year)\n\n\n\n  \n\n\n\nThat is, the data are too long. We can fix this by using pivot_wider() to take these observations and spread them across columns.\n\nlivestock_2 &lt;- livestock_1 %&gt;%\n  pivot_wider(names_from = Item,\n              values_from = Value)\nlivestock_2\n\n\n\n  \n\n\n\nAbove, I used pivot_wider() to create columns for each unique type of livestock, where the rows contain the amounts of each livestock in a country during a specific year.\nI can use pivot_longer() to get it back to the previous format. Note that I’m always creating a data frame /tibble with a new name rather than modifying an existing one.\n\nlivestock_3 &lt;- livestock_2 %&gt;%\n  pivot_longer(c(Asses,Camels,Cattle,Goats,Horses,Mules,Sheep,Buffaloes,Pigs), # oh my!\n  names_to = \"Item\", # the column containing these livestock names\n  values_to = \"Value\")# the column containing these livestock counts # drop NA values\nlivestock_3               \n\n\n\n  \n\n\n\nThere we are! However, note that if we compare livestock_3 and livestock_1, the former has a lot more rows than the latter. This is because livestock_1 had both explicit and implicit missing data. That is, some items were marked as NA, and others were not listed. When we pivoted wider, these implicit values became explicit, and this explicitness remained when we pivoted longer again."
   },
   {
     "objectID": "posts/example-pivoting.html#conclusion",
     "href": "posts/example-pivoting.html#conclusion",
-    "title": "group_by() & summarise()",
+    "title": "pivoting/tidy data",
     "section": "Conclusion",
     "text": "Conclusion\nNow you know a little bit about pivoting & tidy data. It takes a lot of practice, and we’ll work on it more this semester."
   }
