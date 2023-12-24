@@ -1,0 +1,270 @@
+---
+title: "Challenge 1 Solution"
+author: "Sean Conway"
+description: "Reading in data and creating a post"
+date: "12/23/2023"
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: true
+    code-copy: true
+    code-tools: true
+    css: ".../styles.scss"
+categories:
+  - challenge_1
+  - solution
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: true
+
+library(tidyverse)
+library(readxl)
+library(here)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Challenge Overview
+
+Today's challenge is to
+
+1)  read in a dataset, and
+
+2)  describe the dataset using both words and any supporting information (e.g., tables, etc)
+
+## Read in the Data
+
+Read in one (or more) of the following data sets, using the correct R package and command.
+
+You should have already downloaded the datasets from Google Classroom and stored them in a common directory on your computer.
+
+In this challenge, as in all subsequent challenges, the number of stars corresponds to the difficulty of the dataset. You are only required to do the challenge on one dataset, though you are welcome to do it with multiple datasets.
+
+In general, I encourage you to "challenge" yourself by trying to work with a dataset above your experience.
+
+-   `railroad_2012_clean_county.csv` ⭐
+-   `birds.csv` ⭐⭐
+-   `FAOstat\*.csv` ⭐⭐
+-   `wild_bird_data.xlsx` ⭐⭐⭐
+-   `StateCounty2012.xls` ⭐⭐⭐⭐
+
+Add any comments or documentation as needed. More challenging data sets may require additional code chunks and documentation.
+
+
+::: panel-tabset
+## Railroad ⭐
+
+It is hard to get much information about the data source or contents from a `.csv` file - as compared to the formatted `.xlsx` version of the same data described below.
+
+### Read the Data
+
+```{r}
+railroad <- here("posts","_data","railroad_2012_clean_county.csv") %>%
+  read_csv()
+railroad
+```
+
+From inspection, we can that the three variables are named *state*, *county*, and *total employees*. Combined with the name of the file, this appears to be the aggregated data on the number of employees working for the railroad in each county 2012. We assume that the 2930 cases - which are counties embedded within states^1^ - consist only of counties where there are railroad employees?
+
+```{r}
+railroad %>%
+  select(state) %>%
+  n_distinct(.)
+
+railroad%>%
+  select(state)%>%
+  distinct()
+```
+
+With a few simple commands, we can confirm that there are 53 "states" represented in the data. To identify the additional non-state areas (probably District of Columbia, plus some combination of Puerto Rico and/or overseas addresses), we can print out a list of unique state names.
+
+------------------------------------------------------------------------
+
+[1: We can identify case variables because both are character variables, which in tidy lingo are grouping variables not values.]{style="font-size:10px"}
+
+
+## FAOSTAT / birds⭐⭐
+
+Once again, a `.csv` file lacks any of the additional information that might be present in a published Excel table. So, we know the data are likely to be about birds, but will we be looking at individual pet birds, prices of bird breeds sold in stores, the average flock size of wild birds - who knows!
+
+The *FAOSTAT\**.csv files have some additional information - the FAO - which a Google search reveals to be the Food and Agriculture Association of the United Nations publishes country-level data regularly in a [database called FAOSTAT](https://www.fao.org/faostat/en/#home). So my best guess at this point is that we are going to be looking at country-level estimates of the number of birds that are raised for eggs and poultry, but we will see if this is right by inspecting the data.
+
+We're also lumping in the `birds.csv` dataset here, because it comes from the same source. 
+
+### Read the Data
+
+
+```{r}
+birds <- here("posts","_data","birds.csv") %>%
+  read_csv()
+chickens <- here("posts","_data","FAOSTAT_egg_chicken.csv") %>%
+  read_csv()
+cattle <- here("posts","_data","FAOSTAT_cattle_dairy.csv") %>%
+  read_csv()
+country <- here("posts","_data","FAOSTAT_country_groups.csv") %>%
+  read_csv()
+livestock <- here("posts","_data","FAOSTAT_livestock.csv") %>%
+  read_csv()
+birds
+chickens
+cattle
+country
+livestock
+```
+
+```{r}
+glimpse(birds)
+glimpse(chickens)
+glimpse(cattle)
+glimpse(country)
+glimpse(livestock)
+```
+
+There's clearly a lot going on with these data, but using the `glimpse()` function, as well as scrolling through the data, allows us to get more of a handle on the datasets. The columns containing `Code` appear to be redundant with another column, so we can likely ignore them for now. 
+
+For now, we can focus on `birds`, `cattle`, `chickens`, and `livestock`.  
+
+In all 4 of these datasets, the `Area` column indicates the location of the agricultural product. `Element` indicates the type of product, `Item` indicates the animal. `Year` indicates the year of estimate. `Unit` indicates the unit of measurement.
+
+These data are "long" or "tidy". Don't worry if you don't know what this means, yet - we haven't gotten there in the course. Each row appears to compromise a case - a single measurement. A single row will contain a measurement of an agricultural product from a single year and in a single country.  
+
+The `country` dataset is less interesting. It only contains the codes to match Country and Country groups. We may need to go to the FAOSTAT website to figure this out more. For now, we'll move on to the next dataset.  
+
+
+## Wild Birds ⭐⭐⭐
+
+The "wild_bird_data" sheet is in Excel format (*.xlsx*) instead of the *.csv* format of the earlier data sets. In theory, it should be no harder to read in than an Excel worksheet (or even workbook) as compared to a .csv file - there is a package called *read_xl* that is part of the tidyverse that easily reads in excel files.
+
+However, in practice, most people use Excel sheets as a publication format - not a way to store data, so there is almost always a ton of "junk" in the file that is NOT part of the data table that we want to read in. Sometimes the additional "junk" is incredibly useful - it might include table notes or information about data sources. However, we still need a systematic way to identify this junk and get rid of it during the data reading step.
+
+For example, lets see what happens here if we just read in the wild bird data straight from excel.
+
+```{r}
+wildbirds <- here("posts","_data","wild_bird_data.xlsx") %>%
+  read_excel()
+wildbirds
+```
+
+Hm, this doesn't seem quite right. It is clear that the first "case" has information in it that looks more like variable labels. Lets take a quick look at the raw data.
+
+![Wild Bird Excel File](solution_images/WildBirds.png) 
+
+Sure enough the Excel file first row does contain additional information, a pointer to the article that this data was drawn from, and a quick Google reveals the article is \[Nee, S., Read, A., Greenwood, J. et al. The relationship between abundance and body size in British birds. Nature 351, 312--313 (1991)\] (https://www.nature.com/articles/351312a0)
+
+### Skipping a row
+
+We could try to manually adjust things - remove the first row, change the column names, and then change the column types. But this is both a lot of work, and not really a best practice for data management. Lets instead re-read the data in with the *skip* argument from `read_excel`, and see if it fixes all of our problems!
+
+```{r}
+wildbirds <- here("posts","_data","wild_bird_data.xlsx") %>%
+  read_excel(skip = 1)
+wildbirds 
+
+```
+
+This now looks great! Both variables are numeric, and now they correctly show up as *double* or (<dbl>). The variable names might be a bit tough to work with, though, so it can be easier to assign new column names on the read in - and then manually adjust axis labels, etc once you are working on your publication-quality graphs.
+
+Note that I skip two rows this time, and apply my own column names.
+
+```{r}
+wildbirds <- here("posts","_data","wild_bird_data.xlsx") %>% 
+  read_excel(skip = 2,col_names = c("weight", "pop_size"))
+wildbirds
+```
+
+The data are pretty straightforward to interpret.  
+
+```{r}
+glimpse(wildbirds)
+```
+
+Each row is a single case, with measurements of weight and population size for (presumably) a single species of bird.  
+
+We may need to take a look at the publication if we want to figure out the species' name. This is above and beyond this challenge, so we will move on.  
+## Railroad (xls) ⭐⭐⭐⭐
+
+The railroad data set is our most challenging data to read in this week, but is (by comparison) a fairly straightforward formatted table published by the Railroad Retirement Board. The *value* variable is a count of the number of employees in each *county* and *state* combination. ![Railroad Employment](solution_images/railroad.png) 
+
+Looking at the excel file, we can see that there are only a few issues: 1. There are three rows at the top of the sheet that are not needed 2. There are blank columns that are not needed. 3. There are Total rows for each state that are not needed
+
+### Skipping title rows
+
+For the first issue, we use the "skip" option on `read_excel` from the `readxl` package to skip the rows at the top.
+
+```{r}
+here("posts","_data","StateCounty2012.xls") %>%
+  read_excel(skip=3)
+```
+
+### Removing empty columns
+
+For the second issue, I name the blank columns "delete" to make is easy to remove the unwanted columns. I then use `select` (with the ! sign to designate the complement or NOT) to select columns we wish to keep in the dataset - the rest are removed. Note that I skip 4 rows this time as I do not need the original header row.
+
+There are other approaches you could use for this task (e.g., remove all columns that have no valid volues), but hard coding of variable names and types during data read in is not considered a violation of best practices and - if used strategically - can often make later data cleaning much easier.
+
+```{r}
+here("posts","_data","StateCounty2012.xls")  %>%
+  read_excel(skip = 4,
+                     col_names= c("State", "delete", "County", "delete", "Employees"))%>%
+  select(-contains("delete"))
+```
+
+### Filtering "total" rows
+
+For the third issue, we are going to use `filter` to identify (and drop the rows that have the word "Total" in the State column). `str_detect` can be used to find specific rows within a column that have the designated "pattern", while the "!" designates the complement of the selected rows (i.e., those without the "pattern" we are searching for.)
+
+The `str_detect` command is from the `stringr` package, and is a powerful and easy to use implementation of grep and regex in the tidyverse - the base R functions (grep, gsub, etc) are classic but far more difficult to use, particularly for those not in practice. Be sure to explore the `stringr` package on your own.
+
+```{r}
+railroad <- here("posts","_data","StateCounty2012.xls") %>%
+  read_excel(skip = 4,col_names= c("State", "delete", "County", "delete", "Employees"))%>%
+  select(!contains("delete"))%>%
+  filter(!str_detect(State, "Total"))
+railroad
+```
+
+### Remove any table notes
+
+Tables often have notes in the last few table rows. You can check table limits and use this information during data read-in to not read the notes by setting the `n-max` option at the total number of rows to read, or less commonly, the `range` option to specify the spreadsheet range in standard excel naming (e.g., "B4:R142"). If you didn't handle this on read in, you can use the `tail` command to check for notes and either `tail` or `head` to keep only the rows that you need.
+
+```{r}
+tail(railroad, 10)
+#remove the last two observations
+railroad <- head(railroad, -2)
+tail(railroad, 10)
+```
+
+### The `range` approach  
+
+We can manually specify the range of cells we want to read in using the `range` argument. To do so, you'll need to open the file up in Excel (or a similar program) and figure this out on your own.  
+
+```{r}
+railroad_new <- here("posts","_data","StateCounty2012.xls") %>%
+  read_excel(range = "B4:F2990", col_names= c("State", "delete", "County", "delete", "Employees")) %>%
+  select(!contains("delete"))%>%
+  filter(!str_detect(State, "Total"))
+railroad_new
+tail(railroad_new,10)
+```
+
+### Confirm cases
+
+And that is all it takes! The data are now ready for analysis. Lets see if we get the same number of unique states that were in the cleaned data in exercise 1.
+
+```{r}
+railroad%>%
+  select(State)%>%
+  n_distinct(.)
+
+railroad%>%
+  select(State)%>%
+  distinct()
+```
+
+Oh my goodness! It seems that we have an additional "State" - it looks like Canada is in the full excel data and not the tidy data. This is one example of why it is good practice to always work from the original data source!
+:::
