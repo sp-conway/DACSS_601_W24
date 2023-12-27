@@ -1,0 +1,157 @@
+---
+title: "Data analysis pipeline"
+author: "Sean Conway"
+editor: visual
+description: "Data analysis pipeline"  
+date: "12/27/2023"
+editor_options: 
+  chunk_output_type: console
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: false
+    code-copy: true
+    code-tools: true
+    css: "../styles.scss"
+categories:
+  - data import
+  - data wrangling
+  - dplyr
+  - tidyr
+---
+
+```{r}
+#| label: setup
+#| message: false
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(readxl)
+library(tidyverse)
+```
+
+## Overview
+
+So far, we have discussed aspects of the data pipeline in isolation. Today, we're going to put all of that together and discuss how to make all of this into a coherent and reproducible process.
+
+We're going to do so using a dataset we've worked with before `StateCounty2012.xls`.
+
+This analysis will focus on looking at employee counts & proportions within and across US states.
+
+Note that this analysis will somewhat overlap with challenge 2, but that is okay. Challenge 2 is more about computing descriptive statistics, while this analysis is more about creating a systematic and coherent data pipeline.
+
+## Data Import
+
+First, we begin by importing the data. We've discussed this before (see the [Challenge 1 solutions post](https://sp-conway.github.io/DACSS_601_W24/posts/challenge1_solutions.html) for more detail), but we'll need to do some work to get this data imported. Here, I'm using the `"range"` argument of `read_excel()` to specify the cells I want to read in.
+
+```{r}
+railroad_initial <- here("posts","_data","StateCounty2012.xls") %>%
+  read_excel(range="B5:F2990",col_names=c("state","delete","county","delete","total_employees"))
+railroad_initial
+```
+
+As we did in Challenge 1, we'll remove those `delete` columns and filter out the rows where `"total"` is found.
+
+```{r}
+railroad <- railroad_initial %>%
+  filter(str_detect(state,"Total",negate=T)) %>%
+  select(!contains("delete"))
+railroad
+```
+
+## A bit more data wrangling
+
+Before we start doing more analysis, we need to do some more wrangling.
+
+The `railroad` data frame contains employee counts not only from the 50 US states but also from military designations and Canada. For our purposes, we are going to focus on the 50 US states. This means that we need a principled way to filter out these other rows from our dataset.
+
+Luckily, the [`datasets` package](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html), which comes pre-loaded in `R`, contains a vector of all state abbreviations, named `state.abb`.
+
+```{r}
+state.abb
+```
+
+We can use the `%in%` operator, which returns `TRUE` if a value is found within a vector, to filter out non-states.
+
+```{r}
+"b" %in% c("a","b","c")
+"b" %in% c("x","y","z")
+```
+
+```{r}
+railroad_us <- railroad %>%
+  filter(state %in% state.abb)
+railroad_us
+```
+
+Let's double-check to make sure we have all 50 states.
+
+```{r}
+railroad_us %>%
+  summarise(n=n_distinct(state))
+```
+
+Yes! It all worked, and we can start analyzing the data.
+
+## Analysis
+
+For this analysis, we are going to focus on *exploring* the data.
+
+The first step of this analysis will be to get state totals of employees. Below, we use `group_by()` and `summarise()` to add up the employees within a state and put them in a new column named `total`.
+
+```{r}
+railroad_state_totals <- railroad_us %>%
+  group_by(state) %>%
+  summarise(total=sum(total_employees)) %>%
+  ungroup() # always use ungroup!!!
+railroad_state_totals
+```
+
+Now that we have these totals, we're going to calculate some measures of *central tendency* and *dispersion*. Central tendency refers to the "middle" of the dataset (roughly speaking) and is commonly measured using mean or median. Dispersion refers to the extent to which the data differ from the center and is commonly measured using standard deviation and range. We'll also use `min()` and `max()` to find the the minimum and maximum number of employees in a state.
+
+```{r}
+railroad_state_totals %>%
+  summarise(mean=mean(total),
+            median=median(total),
+            sd=sd(total),
+            range=max(total)-min(total),
+            min=min(total),
+            max=max(total))
+```
+
+Note that the mean is substantially higher than the median! This indicates that the data are somewhat *skewed* - essentially that there could be a few states with high employee totals that are driving up the average.
+
+Let's take a closer look at the data to see if we can't find those states with high numbers of employees. We can use `arrange()` to sort the data based on `total`, and then `slice()` to pick out the top 5 rows.
+
+```{r}
+railroad_state_totals %>%
+  arrange(desc(total)) %>%
+  slice(1:5)
+```
+
+We can see that there are actually *three* states with substantially high employee totals - Texas, Illinois, and New York.
+
+Let's take a closer look at those states in `railroad_us`\
+. It seems highly possible that, within those states, there are some counties that have a much higher proportion of employees. For example, Illinois's Cook County, which contains the city of Chicago, almost certainly has a high proportion of railroad employees.
+
+Below, we use `group_by()` and `mutate()` to create a new column that contains the total employees within each state[^1], called `n`. This is the denominator that will allow us to compute the proportion of each state's employees that come from a particular county. Then, we use `mutate()` to compute these proportions and then arrange the data descending based on proportions to see if there are any high proportion counties.
+
+[^1]: We also could have used `_join()` function to combine the `railroad_us` and `railroad_state_totals` data frames. We haven't gotten to joins yet, so I'll save that for a later date.
+
+```{r}
+railroad_us %>%
+  filter(state %in% c("TX","IL","NY")) %>%
+  group_by(state) %>%
+  mutate(n=sum(total_employees)) %>%
+  ungroup() %>%
+  mutate(prop=total_employees/n) %>%
+  arrange(desc(prop))
+```
+
+Indeed, Cook County in Illinois (which contains Chicago), Suffolk County in New York (which contains much of Long Island), and Tarrant County in Texas (which contains Forth Worth), all have high proportions of their states' railroad employees. These are all populous areas that likely have high amounts of commercial and passenger traffic.
+
+That concludes our analysis for now. The next step would be to create visualizations, though we haven't gotten there in the course.
+
+## Conclusion
+
+Even with a fairly simple dataset like `StateCounty2012`, there is plenty of analysis to be done! In this example, we read in a problematic data file, filtered out cases that weren't related to our research question, and identified interesting patterns for our dataset. We did so entirely within a coherent data pipeline.

@@ -32,7 +32,7 @@
     "href": "index.html",
     "title": "DACSS 601: Data Science Fundamentals",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Title\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nDate\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nDec 27, 2023\n\n\nChallenge 6 Instructions\n\n\nSean Conway\n\n\n\n\nDec 27, 2023\n\n\nChallenge 5 Instructions\n\n\nSean Conway\n\n\n\n\nDec 27, 2023\n\n\nChallenge 4 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\nChallenge 3 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\npivoting/tidy data\n\n\nSean Conway\n\n\n\n\nDec 23, 2023\n\n\nChallenge 1 Solution\n\n\nSean Conway\n\n\n\n\nDec 21, 2023\n\n\nChallenge 2 Instructions\n\n\nSean Conway\n\n\n\n\nDec 20, 2023\n\n\ngroup_by() & summarise()\n\n\nSean Conway\n\n\n\n\nDec 18, 2023\n\n\nData Import\n\n\nSean Conway\n\n\n\n\nDec 15, 2023\n\n\nChallenge 1 Instructions\n\n\nSean Conway\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Title\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nDate\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nDec 27, 2023\n\n\nChallenge 6 Instructions\n\n\nSean Conway\n\n\n\n\nDec 27, 2023\n\n\nChallenge 5 Instructions\n\n\nSean Conway\n\n\n\n\nDec 27, 2023\n\n\nData analysis pipeline\n\n\nSean Conway\n\n\n\n\nDec 27, 2023\n\n\nChallenge 4 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\nChallenge 3 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\npivoting/tidy data\n\n\nSean Conway\n\n\n\n\nDec 23, 2023\n\n\nChallenge 1 Solution\n\n\nSean Conway\n\n\n\n\nDec 21, 2023\n\n\nChallenge 2 Instructions\n\n\nSean Conway\n\n\n\n\nDec 20, 2023\n\n\ngroup_by() & summarise()\n\n\nSean Conway\n\n\n\n\nDec 18, 2023\n\n\nData Import\n\n\nSean Conway\n\n\n\n\nDec 15, 2023\n\n\nChallenge 1 Instructions\n\n\nSean Conway\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -418,5 +418,54 @@
     "title": "Challenge 6 Instructions",
     "section": "Visualizing Part-Whole Relationships",
     "text": "Visualizing Part-Whole Relationships"
+  },
+  {
+    "objectID": "posts/example-data_analysis_pipeline.html",
+    "href": "posts/example-data_analysis_pipeline.html",
+    "title": "Data analysis pipeline",
+    "section": "",
+    "text": "knitr::opts_chunk$set(echo = TRUE)\nlibrary(here)\nlibrary(readxl)\nlibrary(tidyverse)"
+  },
+  {
+    "objectID": "posts/example-data_analysis_pipeline.html#overview",
+    "href": "posts/example-data_analysis_pipeline.html#overview",
+    "title": "Data analysis pipeline",
+    "section": "Overview",
+    "text": "Overview\nSo far, we have discussed aspects of the data pipeline in isolation. Today, we’re going to put all of that together and discuss how to make all of this into a coherent and reproducible process.\nWe’re going to do so using a dataset we’ve worked with before StateCounty2012.xls.\nThis analysis will focus on looking at employee counts & proportions within and across US states.\nNote that this analysis will somewhat overlap with challenge 2, but that is okay. Challenge 2 is more about computing descriptive statistics, while this analysis is more about creating a systematic and coherent data pipeline."
+  },
+  {
+    "objectID": "posts/example-data_analysis_pipeline.html#data-import",
+    "href": "posts/example-data_analysis_pipeline.html#data-import",
+    "title": "Data analysis pipeline",
+    "section": "Data Import",
+    "text": "Data Import\nFirst, we begin by importing the data. We’ve discussed this before (see the Challenge 1 solutions post for more detail), but we’ll need to do some work to get this data imported. Here, I’m using the \"range\" argument of read_excel() to specify the cells I want to read in.\n\nrailroad_initial &lt;- here(\"posts\",\"_data\",\"StateCounty2012.xls\") %&gt;%\n  read_excel(range=\"B5:F2990\",col_names=c(\"state\",\"delete\",\"county\",\"delete\",\"total_employees\"))\n\nNew names:\n• `delete` -&gt; `delete...2`\n• `delete` -&gt; `delete...4`\n\nrailroad_initial\n\n\n\n  \n\n\n\nAs we did in Challenge 1, we’ll remove those delete columns and filter out the rows where \"total\" is found.\n\nrailroad &lt;- railroad_initial %&gt;%\n  filter(str_detect(state,\"Total\",negate=T)) %&gt;%\n  select(!contains(\"delete\"))\nrailroad"
+  },
+  {
+    "objectID": "posts/example-data_analysis_pipeline.html#a-bit-more-data-wrangling",
+    "href": "posts/example-data_analysis_pipeline.html#a-bit-more-data-wrangling",
+    "title": "Data analysis pipeline",
+    "section": "A bit more data wrangling",
+    "text": "A bit more data wrangling\nBefore we start doing more analysis, we need to do some more wrangling.\nThe railroad data frame contains employee counts not only from the 50 US states but also from military designations and Canada. For our purposes, we are going to focus on the 50 US states. This means that we need a principled way to filter out these other rows from our dataset.\nLuckily, the datasets package, which comes pre-loaded in R, contains a vector of all state abbreviations, named state.abb.\n\nstate.abb\n\n [1] \"AL\" \"AK\" \"AZ\" \"AR\" \"CA\" \"CO\" \"CT\" \"DE\" \"FL\" \"GA\" \"HI\" \"ID\" \"IL\" \"IN\" \"IA\"\n[16] \"KS\" \"KY\" \"LA\" \"ME\" \"MD\" \"MA\" \"MI\" \"MN\" \"MS\" \"MO\" \"MT\" \"NE\" \"NV\" \"NH\" \"NJ\"\n[31] \"NM\" \"NY\" \"NC\" \"ND\" \"OH\" \"OK\" \"OR\" \"PA\" \"RI\" \"SC\" \"SD\" \"TN\" \"TX\" \"UT\" \"VT\"\n[46] \"VA\" \"WA\" \"WV\" \"WI\" \"WY\"\n\n\nWe can use the %in% operator, which returns TRUE if a value is found within a vector, to filter out non-states.\n\n\"b\" %in% c(\"a\",\"b\",\"c\")\n\n[1] TRUE\n\n\"b\" %in% c(\"x\",\"y\",\"z\")\n\n[1] FALSE\n\n\n\nrailroad_us &lt;- railroad %&gt;%\n  filter(state %in% state.abb)\nrailroad_us\n\n\n\n  \n\n\n\nLet’s double-check to make sure we have all 50 states.\n\nrailroad_us %&gt;%\n  summarise(n=n_distinct(state))\n\n\n\n  \n\n\n\nYes! It all worked, and we can start analyzing the data."
+  },
+  {
+    "objectID": "posts/example-data_analysis_pipeline.html#analysis",
+    "href": "posts/example-data_analysis_pipeline.html#analysis",
+    "title": "Data analysis pipeline",
+    "section": "Analysis",
+    "text": "Analysis\nFor this analysis, we are going to focus on exploring the data.\nThe first step of this analysis will be to get state totals of employees. Below, we use group_by() and summarise() to add up the employees within a state and put them in a new column named total.\n\nrailroad_state_totals &lt;- railroad_us %&gt;%\n  group_by(state) %&gt;%\n  summarise(total=sum(total_employees)) %&gt;%\n  ungroup() # always use ungroup!!!\nrailroad_state_totals\n\n\n\n  \n\n\n\nNow that we have these totals, we’re going to calculate some measures of central tendency and dispersion. Central tendency refers to the “middle” of the dataset (roughly speaking) and is commonly measured using mean or median. Dispersion refers to the extent to which the data differ from the center and is commonly measured using standard deviation and range. We’ll also use min() and max() to find the the minimum and maximum number of employees in a state.\n\nrailroad_state_totals %&gt;%\n  summarise(mean=mean(total),\n            median=median(total),\n            sd=sd(total),\n            range=max(total)-min(total),\n            min=min(total),\n            max=max(total))\n\n\n\n  \n\n\n\nNote that the mean is substantially higher than the median! This indicates that the data are somewhat skewed - essentially that there could be a few states with high employee totals that are driving up the average.\nLet’s take a closer look at the data to see if we can’t find those states with high numbers of employees. We can use arrange() to sort the data based on total, and then slice() to pick out the top 5 rows.\n\nrailroad_state_totals %&gt;%\n  arrange(desc(total)) %&gt;%\n  slice(1:5)\n\n\n\n  \n\n\n\nWe can see that there are actually three states with substantially high employee totals - Texas, Illinois, and New York.\nLet’s take a closer look at those states in railroad_us\n. It seems highly possible that, within those states, there are some counties that have a much higher proportion of employees. For example, Illinois’s Cook County, which contains the city of Chicago, almost certainly has a high proportion of railroad employees.\nBelow, we use group_by() and mutate() to create a new column that contains the total employees within each state1, called n. This is the denominator that will allow us to compute the proportion of each state’s employees that come from a particular county. Then, we use mutate() to compute these proportions and then arrange the data descending based on proportions to see if there are any high proportion counties.\n\nrailroad_us %&gt;%\n  filter(state %in% c(\"TX\",\"IL\",\"NY\")) %&gt;%\n  group_by(state) %&gt;%\n  mutate(n=sum(total_employees)) %&gt;%\n  ungroup() %&gt;%\n  mutate(prop=total_employees/n) %&gt;%\n  arrange(desc(prop))\n\n\n\n  \n\n\n\nIndeed, Cook County in Illinois (which contains Chicago), Suffolk County in New York (which contains much of Long Island), and Tarrant County in Texas (which contains Forth Worth), all have high proportions of their states’ railroad employees. These are all populous areas that likely have high amounts of commercial and passenger traffic.\nThat concludes our analysis for now. The next step would be to create visualizations, though we haven’t gotten there in the course."
+  },
+  {
+    "objectID": "posts/example-data_analysis_pipeline.html#conclusion",
+    "href": "posts/example-data_analysis_pipeline.html#conclusion",
+    "title": "Data analysis pipeline",
+    "section": "Conclusion",
+    "text": "Conclusion\nEven with a fairly simple dataset like StateCounty2012, there is plenty of analysis to be done! In this example, we read in a problematic data file, filtered out cases that weren’t related to our research question, and identified interesting patterns for our dataset. We did so entirely within a coherent data pipeline."
+  },
+  {
+    "objectID": "posts/example-data_analysis_pipeline.html#footnotes",
+    "href": "posts/example-data_analysis_pipeline.html#footnotes",
+    "title": "Data analysis pipeline",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nWe also could have used _join() function to combine the railroad_us and railroad_state_totals data frames. We haven’t gotten to joins yet, so I’ll save that for a later date.↩︎"
   }
 ]
