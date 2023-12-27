@@ -351,7 +351,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Now that we have these totals, we’re going to calculate some measures of <em>central tendency</em> and <em>dispersion</em>. Central tendency refers to the “middle” of the dataset (roughly speaking) and is commonly measured using mean or median. Dispersion refers to the extent to which the data differ from the center and is commonly measured using standard deviation and range. We’ll also use <code>min()</code> and <code>max()</code> to find the the minimum and maximum number of employees in a state.</p>
+<p>Now that we have these totals, we’re going to calculate some measures of <em>central tendency</em> and <em>dispersion</em>. Central tendency refers to the “middle” of the variable (roughly speaking) and is commonly measured using mean or median. Dispersion refers to the extent to which the data differ from the center and is commonly measured using standard deviation and range. We’ll also use <code>min()</code> and <code>max()</code> to find the the minimum and maximum number of employees in a state.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>railroad_state_totals <span class="sc">%&gt;%</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean=</span><span class="fu">mean</span>(total),</span>
@@ -385,8 +385,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We can see that there are actually <em>three</em> states with substantially high employee totals - Texas, Illinois, and New York.</p>
-<p>Let’s take a closer look at those states in <code>railroad_us</code><br>
-. It seems highly possible that, within those states, there are some counties that have a much higher proportion of employees. For example, Illinois’s Cook County, which contains the city of Chicago, almost certainly has a high proportion of railroad employees.</p>
+<p>Let’s take a closer look at those states in <code>railroad_us</code>. It seems highly possible that, within those states, there are some counties that have a much higher proportion of employees. For example, Illinois’s Cook County, which contains the city of Chicago, almost certainly has a high proportion of railroad employees.</p>
 <p>Below, we use <code>group_by()</code> and <code>mutate()</code> to create a new column that contains the total employees within each state<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, called <code>n</code>. This is the denominator that will allow us to compute the proportion of each state’s employees that come from a particular county. Then, we use <code>mutate()</code> to compute these proportions and then arrange the data descending based on proportions to see if there are any high proportion counties.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>railroad_us <span class="sc">%&gt;%</span></span>
@@ -405,7 +404,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Indeed, Cook County in Illinois (which contains Chicago), Suffolk County in New York (which contains much of Long Island), and Tarrant County in Texas (which contains Forth Worth), all have high proportions of their states’ railroad employees. These are all populous areas that likely have high amounts of commercial and passenger traffic.</p>
+<p>Indeed, Cook County in Illinois (which contains Chicago), Suffolk County in New York (which contains much of Long Island), and Tarrant County in Texas (which contains Fort Worth), all have high proportions of their states’ railroad employees. These are all populous areas that likely have high amounts of commercial and passenger traffic.</p>
 <p>That concludes our analysis for now. The next step would be to create visualizations, though we haven’t gotten there in the course.</p>
 </section>
 <section id="conclusion" class="level2">
@@ -932,7 +931,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-123"><a href="#cb18-123" aria-hidden="true" tabindex="-1"></a>railroad_state_totals</span>
 <span id="cb18-124"><a href="#cb18-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-125"><a href="#cb18-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-126"><a href="#cb18-126" aria-hidden="true" tabindex="-1"></a>Now that we have these totals, we're going to calculate some measures of *central tendency* and *dispersion*. Central tendency refers to the "middle" of the dataset (roughly speaking) and is commonly measured using mean or median. Dispersion refers to the extent to which the data differ from the center and is commonly measured using standard deviation and range. We'll also use <span class="in">`min()`</span> and <span class="in">`max()`</span> to find the the minimum and maximum number of employees in a state.</span>
+<span id="cb18-126"><a href="#cb18-126" aria-hidden="true" tabindex="-1"></a>Now that we have these totals, we're going to calculate some measures of *central tendency* and *dispersion*. Central tendency refers to the "middle" of the variable (roughly speaking) and is commonly measured using mean or median. Dispersion refers to the extent to which the data differ from the center and is commonly measured using standard deviation and range. We'll also use <span class="in">`min()`</span> and <span class="in">`max()`</span> to find the the minimum and maximum number of employees in a state.</span>
 <span id="cb18-127"><a href="#cb18-127" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-130"><a href="#cb18-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb18-131"><a href="#cb18-131" aria-hidden="true" tabindex="-1"></a>railroad_state_totals <span class="sc">%&gt;%</span></span>
@@ -956,30 +955,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-151"><a href="#cb18-151" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-152"><a href="#cb18-152" aria-hidden="true" tabindex="-1"></a>We can see that there are actually *three* states with substantially high employee totals - Texas, Illinois, and New York.</span>
 <span id="cb18-153"><a href="#cb18-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-154"><a href="#cb18-154" aria-hidden="true" tabindex="-1"></a>Let's take a closer look at those states in <span class="in">`railroad_us`</span>\</span>
-<span id="cb18-155"><a href="#cb18-155" aria-hidden="true" tabindex="-1"></a>. It seems highly possible that, within those states, there are some counties that have a much higher proportion of employees. For example, Illinois's Cook County, which contains the city of Chicago, almost certainly has a high proportion of railroad employees.</span>
-<span id="cb18-156"><a href="#cb18-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-157"><a href="#cb18-157" aria-hidden="true" tabindex="-1"></a>Below, we use <span class="in">`group_by()`</span> and <span class="in">`mutate()`</span> to create a new column that contains the total employees within each state<span class="ot">[^1]</span>, called <span class="in">`n`</span>. This is the denominator that will allow us to compute the proportion of each state's employees that come from a particular county. Then, we use <span class="in">`mutate()`</span> to compute these proportions and then arrange the data descending based on proportions to see if there are any high proportion counties.</span>
-<span id="cb18-158"><a href="#cb18-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-159"><a href="#cb18-159" aria-hidden="true" tabindex="-1"></a><span class="ot">[^1]: </span>We also could have used <span class="in">`_join()`</span> function to combine the <span class="in">`railroad_us`</span> and <span class="in">`railroad_state_totals`</span> data frames. We haven't gotten to joins yet, so I'll save that for a later date.</span>
-<span id="cb18-160"><a href="#cb18-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-163"><a href="#cb18-163" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb18-164"><a href="#cb18-164" aria-hidden="true" tabindex="-1"></a>railroad_us <span class="sc">%&gt;%</span></span>
-<span id="cb18-165"><a href="#cb18-165" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"TX"</span>,<span class="st">"IL"</span>,<span class="st">"NY"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb18-166"><a href="#cb18-166" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span></span>
-<span id="cb18-167"><a href="#cb18-167" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n=</span><span class="fu">sum</span>(total_employees)) <span class="sc">%&gt;%</span></span>
-<span id="cb18-168"><a href="#cb18-168" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb18-169"><a href="#cb18-169" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prop=</span>total_employees<span class="sc">/</span>n) <span class="sc">%&gt;%</span></span>
-<span id="cb18-170"><a href="#cb18-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(prop))</span>
-<span id="cb18-171"><a href="#cb18-171" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-172"><a href="#cb18-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-173"><a href="#cb18-173" aria-hidden="true" tabindex="-1"></a>Indeed, Cook County in Illinois (which contains Chicago), Suffolk County in New York (which contains much of Long Island), and Tarrant County in Texas (which contains Forth Worth), all have high proportions of their states' railroad employees. These are all populous areas that likely have high amounts of commercial and passenger traffic.</span>
-<span id="cb18-174"><a href="#cb18-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-175"><a href="#cb18-175" aria-hidden="true" tabindex="-1"></a>That concludes our analysis for now. The next step would be to create visualizations, though we haven't gotten there in the course.</span>
-<span id="cb18-176"><a href="#cb18-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-177"><a href="#cb18-177" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
-<span id="cb18-178"><a href="#cb18-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-179"><a href="#cb18-179" aria-hidden="true" tabindex="-1"></a>Even with a fairly simple dataset like <span class="in">`StateCounty2012`</span>, there is plenty of analysis to be done! In this example, we read in a problematic data file, filtered out cases that weren't related to our research question, and identified interesting patterns for our dataset. We did so entirely within a coherent data pipeline.</span>
+<span id="cb18-154"><a href="#cb18-154" aria-hidden="true" tabindex="-1"></a>Let's take a closer look at those states in <span class="in">`railroad_us`</span>. It seems highly possible that, within those states, there are some counties that have a much higher proportion of employees. For example, Illinois's Cook County, which contains the city of Chicago, almost certainly has a high proportion of railroad employees.</span>
+<span id="cb18-155"><a href="#cb18-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-156"><a href="#cb18-156" aria-hidden="true" tabindex="-1"></a>Below, we use <span class="in">`group_by()`</span> and <span class="in">`mutate()`</span> to create a new column that contains the total employees within each state<span class="ot">[^1]</span>, called <span class="in">`n`</span>. This is the denominator that will allow us to compute the proportion of each state's employees that come from a particular county. Then, we use <span class="in">`mutate()`</span> to compute these proportions and then arrange the data descending based on proportions to see if there are any high proportion counties.</span>
+<span id="cb18-157"><a href="#cb18-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-158"><a href="#cb18-158" aria-hidden="true" tabindex="-1"></a><span class="ot">[^1]: </span>We also could have used <span class="in">`_join()`</span> function to combine the <span class="in">`railroad_us`</span> and <span class="in">`railroad_state_totals`</span> data frames. We haven't gotten to joins yet, so I'll save that for a later date.</span>
+<span id="cb18-159"><a href="#cb18-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-162"><a href="#cb18-162" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-163"><a href="#cb18-163" aria-hidden="true" tabindex="-1"></a>railroad_us <span class="sc">%&gt;%</span></span>
+<span id="cb18-164"><a href="#cb18-164" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"TX"</span>,<span class="st">"IL"</span>,<span class="st">"NY"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-165"><a href="#cb18-165" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span></span>
+<span id="cb18-166"><a href="#cb18-166" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n=</span><span class="fu">sum</span>(total_employees)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-167"><a href="#cb18-167" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb18-168"><a href="#cb18-168" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prop=</span>total_employees<span class="sc">/</span>n) <span class="sc">%&gt;%</span></span>
+<span id="cb18-169"><a href="#cb18-169" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(prop))</span>
+<span id="cb18-170"><a href="#cb18-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-171"><a href="#cb18-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-172"><a href="#cb18-172" aria-hidden="true" tabindex="-1"></a>Indeed, Cook County in Illinois (which contains Chicago), Suffolk County in New York (which contains much of Long Island), and Tarrant County in Texas (which contains Fort Worth), all have high proportions of their states' railroad employees. These are all populous areas that likely have high amounts of commercial and passenger traffic.</span>
+<span id="cb18-173"><a href="#cb18-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-174"><a href="#cb18-174" aria-hidden="true" tabindex="-1"></a>That concludes our analysis for now. The next step would be to create visualizations, though we haven't gotten there in the course.</span>
+<span id="cb18-175"><a href="#cb18-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-176"><a href="#cb18-176" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
+<span id="cb18-177"><a href="#cb18-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-178"><a href="#cb18-178" aria-hidden="true" tabindex="-1"></a>Even with a fairly simple dataset like <span class="in">`StateCounty2012`</span>, there is plenty of analysis to be done! In this example, we read in a problematic data file, filtered out cases that weren't related to our research question, and identified interesting patterns for our dataset. We did so entirely within a coherent data pipeline.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
