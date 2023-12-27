@@ -32,7 +32,7 @@
     "href": "index.html",
     "title": "DACSS 601: Data Science Fundamentals",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Title\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nDate\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nDec 24, 2023\n\n\nChallenge 3 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\npivoting/tidy data\n\n\nSean Conway\n\n\n\n\nDec 23, 2023\n\n\nChallenge 1 Solution\n\n\nSean Conway\n\n\n\n\nDec 21, 2023\n\n\nChallenge 2 Instructions\n\n\nSean Conway\n\n\n\n\nDec 20, 2023\n\n\ngroup_by() & summarise()\n\n\nSean Conway\n\n\n\n\nDec 18, 2023\n\n\nData Import\n\n\nSean Conway\n\n\n\n\nDec 15, 2023\n\n\nChallenge 1 Instructions\n\n\nSean Conway\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Title\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nDate\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nDec 27, 2023\n\n\nChallenge 4 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\nChallenge 3 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\npivoting/tidy data\n\n\nSean Conway\n\n\n\n\nDec 23, 2023\n\n\nChallenge 1 Solution\n\n\nSean Conway\n\n\n\n\nDec 21, 2023\n\n\nChallenge 2 Instructions\n\n\nSean Conway\n\n\n\n\nDec 20, 2023\n\n\ngroup_by() & summarise()\n\n\nSean Conway\n\n\n\n\nDec 18, 2023\n\n\nData Import\n\n\nSean Conway\n\n\n\n\nDec 15, 2023\n\n\nChallenge 1 Instructions\n\n\nSean Conway\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -291,7 +291,7 @@
     "href": "posts/example-pivoting.html#pivoting",
     "title": "pivoting/tidy data",
     "section": "Pivoting",
-    "text": "Pivoting\nWe’re going to practice with the FAOSTAT_livestock.csv dataset.\n\nlivestock\n\n\n\n  \n\n\n\nFirst, we’re going to remove the Code columns. We can get the same information out of the corresponding “non-code” columns, and this cleans things up for us. I will also remove the Flag Column.\nFinally, if we use the unique() function to identify all the unique values in a column, we see that every value of Unit is “Head”, every value of Domain is “Live Animals”, and every value of Element is “Stocks”. If every value is the same, we can remove these columns.\n\nunique(livestock$Unit)\n\n[1] \"Head\"\n\nunique(livestock$Domain)\n\n[1] \"Live Animals\"\n\nunique(livestock$Element)\n\n[1] \"Stocks\"\n\nlivestock_1 &lt;- livestock %&gt;%\n  select(c(-contains(\"Code\"),\n           -contains(\"Flag\"),\n           -Unit,\n           -Domain,\n           -Element)) # use the select() function to choose the columns I'm keeping, contains() to pick the columns containing the string \"Code\", and the - operator to tell select() that I want all the columns that DO NOT contain \"Code\" in their titles\n# also use - operator to remove Flag & Flag Description\n# also use - operator to remove Head\n# also use - operator to remove Domain\nlivestock_1\n\n\n\n  \n\n\n\nHere, we notice that there are observations scattered across multiple rows. For example, if we sort by Year, we can see that each the Item column contains the livestock being measured, and Value contains the amount of livestock. This should probably be spread across columns - i.e,. one column for Camel counts, another for Goat counts, etc.\n\nlivestock_1 %&gt;%\n  arrange(Year)\n\n\n\n  \n\n\n\nThat is, the data are too long. We can fix this by using pivot_wider() to take these observations and spread them across columns.\n\nlivestock_2 &lt;- livestock_1 %&gt;%\n  pivot_wider(names_from = Item,\n              values_from = Value)\nlivestock_2\n\n\n\n  \n\n\n\nAbove, I used pivot_wider() to create columns for each unique type of livestock, where the rows contain the amounts of each livestock in a country during a specific year.\nI can use pivot_longer() to get it back to the previous format. Note that I’m always creating a data frame /tibble with a new name rather than modifying an existing one.\n\nlivestock_3 &lt;- livestock_2 %&gt;%\n  pivot_longer(c(Asses,Camels,Cattle,Goats,Horses,Mules,Sheep,Buffaloes,Pigs), # oh my!\n  names_to = \"Item\", # the column containing these livestock names\n  values_to = \"Value\")# the column containing these livestock counts # drop NA values\nlivestock_3               \n\n\n\n  \n\n\n\nThere we are! However, note that if we compare livestock_3 and livestock_1, the former has a lot more rows than the latter. This is because livestock_1 had both explicit and implicit missing data. That is, some items were marked as NA, and others were not listed. When we pivoted wider, these implicit values became explicit, and this explicitness remained when we pivoted longer again."
+    "text": "Pivoting\nWe’re going to practice with the FAOSTAT_livestock.csv dataset.\n\nlivestock\n\n\n\n  \n\n\n\nFirst, we’re going to remove the Code columns. We can get the same information out of the corresponding “non-code” columns, and this cleans things up for us. I will also remove the Flag Column.\nFinally, if we use the unique() function to identify all the unique values in a column, we see that every value of Unit is “Head”, every value of Domain is “Live Animals”, and every value of Element is “Stocks”. If every value is the same, we can remove these columns.\n\nunique(livestock$Unit)\n\n[1] \"Head\"\n\nunique(livestock$Domain)\n\n[1] \"Live Animals\"\n\nunique(livestock$Element)\n\n[1] \"Stocks\"\n\nlivestock_1 &lt;- livestock %&gt;%\n  select(c(-contains(\"Code\"),\n           -contains(\"Flag\"),\n           -Unit,\n           -Domain,\n           -Element)) # use the select() function to choose the columns I'm keeping, contains() to pick the columns containing the string \"Code\", and the - operator to tell select() that I want all the columns that DO NOT contain \"Code\" in their titles\n# also use - operator to remove Flag & Flag Description\n# also use - operator to remove Head\n# also use - operator to remove Domain\nlivestock_1\n\n\n\n  \n\n\n\nHere, we notice that there are observations scattered across multiple rows. For example, if we sort by Year, we can see that each Item column contains the livestock being measured, and Value contains the amount of livestock. This should probably be spread across columns - i.e,. one column for Camel counts, another for Goat counts, etc.\n\nlivestock_1 %&gt;%\n  arrange(Year)\n\n\n\n  \n\n\n\nThat is, the data are too long. We can fix this by using pivot_wider() to take these observations and spread them across columns.\n\nlivestock_2 &lt;- livestock_1 %&gt;%\n  pivot_wider(names_from = Item,\n              values_from = Value)\nlivestock_2\n\n\n\n  \n\n\n\nAbove, I used pivot_wider() to create columns for each unique type of livestock, where the rows contain the amounts of each livestock in a country during a specific year.\nI can use pivot_longer() to get it back to the previous format. Note that I’m always creating a data frame /tibble with a new name rather than modifying an existing one.\n\nlivestock_3 &lt;- livestock_2 %&gt;%\n  pivot_longer(c(Asses,Camels,Cattle,Goats,Horses,Mules,Sheep,Buffaloes,Pigs), # oh my!\n  names_to = \"Item\", # the column containing these livestock names\n  values_to = \"Value\")# the column containing these livestock counts \nlivestock_3               \n\n\n\n  \n\n\n\nThere we are! However, note that if we compare livestock_3 and livestock_1, the former has a lot more rows than the latter. This is because livestock_1 had both explicit and implicit missing data. That is, some items were marked as NA, and others were not listed. When we pivoted wider, these implicit values became explicit, and this explicitness remained when we pivoted longer again."
   },
   {
     "objectID": "posts/example-pivoting.html#conclusion",
@@ -299,5 +299,40 @@
     "title": "pivoting/tidy data",
     "section": "Conclusion",
     "text": "Conclusion\nNow you know a little bit about pivoting & tidy data. It takes a lot of practice, and we’ll work on it more this semester."
+  },
+  {
+    "objectID": "posts/challenge4_instructions.html",
+    "href": "posts/challenge4_instructions.html",
+    "title": "Challenge 4 Instructions",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\n\nknitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)"
+  },
+  {
+    "objectID": "posts/challenge4_instructions.html#challenge-overview",
+    "href": "posts/challenge4_instructions.html#challenge-overview",
+    "title": "Challenge 4 Instructions",
+    "section": "Challenge Overview",
+    "text": "Challenge Overview\nToday’s challenge is to:\n\nread in a data set, and describe the data set using both words and any supporting information (e.g., tables, etc)\ntidy data (as needed, including sanity checks)\nidentify variables that need to be mutated\nmutate variables and sanity check all mutations"
+  },
+  {
+    "objectID": "posts/challenge4_instructions.html#read-in-data",
+    "href": "posts/challenge4_instructions.html#read-in-data",
+    "title": "Challenge 4 Instructions",
+    "section": "Read in data",
+    "text": "Read in data\nRead in one (or more) of the following datasets, using the correct R package and command.\n\nabc_poll.csv ⭐\npoultry_tidy.xlsx or organiceggpoultry.xls⭐⭐\nFedFundsRate.csv⭐⭐⭐\nhotel_bookings.csv⭐⭐⭐⭐\ndebt_in_trillions.xlsx ⭐⭐⭐⭐⭐\n\n\nBriefly describe the data"
+  },
+  {
+    "objectID": "posts/challenge4_instructions.html#tidy-data-as-needed",
+    "href": "posts/challenge4_instructions.html#tidy-data-as-needed",
+    "title": "Challenge 4 Instructions",
+    "section": "Tidy Data (as needed)",
+    "text": "Tidy Data (as needed)\nIs your data already tidy, or is there work to be done? Be sure to anticipate your end result to provide a sanity check, and document your work here.\nAny additional comments?"
+  },
+  {
+    "objectID": "posts/challenge4_instructions.html#identify-variables-that-need-to-be-mutated",
+    "href": "posts/challenge4_instructions.html#identify-variables-that-need-to-be-mutated",
+    "title": "Challenge 4 Instructions",
+    "section": "Identify variables that need to be mutated",
+    "text": "Identify variables that need to be mutated\nAre there any variables that require mutation to be usable in your analysis stream? For example, are all time variables correctly coded as dates? Are all string variables reduced and cleaned to sensible categories? Do you need to turn any variables into factors and reorder for ease of graphics and visualization?\nDocument your work here.\nAny additional comments?"
   }
 ]

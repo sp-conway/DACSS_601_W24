@@ -69,12 +69,12 @@ railroad <- here("posts","_data","railroad_2012_clean_county.csv") %>%
 railroad
 ```
 
-From inspection, we can that the three variables are named *state*, *county*, and *total employees*. Combined with the name of the file, this appears to be the aggregated data on the number of employees working for the railroad in each county 2012. We assume that the 2930 cases - which are counties embedded within states^1^ - consist only of counties where there are railroad employees?
+From inspection, we can that the three variables are named *state*, *county*, and *total_employees*. Combined with the name of the file, this appears to be the aggregated data on the number of employees working for the railroad in each county 2012. We assume that the 2930 cases - which are counties embedded within states^1^ - consist only of counties where there are railroad employees?
 
 ```{r}
 railroad %>%
   select(state) %>%
-  n_distinct(.)
+  n_distinct()
 
 railroad%>%
   select(state)%>%
@@ -129,16 +129,16 @@ There's clearly a lot going on with these data, but using the `glimpse()` functi
 
 For now, we can focus on `birds`, `cattle`, `chickens`, and `livestock`.  
 
-In all 4 of these datasets, the `Area` column indicates the location of the agricultural product. `Element` indicates the type of product, `Item` indicates the animal. `Year` indicates the year of estimate. `Unit` indicates the unit of measurement.
+In all 4 of these datasets, the `Area` column indicates the location of the agricultural product. `Element` indicates the type of product, `Item` indicates the animal / animal product. `Year` indicates the year of estimate. `Unit` indicates the unit of measurement.
 
-These data are in a long format - technically I might classify them as "extra long". Don't worry if you don't know what this means, yet - we haven't gotten there in the course. Each row appears to compromise a case - a single measurement. A single row will contain a measurement of an agricultural product from a single year and in a single country.  
+These data are in a long format - technically I might classify them as "extra long". Don't worry if you don't know what this means, yet - we haven't gotten there in the course. Each case is spread across several rows.  
 
 The `country` dataset is less interesting. It only contains the codes to match Country and Country groups. We may need to go to the FAOSTAT website to figure this out more. For now, we'll move on to the next dataset.  
 
 
 ## Wild Birds ⭐⭐⭐
 
-The "wild_bird_data" sheet is in Excel format (*.xlsx*) instead of the *.csv* format of the earlier data sets. In theory, it should be no harder to read in than an Excel worksheet (or even workbook) as compared to a .csv file - there is a package called *read_xl* that is part of the tidyverse that easily reads in excel files.
+The "wild_bird_data" sheet is in Excel format (*.xlsx*) instead of the *.csv* format of the earlier data sets. In theory, it should be no harder to read in than an Excel worksheet (or even workbook) as compared to a .csv file - there is a package called *readxl* that is part of the tidyverse that easily reads in excel files.
 
 However, in practice, most people use Excel sheets as a publication format - not a way to store data, so there is almost always a ton of "junk" in the file that is NOT part of the data table that we want to read in. Sometimes the additional "junk" is incredibly useful - it might include table notes or information about data sources. However, we still need a systematic way to identify this junk and get rid of it during the data reading step.
 
@@ -164,7 +164,6 @@ We could try to manually adjust things - remove the first row, change the column
 wildbirds <- here("posts","_data","wild_bird_data.xlsx") %>%
   read_excel(skip = 1)
 wildbirds 
-
 ```
 
 This now looks great! Both variables are numeric, and now they correctly show up as *double* or (<dbl>). The variable names might be a bit tough to work with, though, so it can be easier to assign new column names on the read in - and then manually adjust axis labels, etc once you are working on your publication-quality graphs.
@@ -186,9 +185,12 @@ glimpse(wildbirds)
 Each row is a single case, with measurements of weight and population size for (presumably) a single species of bird.  
 
 We may need to take a look at the publication if we want to figure out the species' name. This is above and beyond this challenge, so we will move on.  
+
 ## Railroad (xls) ⭐⭐⭐⭐
 
-The railroad data set is our most challenging data to read in this week, but is (by comparison) a fairly straightforward formatted table published by the Railroad Retirement Board. The *value* variable is a count of the number of employees in each *county* and *state* combination. ![Railroad Employment](solution_images/railroad.png) 
+The railroad data set is our most challenging data to read in this week, but is (by comparison) a fairly straightforward formatted table published by the Railroad Retirement Board. The *value* variable is a count of the number of employees in each *county* and *state* combination. 
+![Railroad Employment](solution_images/railroad.png)
+
 
 Looking at the excel file, we can see that there are only a few issues: 1. There are three rows at the top of the sheet that are not needed 2. There are blank columns that are not needed. 3. There are Total rows for each state that are not needed
 
@@ -211,7 +213,7 @@ There are other approaches you could use for this task (e.g., remove all columns
 here("posts","_data","StateCounty2012.xls")  %>%
   read_excel(skip = 4,
                      col_names= c("State", "delete", "County", "delete", "Employees"))%>%
-  select(-contains("delete"))
+  select(!contains("delete"))
 ```
 
 ### Filtering "total" rows

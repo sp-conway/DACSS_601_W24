@@ -81,7 +81,7 @@ livestock_1 <- livestock %>%
 livestock_1
 ```
 
-Here, we notice that there are observations scattered across multiple rows. For example, if we sort by `Year`, we can see that each the `Item` column contains the livestock being measured, and `Value` contains the amount of livestock. This should probably be spread across columns - i.e,. one column for Camel counts, another for Goat counts, etc.
+Here, we notice that there are observations scattered across multiple rows. For example, if we sort by `Year`, we can see that each `Item` column contains the livestock being measured, and `Value` contains the amount of livestock. This should probably be spread across columns - i.e,. one column for Camel counts, another for Goat counts, etc.
 
 ```{r}
 livestock_1 %>%
@@ -105,7 +105,7 @@ I can use `pivot_longer()` to get it back to the previous format. Note that I'm 
 livestock_3 <- livestock_2 %>%
   pivot_longer(c(Asses,Camels,Cattle,Goats,Horses,Mules,Sheep,Buffaloes,Pigs), # oh my!
   names_to = "Item", # the column containing these livestock names
-  values_to = "Value")# the column containing these livestock counts # drop NA values
+  values_to = "Value")# the column containing these livestock counts 
 livestock_3               
 ```
 
