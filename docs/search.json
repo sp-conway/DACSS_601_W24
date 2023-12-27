@@ -32,7 +32,7 @@
     "href": "index.html",
     "title": "DACSS 601: Data Science Fundamentals",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Title\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nDate\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nDec 27, 2023\n\n\nChallenge 4 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\nChallenge 3 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\npivoting/tidy data\n\n\nSean Conway\n\n\n\n\nDec 23, 2023\n\n\nChallenge 1 Solution\n\n\nSean Conway\n\n\n\n\nDec 21, 2023\n\n\nChallenge 2 Instructions\n\n\nSean Conway\n\n\n\n\nDec 20, 2023\n\n\ngroup_by() & summarise()\n\n\nSean Conway\n\n\n\n\nDec 18, 2023\n\n\nData Import\n\n\nSean Conway\n\n\n\n\nDec 15, 2023\n\n\nChallenge 1 Instructions\n\n\nSean Conway\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Title\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nDate\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nDec 27, 2023\n\n\nChallenge 6 Instructions\n\n\nSean Conway\n\n\n\n\nDec 27, 2023\n\n\nChallenge 5 Instructions\n\n\nSean Conway\n\n\n\n\nDec 27, 2023\n\n\nChallenge 4 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\nChallenge 3 Instructions\n\n\nSean Conway\n\n\n\n\nDec 24, 2023\n\n\npivoting/tidy data\n\n\nSean Conway\n\n\n\n\nDec 23, 2023\n\n\nChallenge 1 Solution\n\n\nSean Conway\n\n\n\n\nDec 21, 2023\n\n\nChallenge 2 Instructions\n\n\nSean Conway\n\n\n\n\nDec 20, 2023\n\n\ngroup_by() & summarise()\n\n\nSean Conway\n\n\n\n\nDec 18, 2023\n\n\nData Import\n\n\nSean Conway\n\n\n\n\nDec 15, 2023\n\n\nChallenge 1 Instructions\n\n\nSean Conway\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -334,5 +334,89 @@
     "title": "Challenge 4 Instructions",
     "section": "Identify variables that need to be mutated",
     "text": "Identify variables that need to be mutated\nAre there any variables that require mutation to be usable in your analysis stream? For example, are all time variables correctly coded as dates? Are all string variables reduced and cleaned to sensible categories? Do you need to turn any variables into factors and reorder for ease of graphics and visualization?\nDocument your work here.\nAny additional comments?"
+  },
+  {
+    "objectID": "posts/challenge5_instructions.html",
+    "href": "posts/challenge5_instructions.html",
+    "title": "Challenge 5 Instructions",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(ggplot2)\n\nknitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)"
+  },
+  {
+    "objectID": "posts/challenge5_instructions.html#challenge-overview",
+    "href": "posts/challenge5_instructions.html#challenge-overview",
+    "title": "Challenge 5 Instructions",
+    "section": "Challenge Overview",
+    "text": "Challenge Overview\nToday’s challenge is to:\n\nread in a data set, and describe the data set using both words and any supporting information (e.g., tables, etc)\ntidy data (as needed, including sanity checks)\nmutate variables as needed (including sanity checks)\ncreate at least two univariate visualizations\n\n\ntry to make them “publication” ready\nExplain why you choose the specific graph type\n\n\nCreate at least one bivariate visualization\n\n\ntry to make them “publication” ready\nExplain why you choose the specific graph type\n\nR Graph Gallery is a good starting point for thinking about what information is conveyed in standard graph types, and includes example R code.\n(be sure to only include the category tags for the data you use!)"
+  },
+  {
+    "objectID": "posts/challenge5_instructions.html#read-in-data",
+    "href": "posts/challenge5_instructions.html#read-in-data",
+    "title": "Challenge 5 Instructions",
+    "section": "Read in data",
+    "text": "Read in data\nRead in one (or more) of the following datasets, using the correct R package and command.\n\ncereal.csv ⭐\nTotal_cost_for_top_15_pathogens_2018.xlsx ⭐\nAustralian Marriage ⭐⭐\nAB_NYC_2019.csv ⭐⭐⭐\nStateCounty2012.xls ⭐⭐⭐\nPublic School Characteristics ⭐⭐⭐⭐\nUSA Households ⭐⭐⭐⭐⭐\n\n\nBriefly describe the data"
+  },
+  {
+    "objectID": "posts/challenge5_instructions.html#tidy-data-as-needed",
+    "href": "posts/challenge5_instructions.html#tidy-data-as-needed",
+    "title": "Challenge 5 Instructions",
+    "section": "Tidy Data (as needed)",
+    "text": "Tidy Data (as needed)\nIs your data already tidy, or is there work to be done? Be sure to anticipate your end result to provide a sanity check, and document your work here.\nAre there any variables that require mutation to be usable in your analysis stream? For example, do you need to calculate new values in order to graph them? Can string values be represented numerically? Do you need to turn any variables into factors and reorder for ease of graphics and visualization?\nDocument your work here."
+  },
+  {
+    "objectID": "posts/challenge5_instructions.html#univariate-visualizations",
+    "href": "posts/challenge5_instructions.html#univariate-visualizations",
+    "title": "Challenge 5 Instructions",
+    "section": "Univariate Visualizations",
+    "text": "Univariate Visualizations"
+  },
+  {
+    "objectID": "posts/challenge5_instructions.html#bivariate-visualizations",
+    "href": "posts/challenge5_instructions.html#bivariate-visualizations",
+    "title": "Challenge 5 Instructions",
+    "section": "Bivariate Visualization(s)",
+    "text": "Bivariate Visualization(s)\nAny additional comments?"
+  },
+  {
+    "objectID": "posts/challenge6_instructions.html",
+    "href": "posts/challenge6_instructions.html",
+    "title": "Challenge 6 Instructions",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(ggplot2)\n\nknitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)"
+  },
+  {
+    "objectID": "posts/challenge6_instructions.html#challenge-overview",
+    "href": "posts/challenge6_instructions.html#challenge-overview",
+    "title": "Challenge 6 Instructions",
+    "section": "Challenge Overview",
+    "text": "Challenge Overview\nToday’s challenge is to:\n\nread in a data set, and describe the data set using both words and any supporting information (e.g., tables, etc)\ntidy data (as needed, including sanity checks)\nmutate variables as needed (including sanity checks)\ncreate at least one graph including time (evolution)\n\n\ntry to make them “publication” ready (optional)\nExplain why you choose the specific graph type\n\n\nCreate at least one graph depicting part-whole or flow relationships\n\n\ntry to make them “publication” ready (optional)\nExplain why you choose the specific graph type\n\nR Graph Gallery is a good starting point for thinking about what information is conveyed in standard graph types, and includes example R code.\n(be sure to only include the category tags for the data you use!)"
+  },
+  {
+    "objectID": "posts/challenge6_instructions.html#read-in-data",
+    "href": "posts/challenge6_instructions.html#read-in-data",
+    "title": "Challenge 6 Instructions",
+    "section": "Read in data",
+    "text": "Read in data\nRead in one (or more) of the following datasets, using the correct R package and command.\n\ndebt ⭐\nfed_rate ⭐⭐\nabc_poll ⭐⭐⭐\nusa_hh ⭐⭐⭐\nhotel_bookings ⭐⭐⭐⭐\nAB_NYC ⭐⭐⭐⭐⭐\n\n\nBriefly describe the data"
+  },
+  {
+    "objectID": "posts/challenge6_instructions.html#tidy-data-as-needed",
+    "href": "posts/challenge6_instructions.html#tidy-data-as-needed",
+    "title": "Challenge 6 Instructions",
+    "section": "Tidy Data (as needed)",
+    "text": "Tidy Data (as needed)\nIs your data already tidy, or is there work to be done? Be sure to anticipate your end result to provide a sanity check, and document your work here.\nAre there any variables that require mutation to be usable in your analysis stream? For example, do you need to calculate new values in order to graph them? Can string values be represented numerically? Do you need to turn any variables into factors and reorder for ease of graphics and visualization?\nDocument your work here."
+  },
+  {
+    "objectID": "posts/challenge6_instructions.html#time-dependent-visualization",
+    "href": "posts/challenge6_instructions.html#time-dependent-visualization",
+    "title": "Challenge 6 Instructions",
+    "section": "Time Dependent Visualization",
+    "text": "Time Dependent Visualization"
+  },
+  {
+    "objectID": "posts/challenge6_instructions.html#visualizing-part-whole-relationships",
+    "href": "posts/challenge6_instructions.html#visualizing-part-whole-relationships",
+    "title": "Challenge 6 Instructions",
+    "section": "Visualizing Part-Whole Relationships",
+    "text": "Visualizing Part-Whole Relationships"
   }
 ]
