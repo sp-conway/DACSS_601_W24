@@ -1,0 +1,160 @@
+---
+title: "Reproducible examples"
+author: "Sean Conway"
+editor: visual
+description: "Reproducible examples"  
+date: "12/31/2023"
+editor_options: 
+  chunk_output_type: console
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: false
+    code-copy: true
+    code-tools: true
+    css: "../styles.scss"
+categories:
+  - reproducible examples
+  - reprex
+---
+
+```{r}
+#| label: setup
+#| message: false
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(readxl)
+library(tidyverse)
+```
+
+## Overview
+
+In this script, we're going to discuss a topic not directly connected to the topics we've discussed so far, but one that is crucial to your development as a data scientist.
+
+Every data analyst, regardless of skill level or experience, occasionally encounters a problem that they need help solving. This help could entail posting to an online forum like [StackOverflow](https://stackoverflow.com/), posting to a social media website like Slack, or emailing friends or coworkers.
+
+In these scenarios, it is crucial to create a *minimally reproducible example* - an example that allows your problem to be easily and quickly re-created by others. This ties into the larger issue of **reproducibility**, which you will read about this week.
+
+When creating a minimally reproducible example, you should focus on simplicity. Others don't necessarily need access to your whole dataset - just a dataset with the same properties as yours.
+
+## An example
+
+The easiest way to discuss this problem is with an example of our own. We're going to use the hotel bookings dataset, or `hotel_bookings.csv`. This comes to us from Jesse Mostipak on [Kaggle](https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand). We'll also filter the dataset to only include the cases where customers actually checked out.
+
+```{r}
+hotel_bookings <- here("posts","_data","hotel_bookings.csv") %>%
+  read_csv() %>%
+  filter(str_detect(reservation_status,"Check-Out"))
+hotel_bookings
+```
+
+This dataset contains two different `hotels`, `"Resort Hotel"` and `"City Hotel"`. There are also columns for `market_segment` (the type of guest that books the hotel) and `distribution_channel` (how they booked the reservation). Jesse's key on Kaggle tells us that "TA" = "Travel Agent" and "TO" = "Tour Operators".
+
+```{r}
+distinct(hotel_bookings,market_segment)
+distinct(hotel_bookings,distribution_channel)
+```
+
+Let's say we want to know the proportion of bookings that come from all combinations of `market_segment` and `distribution_channel` within each hotel type. That is, we want to know these *conditional probabilities*.[^1]
+
+[^1]: At the end of this script, I'll demonstrate how to actually compute these for the `hotel_bookings` dataset.
+
+Let's say that we don't know how to do this in `R`. So, we decide to post to Slack for others to weigh in on. However, this is a large dataset. Even the filtered version of the dataset contains `r nrow(hotel_bookings)` rows. We could post a screenshot, but this is not ideal based on reproducibility standards or practical considerations (how large the dataset is).
+
+### dput()
+
+One solution is the `dput()` function. `dput()` takes as input an object currently in the environment, and produces code that can be copy-pasted to recreate the object exactly in any `R` environment.
+
+```{r}
+dput(hotel_bookings)
+```
+
+This can be handy, although even here it is not ideal. That output is **massive**, and posting it anywhere would be unwieldy.
+
+We could try reducing the number of rows in `hotel_bookings` to something more manageable, say 20.
+
+```{r}
+hotel_bookings_1 <- slice(hotel_bookings,1:20)
+hotel_bookings_1
+```
+
+```{r}
+dput(hotel_bookings_1)
+```
+
+This is more manageable, but note that we only have one hotel type here, `"City Hotel"`. We were wondering about computing proportions *within* each hotel, so having one hotel type is not ideal. We could pick out 10 rows where `hotel`= `"City Hotel"`, and 10 rows where `hotel`=`"Resort Hotel"`, and then use `bind_rows()` to combine these two filtered dataframes.
+
+```{r}
+city_hotels_1 <- hotel_bookings %>%
+  filter(str_detect(hotel, "City")) %>%
+  slice(1:10)
+resort_hotels_1 <- hotel_bookings %>%
+  filter(str_detect(hotel, "Resort")) %>%
+  slice(1:10)
+hotel_bookings_filtered <- bind_rows(
+  city_hotels_1,
+  resort_hotels_1
+)
+hotel_bookings_filtered
+```
+
+That looks much better. However, here our tibble contains other columns that aren't essential to our question (i.e., anything other than `hotel`, `market_segment`, and `distribution_channel`. We don't want our potential helpers to have to deal with these, so we'll remove them.
+
+```{r}
+hotel_bookings_filtered_1 <- hotel_bookings_filtered %>%
+  select(hotel, market_segment, distribution_channel)
+hotel_bookings_filtered_1
+```
+
+That's so much better! Now we can use `dput()` to get a reproducible data structure that others can easily work with.
+
+```{r}
+dput(hotel_bookings_filtered_1)
+```
+
+### Creating our own data structure  
+
+Sometimes we can't use `dput()`. We may have data that, due to privacy considerations, can't be shared publicly. We may be working with data that our employer doesn't want public. However, if we want to get help with our problem, we need to have *something* to share with others.
+
+This means we will need to simulate our own fake data. Simulation is not something we cover much in this course, but if you take more quantitative classes, you'll have to do plenty of it.
+
+What we need is a dataframe containing three variables, all categorical (specifically, character data). However, we can't directly share our data, as will sometimes be the case for you.
+
+We will use the `sample()` function to simulate random draws from a categorical variable. Using it is actually fairly simple. We specify `x`, the vector we want to sample from (here, a vector of the characters `"a"`,`"b"`, and `"c"`), the sample `size` (here, 10), and `replace` (a logical value indicating whether or not we want to sample with replacement, which we usually do).
+
+```{r}
+sample(x=c("a","b","c"),size=10,replace=T)
+```
+
+Now, we're going to create a tibble, using simulated data of three fake variables. Remember, we want our first variable (which I'm calling `x1`), to have two values (approximating our city hotel vs. resort hotel situation), while our other two variables will have more possible values (I'm choosing 5, arbitrarily). Note that all three of these variables need to take the same sample size, i.e., you can't create a tibble using vectors of varying length.
+
+```{r}
+tibble(
+  x1=sample(c("a","b"),size=100,replace=T),
+  x2=sample(c("c","d","e","f","g"),size=100,replace=T),
+  x3=sample(c("h","i","j","k","l"),size=100,replace=T)
+)
+```
+
+Voila! We have an easily reproducible dataset that others could use to understand the dataset we're dealing with. Here, we don't even need `dput()`, we can just post the above code creating the tibble along with our question.
+
+## Solving the problem
+
+```{r}
+hotel_bookings %>%
+  select(hotel,market_segment,distribution_channel) %>% # select cols. we're working with
+  mutate(across(everything(),as.factor)) %>% # convert to factor 
+  group_by(hotel,market_segment,distribution_channel) %>% # group by all three variables
+  summarise(n=n()) %>% # compute n for all possible combinations.
+  group_by(hotel) %>% # group by hotel
+  mutate(total_n=sum(n)) %>% # compute denominator for each hotel type, use mutate to store it for working with
+  ungroup() %>% # no more grouping necessary
+  mutate(prop=n/sum(n)) # compute proportions
+```
+
+## Conclusion  
+
+Now you know a little bit about creating reproducible examples. This can help you better understand the problem you're working with and make life easier for folks you're asking to help you.
+
+I did not fully discuss the issue of reproducibility, which is a massive topic in data science. Indeed, a whole course could be designed around this topic. I also did not discuss the [reprex](https://reprex.tidyverse.org/) package, another method of creating reproducible examples. Rather, we focused on the *principles* of minimally reproducible examples, and ways you might implement these principles yourselves.

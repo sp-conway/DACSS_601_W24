@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/example-reproducible_examples.html",
       "/posts/challenge2_solutions.html",
       "/posts/challenge3_solutions.html",
       "/posts/challenge6_instructions.html",
