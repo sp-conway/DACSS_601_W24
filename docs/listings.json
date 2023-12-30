@@ -2,6 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/challenge2_solutions.html",
+      "/posts/challenge3_solutions.html",
       "/posts/challenge6_instructions.html",
       "/posts/challenge5_instructions.html",
       "/posts/example-data_analysis_pipeline.html",
