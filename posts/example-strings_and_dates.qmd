@@ -1,0 +1,247 @@
+---
+title: "Working with strings and dates"
+author: "Sean Conway"
+editor: visual
+description: "Strings and dates"  
+date: "1/3/2024"
+editor_options: 
+  chunk_output_type: console
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: false
+    code-copy: true
+    code-tools: true
+    css: "../styles.scss"
+categories:
+  - strings
+  - dates
+  - lubridate
+  - stringr
+---
+
+```{r}
+#| label: setup
+#| message: false
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(readxl)
+library(lubridate)
+library(tidyverse)
+```
+
+## Overview
+
+Working with strings and dates can be tough. So far we have largely glossed over these types of data, but with this demonstration we'll discuss them in a bit more detail.
+
+## Strings
+
+Strings are specific type of data that has quotes around it. If you use the `typeof()` function on a string, you'll find `R` calls it "character" data - this synonymous with the word "string".
+
+```{r}
+typeof("abc")
+```
+
+Today, we'll be primarily discussing how to work with strings via the [stringr](https://stringr.tidyverse.org/) package, but note that base `R` has functions to work with strings as well, such as `grep()` and `grepl()`.
+
+### `stringr`
+
+`stringr` has functions for doing almost anything you could ever need to do with strings. All of these functions start with `str_` , and there are a number of them - too many to demonstrate in one lecture. I strongly recommend bookmarking [the `stringr` cheatsheet](https://github.com/rstudio/cheatsheets/blob/main/strings.pdf) - I use it all the time, myself.
+
+To demonstrate, we'll be using the `snl` data. These data came to my attention courtesy of Jeremy Singer-Vine's wonderful [Data is Plural](data-is-plural.com) newsletter. [These datasets](https://github.com/hhllcks/snldb), archived by Joel Navaroli and scraped by Hendrik Hilleckes and Colin Morris, contain data about the actors, cast, seasons, etc. from every season of Saturday Night Live from its inception through 2020. We will be working with the data file `snl_actors.csv`.
+
+```{r}
+snl <- here("posts","_data","snl_actors.csv") %>%
+  read_csv()
+snl
+```
+
+This dataset contains four variables: `aid` - actor ID, `url` - part of the url from the web scraping process, `type` - whether the actor is part of the cast/guest/crew/unknown, and `gender`. We're just going to focus on `aid` and `type`.
+
+```{r}
+snl_1 <- snl %>%
+  select(aid,type)
+snl_1
+```
+
+Say we wanted to filter the data as to only include cast members. We could use the `==` operator:
+
+```{r}
+snl_1 %>%
+  filter(type=="cast")
+```
+
+It's far better practice to use the `str_detect()` function to filter our data to only include these types of data.
+
+```{r}
+snl_1 %>%
+  filter(str_detect(type,"cast"))
+```
+
+We first passed the variable `str_detect()` was to search in (`type`), and then we passed the string it was to search for (`"type"`). Behind the scenes, `str_detect()` returned a `TRUE` value for every row that contained the string `"cast"` in the `type` column and a `FALSE` otherwise. We can confirm this ourselves:
+
+```{r}
+#| code-overflow: wrap
+str_detect(snl_1$type,"cast")
+```
+
+`filter()` then only kept those rows where `str_detect()` returned `TRUE`.
+
+What if we wanted to filter our data to include both cast and guests? We could run something like this:
+
+```{r}
+snl_1 %>%
+  filter(type=="cast"|type=="guest")
+```
+
+However, `stringr` has a better way, using the `|` (or) operator:
+
+```{r}
+snl_1 %>%
+  filter(str_detect(type,"cast|guest"))
+```
+
+Here a few other uses of `stringr`:
+
+-   splitting a string into multiple:
+
+```{r}
+str_split(snl_1$aid, " ", n=2) #get actor first/last names
+```
+
+-   combining multiple strings into one:
+
+```{r}
+# getting a variable consisting of performer name and type
+snl_1 %>%
+  mutate(actor_name_type=str_c(aid,type,sep = "-"))
+```
+
+-   count the number of characters in a string:
+
+```{r}
+# finding the snl cast member with the longest name
+snl_1 %>%
+  filter(str_detect(type,"cast")) %>%
+  mutate(name_length=str_length(aid)) %>%
+  arrange(desc(name_length))
+```
+
+### Regular expressions  
+
+Sometimes patterns in strings are not so easily expressed (e.g., "cast" or "guest"). For example, we may want to search within strings for specific types of characters, such as punctuation, numbers, or lowercase characters. Or we may want to extract only part of a string, such as survey responses where the text response is preceded by "Response ".
+
+For these more complicated tasks, we need [regular expressions](https://en.wikipedia.org/wiki/Regular_expression). Regular expressions are a tool for expressing patterns in strings, and are by no means inherent to `R`.
+
+Regular expressions include match characters, alternates, anchors, and look arounds. See page 2 of the `stringr` cheatsheet for a full listing of these, but below I'll demonstrate just a few.
+
+For these, we'll use the `str_view()` function, which, according to the documentation, *is used to print the underlying representation of a string and to see how a `pattern` matches.* The first argument to `str_view()` is the string we're looking in, and the second argument is the pattern we want to match.
+
+#### match characters  
+
+First, we'll go over a couple match characters. Note that since "\\" is a *special character* in `R`, we have to use double the amount of "\\"s every time we want to use one.
+
+```{r}
+str_view("!.><1","\\.") # match a single period
+str_view("123 ABC 8910 XYZ","[:digit:]") # match any digits
+str_view("HELLO world","[:upper:]")
+```
+
+#### alternates  
+
+Alternates let us specify the criteria by which we want to match multiple patterns to.
+
+```{r}
+str_view("abcxyz","a|z") # or
+str_view("abc123","[^2]") # anything but 
+```
+
+## anchors
+
+Anchors let us specify the start and end of the string we want to pattern match to.
+
+```{r}
+str_view("quick brown fox","^quick b") # start of
+str_view("lazy dog","y dog$") # end of
+```
+
+#### look arounds  
+
+Look arounds specify ways to match patterns based on what surrounds (or does not surround) your strings.
+
+```{r}
+str_view("abc", "ab(?=c)") # ab followed by c
+str_view("abc","(?<=ab)c") # c preceded by ab
+```
+
+#### quantifiers
+
+We also sometimes need to use *quantifiers* to describe the number of certain patterns we're looking for.
+
+```{r}
+str_view("abccccaaacccaaaccc","c{2}") # exactly 1
+str_view("abccccaaaccccaaaccc","c{1,3}") # between 1 & 3
+str_view("abccaacccbbccccccac","c{2,}") # 2 or more
+```
+
+## Dates  
+
+Dates are a specific type of data that refer to a particular point in time. There are technically multiple versions of this type of data, but we'll be working with `<date>` type.
+
+We'll be using `FedFundsRate` and `hotel_bookings` data.
+
+```{r}
+ffr <- here("posts","_data","FedFundsRate.csv") %>%
+  read_csv()
+hotels <- here("posts","_data","hotel_bookings.csv") %>%
+  read_csv()
+```
+
+We can make date type variables using the `ymd()` or `mdy()` functions (there are others, depending on how you arrange months, dates, and years):
+
+```{r}
+ymd(20240103)
+mdy(12122024)
+```
+
+We can also use the `make_date()` function, which we do here using the federal funds rate data:
+
+```{r}
+ffr1 <- ffr %>%
+  mutate(date=make_date(Year,Month,Day)) 
+ffr1
+```
+
+We can even get today's date, using the `today()` function.
+
+```{r}
+today()
+```
+
+Below, we parse the arrival date into a string, using the `str_c()` function to combine the `arrival_date_year`, `arrival_date_month`, and `arrival_date_day_of_month` columns. Next, we make that `date_tmp` column into a date type column using the `ymd()` function.
+
+```{r}
+hotels1 <- hotels %>%
+  filter(!is_canceled) %>%
+  mutate(date_tmp=str_c(arrival_date_year,
+                                 arrival_date_month,
+                                 arrival_date_day_of_month,
+                             sep="/"),
+         check_in_date=ymd(date_tmp)) %>%
+  select(-date_tmp)
+```
+
+Finally, we can actually perform a mathematical operation, calculating the date of the guest's reservation by subtracting the lead time (amount of days ahead of check-in the guest made the reservation) from the check in date.
+
+```{r}
+hotels2 <- hotels1 %>%
+  mutate(reservation_date=check_in_date-lead_time)
+hotels2
+```
+
+Dates will become extremely relevant when we start visualizing flow relationships next week. We also didn't discuss time type data, which are a more advanced topic.
+
+## Conclusion 
+
+Strings and dates are ubiquitous in data science. You need to know how to work with them, though using cheatsheets (like the stringr one) is okay!
