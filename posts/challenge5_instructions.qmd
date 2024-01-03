@@ -41,7 +41,7 @@ Today's challenge is to:
    - try to make them "publication" ready
    - Explain why you choose the specific graph type
 5)  Create at least one bivariate visualization
-   - try to make them "publication" ready
+   - try to make it "publication" ready
    - Explain why you choose the specific graph type
 
 [R Graph Gallery](https://r-graph-gallery.com/) is a good starting point for thinking about what information is conveyed in standard graph types, and includes example R code.
