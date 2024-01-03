@@ -157,7 +157,7 @@ str_view("abcxyz","a|z") # or
 str_view("abc123","[^2]") # anything but 
 ```
 
-## anchors
+#### anchors
 
 Anchors let us specify the start and end of the string we want to pattern match to.
 
