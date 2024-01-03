@@ -83,7 +83,8 @@ We first passed the variable `str_detect()` was to search in (`type`), and then 
 
 ```{r}
 #| code-overflow: wrap
-str_detect(snl_1$type,"cast")
+tmp1 <- str_detect(snl_1$type,"cast")
+head(tmp1)
 ```
 
 `filter()` then only kept those rows where `str_detect()` returned `TRUE`.
@@ -108,7 +109,8 @@ Here a few other uses of `stringr`:
 
 ```{r}
 #| class-output: hscroll
-str_split(snl_1$aid, " ", n=2) #get actor first/last names
+tmp2 <- str_split(snl_1$aid, " ", n=2) #get actor first/last names
+head(tmp2)
 ```
 
 -   combining multiple strings into one:
@@ -231,6 +233,7 @@ hotels1 <- hotels %>%
                              sep="/"),
          check_in_date=ymd(date_tmp)) %>%
   select(-date_tmp)
+hotels1
 ```
 
 Finally, we can actually perform a mathematical operation, calculating the date of the guest's reservation by subtracting the lead time (amount of days ahead of check-in the guest made the reservation) from the check in date.
