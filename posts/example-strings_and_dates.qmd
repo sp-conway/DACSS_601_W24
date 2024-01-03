@@ -37,7 +37,7 @@ Working with strings and dates can be tough. So far we have largely glossed over
 
 ## Strings
 
-Strings are specific type of data that has quotes around it. If you use the `typeof()` function on a string, you'll find `R` calls it "character" data - this synonymous with the word "string".
+Strings are specific type of data that has quotes around them. If you use the `typeof()` function on a string, you'll find `R` calls it "character" data - this synonymous with the word "string".
 
 ```{r}
 typeof("abc")
@@ -72,14 +72,14 @@ snl_1 %>%
   filter(type=="cast")
 ```
 
-It's far better practice to use the `str_detect()` function to filter our data to only include these types of data.
+It's far better practice to use the `str_detect()` function to filter our data to only include cast members.
 
 ```{r}
 snl_1 %>%
   filter(str_detect(type,"cast"))
 ```
 
-We first passed the variable `str_detect()` was to search in (`type`), and then we passed the string it was to search for (`"type"`). Behind the scenes, `str_detect()` returned a `TRUE` value for every row that contained the string `"cast"` in the `type` column and a `FALSE` otherwise. We can confirm this ourselves:
+We first passed the variable that `str_detect()` was to search in (`type`), and then we passed the string it was to search for (`"cast"`). Behind the scenes, `str_detect()` returned a `TRUE` value for every row that contained the string `"cast"` in the `type` column and a `FALSE` otherwise. We can confirm this ourselves:
 
 ```{r}
 #| code-overflow: wrap
@@ -124,10 +124,11 @@ snl_1 %>%
 -   count the number of characters in a string:
 
 ```{r}
-# finding the snl cast member with the longest name
+# finding the snl cast member with the longest name, but remove spaces first
 snl_1 %>%
   filter(str_detect(type,"cast")) %>%
-  mutate(name_length=str_length(aid)) %>%
+  mutate(name_no_spaces=str_remove_all(aid," "),
+         name_length=str_length(name_no_spaces)) %>%
   arrange(desc(name_length))
 ```
 
@@ -143,12 +144,12 @@ For these, we'll use the `str_view()` function, which, according to the document
 
 #### match characters  
 
-First, we'll go over a couple match characters. Note that since "\\" is a *special character* in `R`, we have to use double the amount of "\\"s every time we want to use one.
+First, we'll go over a couple match characters. Note that since "\\" is a *special character* in `R`, we have to use 1 extra "\\"s every time we want to use one.
 
 ```{r}
 str_view("!.><1","\\.") # match a single period
 str_view("123 ABC 8910 XYZ","[:digit:]") # match any digits
-str_view("HELLO world","[:upper:]")
+str_view("HELLO world","[:upper:]") # match any uppercase letters
 ```
 
 #### alternates  
@@ -156,8 +157,8 @@ str_view("HELLO world","[:upper:]")
 Alternates let us specify the criteria by which we want to match multiple patterns to.
 
 ```{r}
-str_view("abcxyz","a|z") # or
-str_view("abc123","[^2]") # anything but 
+str_view("abcxyz","ab|yz") # or
+str_view("abc123","[^c1]") # anything but 
 ```
 
 #### anchors
@@ -174,8 +175,8 @@ str_view("lazy dog","y dog$") # end of
 Look arounds specify ways to match patterns based on what surrounds (or does not surround) your strings.
 
 ```{r}
-str_view("abc", "ab(?=c)") # ab followed by c
-str_view("abc","(?<=ab)c") # c preceded by ab
+str_view("abcdefgab4abc", "ab(?=c)") # ab followed by c
+str_view("abcdaeceqabc","(?<=ab)c") # c preceded by ab
 ```
 
 #### quantifiers
@@ -183,7 +184,7 @@ str_view("abc","(?<=ab)c") # c preceded by ab
 We also sometimes need to use *quantifiers* to describe the number of certain patterns we're looking for.
 
 ```{r}
-str_view("abccccaaacccaaaccc","c{2}") # exactly 1
+str_view("cabccccaaacccaaaccc","c{2}") # exactly 2 c's
 str_view("abccccaaaccccaaaccc","c{1,3}") # between 1 & 3
 str_view("abccaacccbbccccccac","c{2,}") # 2 or more
 ```
