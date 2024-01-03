@@ -195,6 +195,8 @@ We need to remove the "note" indicators in two of the rows. Some characters requ
 #| label: eggs4
 eggs<-eggs_orig%>%
   mutate(date = str_remove(date, " /1"))
+eggs %>%
+  count(date)
 ```
 
 One final step is needed to split the year variable away from the month. You will often need to separate out two variables from a single column when working with published tables, and also need to use the equivalent of dragging to fill in a normal spreadsheet. Lets look at the easiest way to fix both of these issues.
@@ -230,7 +232,7 @@ To do this (and make our data easier to graph and analyze), we can pivot longer 
 ```{r}
 #| label: eggs6
 eggs_long<-eggs_filled%>%
-  pivot_longer(cols=contains("large"), 
+  pivot_longer(cols=contains("large"), # -c(month,year)
                names_to = "egg_type",
                values_to = "avg_price"
   )
@@ -304,7 +306,7 @@ The most glaring remaining issue is that the administrative *Division* is not in
 ```{r}
 #| label: australia2
 
-vote<- vote_orig%>%
+vote<- vote_orig %>%
   mutate(Division = case_when(
     str_ends(District, "Divisions") ~ District,
     TRUE ~ NA_character_ )) %>%
@@ -319,8 +321,7 @@ Supposed we wanted to create a stacked bar chart to compare the % who votes Yes 
 
 ```{r}
 #| label: australia3
-#| 
-vote_long<- vote%>%
+vote_long<- vote %>%
   pivot_longer(
     cols = Yes:`No Response`,
     names_to = "Response",
@@ -335,7 +336,7 @@ vote_long
 
 The excel workbook "USA Households by Total Money Income, Race, and Hispanic Origin of Householder 1967 to 2019" is clearly a table of census-type household data (e.g., Current Population Study or CPS, American Community Study or ACS, etc.) Row 3 of the workbook provides [a link to more details about the origin of the data used to produce the table.](https://www2.census.gov/programs-surveys/cps/techdocs/cpsmar20.pdf)
 
-The cases in this example are essentially year-identity groups, where I use the term identity to refer to the wide range of ways that the census can cluster racial and identity. While there are 12 categories in the data, many of these overlap and/or are not available in specific years. For example, one category is "All Races", and it overlaps with all other categories but cannot be easily eliminated.
+The cases in this example are essentially year-identity groups, where I use the term identity to refer to the wide range of ways that the census can cluster racial identity. While there are 12 categories in the data, many of these overlap and/or are not available in specific years. For example, one category is "All Races", and it overlaps with all other categories but cannot be easily eliminated.
 
 ![Excel Workbook Screenshot](solution_images/us_hholds.png)
 
@@ -355,7 +356,7 @@ The data appears to have two grouping variables (*year* and *identity*), plus se
 -   median and mean income (and associated margin of error)
 -   proportion of households with hhold income in one of 9 designated ranges or brackets
 
-The final data should potentially be split into two data tables - one with averages for a group of households, the other with proportions information based on income brackets. There is less clarity about how to handle the potential overlap between *race* and *hispanic* group identity information.
+The final data should potentially be split into two data tables - one with averages for a group of households, the other with proportion information based on income brackets. There is less clarity about how to handle the potential overlap between *race* and *hispanic* group identity information.
 
 ::: panel-tabset
 ### Read data
@@ -396,7 +397,7 @@ The current year column has both year and identity information on the hholds, as
 :::
 
 ```{r}
-ushh_orig%>%
+ushh_orig %>%
   filter(str_detect(year, "[[:alpha:]]"))
 ```
 
@@ -452,7 +453,7 @@ Original data that has been carefully documented can be overly detailed and brok
 :::
 
 ```{r}
-ushh <-ushh_id%>%
+ushh <- ushh_id%>%
   mutate(gp_identity = case_when(
     identity %in% c("BLACK", "BLACK ALONE") ~ "gp_black",
     identity %in% c("ASIAN ALONE OR IN COMBINATION",

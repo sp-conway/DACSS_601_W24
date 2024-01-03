@@ -113,13 +113,13 @@ That's so much better! Now we can use `dput()` to get a reproducible data struct
 dput(hotel_bookings_filtered_1)
 ```
 
-### Creating our own data structure  
+### Creating our own data structure
 
 Sometimes we can't use `dput()`. We may have data that, due to privacy considerations, can't be shared publicly. We may be working with data that our employer doesn't want public. However, if we want to get help with our problem, we need to have *something* to share with others.
 
 This means we will need to simulate our own fake data. Simulation is not something we cover much in this course, but if you take more quantitative classes, you'll have to do plenty of it.
 
-What we need is a dataframe containing three variables, all categorical (specifically, character data). However, we can't directly share our data, as will sometimes be the case for you.
+What we need is a data frame containing three variables, all categorical (specifically, character data). However, we can't directly share our data, as will sometimes be the case for you.
 
 We will use the `sample()` function to simulate random draws from a categorical variable. Using it is actually fairly simple. We specify `x`, the vector we want to sample from (here, a vector of the characters `"a"`,`"b"`, and `"c"`), the sample `size` (here, 10), and `replace` (a logical value indicating whether or not we want to sample with replacement, which we usually do).
 
@@ -137,12 +137,12 @@ tibble(
 )
 ```
 
-Voila! We have an easily reproducible dataset that others could use to understand the dataset we're dealing with. Here, we don't even need `dput()`, we can just post the above code creating the tibble along with our question.
+Voila! We have an easily reproducible dataset that others could use to understand the dataset we're dealing with. Here, we don't even need `dput()`, we can just post the above code creating the tibble along with our question. We would also post all libraries need to create the code, too.
 
 ## Solving the problem
 
 ```{r}
-hotel_bookings %>%
+hotel_props <- hotel_bookings %>%
   select(hotel,market_segment,distribution_channel) %>% # select cols. we're working with
   mutate(across(everything(),as.factor)) %>% # convert to factor 
   group_by(hotel,market_segment,distribution_channel) %>% # group by all three variables
@@ -150,10 +150,17 @@ hotel_bookings %>%
   group_by(hotel) %>% # group by hotel
   mutate(total_n=sum(n)) %>% # compute denominator for each hotel type, use mutate to store it for working with
   ungroup() %>% # no more grouping necessary
-  mutate(prop=n/sum(n)) # compute proportions
+  mutate(prop=n/total_n) # compute proportions
+hotel_props
+
+# double checking that proportions sum to 1 within a hotel
+hotel_props %>%
+  group_by(hotel) %>%
+  summarise(total=sum(prop)) %>%
+  ungroup()
 ```
 
-## Conclusion  
+## Conclusion
 
 Now you know a little bit about creating reproducible examples. This can help you better understand the problem you're working with and make life easier for folks you're asking to help you.
 

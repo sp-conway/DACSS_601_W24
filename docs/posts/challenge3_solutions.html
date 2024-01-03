@@ -1456,310 +1456,311 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb32-213"><a href="#cb32-213" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: eggs4</span></span>
 <span id="cb32-214"><a href="#cb32-214" aria-hidden="true" tabindex="-1"></a>eggs<span class="ot">&lt;-</span>eggs_orig<span class="sc">%&gt;%</span></span>
 <span id="cb32-215"><a href="#cb32-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">str_remove</span>(date, <span class="st">" /1"</span>))</span>
-<span id="cb32-216"><a href="#cb32-216" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-217"><a href="#cb32-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-218"><a href="#cb32-218" aria-hidden="true" tabindex="-1"></a>One final step is needed to split the year variable away from the month. You will often need to separate out two variables from a single column when working with published tables, and also need to use the equivalent of dragging to fill in a normal spreadsheet. Lets look at the easiest way to fix both of these issues.</span>
+<span id="cb32-216"><a href="#cb32-216" aria-hidden="true" tabindex="-1"></a>eggs <span class="sc">%&gt;%</span></span>
+<span id="cb32-217"><a href="#cb32-217" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(date)</span>
+<span id="cb32-218"><a href="#cb32-218" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-219"><a href="#cb32-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-220"><a href="#cb32-220" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb32-221"><a href="#cb32-221" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidyr::separate()</span></span>
-<span id="cb32-222"><a href="#cb32-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-223"><a href="#cb32-223" aria-hidden="true" tabindex="-1"></a>Separate is a fantastic function for working with strings. It will break a string column into multiple new (named) columns, at the indicated separator character (e.g., "," or " "). The old variable is automatically removed, but can be left.</span>
-<span id="cb32-224"><a href="#cb32-224" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb32-225"><a href="#cb32-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-226"><a href="#cb32-226" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb32-227"><a href="#cb32-227" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidyr::fill()</span></span>
-<span id="cb32-228"><a href="#cb32-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-229"><a href="#cb32-229" aria-hidden="true" tabindex="-1"></a>Fill works like dragging to fill functionality in a spreadsheet. You can choose the direction to fill.</span>
-<span id="cb32-230"><a href="#cb32-230" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb32-231"><a href="#cb32-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-234"><a href="#cb32-234" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-235"><a href="#cb32-235" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: eggs5</span></span>
-<span id="cb32-236"><a href="#cb32-236" aria-hidden="true" tabindex="-1"></a><span class="co">#| </span></span>
-<span id="cb32-237"><a href="#cb32-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-238"><a href="#cb32-238" aria-hidden="true" tabindex="-1"></a>eggs_filled <span class="ot">&lt;-</span> eggs<span class="sc">%&gt;%</span></span>
-<span id="cb32-239"><a href="#cb32-239" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(date, <span class="at">into=</span><span class="fu">c</span>(<span class="st">"month"</span>, <span class="st">"year"</span>), <span class="at">sep=</span><span class="st">" "</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb32-240"><a href="#cb32-240" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill</span>(year)</span>
-<span id="cb32-241"><a href="#cb32-241" aria-hidden="true" tabindex="-1"></a>eggs_filled</span>
-<span id="cb32-242"><a href="#cb32-242" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-243"><a href="#cb32-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-244"><a href="#cb32-244" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pivot Type Only</span></span>
+<span id="cb32-220"><a href="#cb32-220" aria-hidden="true" tabindex="-1"></a>One final step is needed to split the year variable away from the month. You will often need to separate out two variables from a single column when working with published tables, and also need to use the equivalent of dragging to fill in a normal spreadsheet. Lets look at the easiest way to fix both of these issues.</span>
+<span id="cb32-221"><a href="#cb32-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-222"><a href="#cb32-222" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb32-223"><a href="#cb32-223" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidyr::separate()</span></span>
+<span id="cb32-224"><a href="#cb32-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-225"><a href="#cb32-225" aria-hidden="true" tabindex="-1"></a>Separate is a fantastic function for working with strings. It will break a string column into multiple new (named) columns, at the indicated separator character (e.g., "," or " "). The old variable is automatically removed, but can be left.</span>
+<span id="cb32-226"><a href="#cb32-226" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb32-227"><a href="#cb32-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-228"><a href="#cb32-228" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb32-229"><a href="#cb32-229" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidyr::fill()</span></span>
+<span id="cb32-230"><a href="#cb32-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-231"><a href="#cb32-231" aria-hidden="true" tabindex="-1"></a>Fill works like dragging to fill functionality in a spreadsheet. You can choose the direction to fill.</span>
+<span id="cb32-232"><a href="#cb32-232" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb32-233"><a href="#cb32-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-236"><a href="#cb32-236" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-237"><a href="#cb32-237" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: eggs5</span></span>
+<span id="cb32-238"><a href="#cb32-238" aria-hidden="true" tabindex="-1"></a><span class="co">#| </span></span>
+<span id="cb32-239"><a href="#cb32-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-240"><a href="#cb32-240" aria-hidden="true" tabindex="-1"></a>eggs_filled <span class="ot">&lt;-</span> eggs<span class="sc">%&gt;%</span></span>
+<span id="cb32-241"><a href="#cb32-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(date, <span class="at">into=</span><span class="fu">c</span>(<span class="st">"month"</span>, <span class="st">"year"</span>), <span class="at">sep=</span><span class="st">" "</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb32-242"><a href="#cb32-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill</span>(year)</span>
+<span id="cb32-243"><a href="#cb32-243" aria-hidden="true" tabindex="-1"></a>eggs_filled</span>
+<span id="cb32-244"><a href="#cb32-244" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-245"><a href="#cb32-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-246"><a href="#cb32-246" aria-hidden="true" tabindex="-1"></a>Looking at the data, we can see that each of the original 120 *cases* consist of a year-month combination (e.g., January 2004), while the *values* are the average price (in cents) of four different types of eggs (e.g., large_half_dozen, large_dozen, etc) So to tidy our data, we should create a matrix with a year-month-eggType combination, with a single price *value* for each case.</span>
+<span id="cb32-246"><a href="#cb32-246" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pivot Type Only</span></span>
 <span id="cb32-247"><a href="#cb32-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-248"><a href="#cb32-248" aria-hidden="true" tabindex="-1"></a>To do this (and make our data easier to graph and analyze), we can pivot longer - changing our data from 120 rows with 6 variables (2 grouping and 4 values) to 480 rows of 4 variables (with 3 grouping variables and a single *price* value).</span>
+<span id="cb32-248"><a href="#cb32-248" aria-hidden="true" tabindex="-1"></a>Looking at the data, we can see that each of the original 120 *cases* consist of a year-month combination (e.g., January 2004), while the *values* are the average price (in cents) of four different types of eggs (e.g., large_half_dozen, large_dozen, etc) So to tidy our data, we should create a matrix with a year-month-eggType combination, with a single price *value* for each case.</span>
 <span id="cb32-249"><a href="#cb32-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-252"><a href="#cb32-252" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-253"><a href="#cb32-253" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: eggs6</span></span>
-<span id="cb32-254"><a href="#cb32-254" aria-hidden="true" tabindex="-1"></a>eggs_long<span class="ot">&lt;-</span>eggs_filled<span class="sc">%&gt;%</span></span>
-<span id="cb32-255"><a href="#cb32-255" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">contains</span>(<span class="st">"large"</span>), </span>
-<span id="cb32-256"><a href="#cb32-256" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"egg_type"</span>,</span>
-<span id="cb32-257"><a href="#cb32-257" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"avg_price"</span></span>
-<span id="cb32-258"><a href="#cb32-258" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb32-259"><a href="#cb32-259" aria-hidden="true" tabindex="-1"></a>eggs_long</span>
-<span id="cb32-260"><a href="#cb32-260" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-261"><a href="#cb32-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-262"><a href="#cb32-262" aria-hidden="true" tabindex="-1"></a>Well, that was super easy. But wait, what if you are interested in egg *size* - you want to know how much more expensive extra-large eggs are compared to large eggs. Right now, that will be annoying, as you will have to keep sorting out the egg *quantity* - whether the price is for a half_dozen or a dozen eggs.</span>
+<span id="cb32-250"><a href="#cb32-250" aria-hidden="true" tabindex="-1"></a>To do this (and make our data easier to graph and analyze), we can pivot longer - changing our data from 120 rows with 6 variables (2 grouping and 4 values) to 480 rows of 4 variables (with 3 grouping variables and a single *price* value).</span>
+<span id="cb32-251"><a href="#cb32-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-254"><a href="#cb32-254" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-255"><a href="#cb32-255" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: eggs6</span></span>
+<span id="cb32-256"><a href="#cb32-256" aria-hidden="true" tabindex="-1"></a>eggs_long<span class="ot">&lt;-</span>eggs_filled<span class="sc">%&gt;%</span></span>
+<span id="cb32-257"><a href="#cb32-257" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">contains</span>(<span class="st">"large"</span>), <span class="co"># -c(month,year)</span></span>
+<span id="cb32-258"><a href="#cb32-258" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"egg_type"</span>,</span>
+<span id="cb32-259"><a href="#cb32-259" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"avg_price"</span></span>
+<span id="cb32-260"><a href="#cb32-260" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb32-261"><a href="#cb32-261" aria-hidden="true" tabindex="-1"></a>eggs_long</span>
+<span id="cb32-262"><a href="#cb32-262" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-263"><a href="#cb32-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-264"><a href="#cb32-264" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pivot Size and Quantity</span></span>
+<span id="cb32-264"><a href="#cb32-264" aria-hidden="true" tabindex="-1"></a>Well, that was super easy. But wait, what if you are interested in egg *size* - you want to know how much more expensive extra-large eggs are compared to large eggs. Right now, that will be annoying, as you will have to keep sorting out the egg *quantity* - whether the price is for a half_dozen or a dozen eggs.</span>
 <span id="cb32-265"><a href="#cb32-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-266"><a href="#cb32-266" aria-hidden="true" tabindex="-1"></a>Wouldn't it be nice if we had two new columns - *size* and *quantity* - in place of the existing *eggType* categorical variable? In other words, to have fully tidy data, we would need 4 grouping variables (year, month, size, and quantity) and the same value (price). So, we want to use pivot longer, but we will be adding **two** new category variables (for a total of 4) and this will cut the number of rows in half (to 240).</span>
+<span id="cb32-266"><a href="#cb32-266" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pivot Size and Quantity</span></span>
 <span id="cb32-267"><a href="#cb32-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-268"><a href="#cb32-268" aria-hidden="true" tabindex="-1"></a>How can we let R know what we want it to do?? Thankfully, we created pretty systematic column names for egg types in our original data, following the general pattern: <span class="in">`size-quantity`</span>. Maybe we can use this to our advantage? Working with patterns in the <span class="in">`names_sep`</span> option of the pivot functions makes it easier than you would think to pivot four existing columns into two new columns.</span>
+<span id="cb32-268"><a href="#cb32-268" aria-hidden="true" tabindex="-1"></a>Wouldn't it be nice if we had two new columns - *size* and *quantity* - in place of the existing *eggType* categorical variable? In other words, to have fully tidy data, we would need 4 grouping variables (year, month, size, and quantity) and the same value (price). So, we want to use pivot longer, but we will be adding **two** new category variables (for a total of 4) and this will cut the number of rows in half (to 240).</span>
 <span id="cb32-269"><a href="#cb32-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-272"><a href="#cb32-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-273"><a href="#cb32-273" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: eggs7</span></span>
-<span id="cb32-274"><a href="#cb32-274" aria-hidden="true" tabindex="-1"></a>eggs_long<span class="ot">&lt;-</span> eggs_filled<span class="sc">%&gt;%</span></span>
-<span id="cb32-275"><a href="#cb32-275" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">contains</span>(<span class="st">"large"</span>),</span>
-<span id="cb32-276"><a href="#cb32-276" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"size"</span>, <span class="st">"quantity"</span>),</span>
-<span id="cb32-277"><a href="#cb32-277" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep=</span><span class="st">"_"</span>,</span>
-<span id="cb32-278"><a href="#cb32-278" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"price"</span></span>
-<span id="cb32-279"><a href="#cb32-279" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb32-280"><a href="#cb32-280" aria-hidden="true" tabindex="-1"></a>eggs_long</span>
-<span id="cb32-281"><a href="#cb32-281" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-282"><a href="#cb32-282" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb32-283"><a href="#cb32-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-284"><a href="#cb32-284" aria-hidden="true" tabindex="-1"></a><span class="fu">## Australian Marriage Ballot ⭐⭐⭐</span></span>
+<span id="cb32-270"><a href="#cb32-270" aria-hidden="true" tabindex="-1"></a>How can we let R know what we want it to do?? Thankfully, we created pretty systematic column names for egg types in our original data, following the general pattern: <span class="in">`size-quantity`</span>. Maybe we can use this to our advantage? Working with patterns in the <span class="in">`names_sep`</span> option of the pivot functions makes it easier than you would think to pivot four existing columns into two new columns.</span>
+<span id="cb32-271"><a href="#cb32-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-274"><a href="#cb32-274" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-275"><a href="#cb32-275" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: eggs7</span></span>
+<span id="cb32-276"><a href="#cb32-276" aria-hidden="true" tabindex="-1"></a>eggs_long<span class="ot">&lt;-</span> eggs_filled<span class="sc">%&gt;%</span></span>
+<span id="cb32-277"><a href="#cb32-277" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">contains</span>(<span class="st">"large"</span>),</span>
+<span id="cb32-278"><a href="#cb32-278" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"size"</span>, <span class="st">"quantity"</span>),</span>
+<span id="cb32-279"><a href="#cb32-279" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep=</span><span class="st">"_"</span>,</span>
+<span id="cb32-280"><a href="#cb32-280" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"price"</span></span>
+<span id="cb32-281"><a href="#cb32-281" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb32-282"><a href="#cb32-282" aria-hidden="true" tabindex="-1"></a>eggs_long</span>
+<span id="cb32-283"><a href="#cb32-283" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-284"><a href="#cb32-284" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb32-285"><a href="#cb32-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-286"><a href="#cb32-286" aria-hidden="true" tabindex="-1"></a>This is another tabular data source published by the <span class="co">[</span><span class="ot">Australian Bureau of Statistics</span><span class="co">](https://www.abs.gov.au/)</span> that requires a decent amount of cleaning. In 2017, Australia conducted a postal survey to gauge citizens' opinions towards same sex marriage: "Should the law be changed to allow same-sex couples to marry?" All Australian citizens are required to vote in elections, so citizens could respond in one of four ways: vote yes, vote no, vote in an unclear way, or fail to vote. (See the "Explanatory Notes" sheet for more details.)</span>
+<span id="cb32-286"><a href="#cb32-286" aria-hidden="true" tabindex="-1"></a><span class="fu">## Australian Marriage Ballot ⭐⭐⭐</span></span>
 <span id="cb32-287"><a href="#cb32-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-288"><a href="#cb32-288" aria-hidden="true" tabindex="-1"></a>The provided table includes estimates of the proportion of citizens choosing each of the four options, aggregated by Federal Electoral District, which are nested within one of 8 overarching Electoral Divisions. Here is a quick image showing the original table format.</span>
+<span id="cb32-288"><a href="#cb32-288" aria-hidden="true" tabindex="-1"></a>This is another tabular data source published by the <span class="co">[</span><span class="ot">Australian Bureau of Statistics</span><span class="co">](https://www.abs.gov.au/)</span> that requires a decent amount of cleaning. In 2017, Australia conducted a postal survey to gauge citizens' opinions towards same sex marriage: "Should the law be changed to allow same-sex couples to marry?" All Australian citizens are required to vote in elections, so citizens could respond in one of four ways: vote yes, vote no, vote in an unclear way, or fail to vote. (See the "Explanatory Notes" sheet for more details.)</span>
 <span id="cb32-289"><a href="#cb32-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-290"><a href="#cb32-290" aria-hidden="true" tabindex="-1"></a><span class="al">![Australian Marriage Data](solution_images/australiandata.png)</span></span>
+<span id="cb32-290"><a href="#cb32-290" aria-hidden="true" tabindex="-1"></a>The provided table includes estimates of the proportion of citizens choosing each of the four options, aggregated by Federal Electoral District, which are nested within one of 8 overarching Electoral Divisions. Here is a quick image showing the original table format.</span>
 <span id="cb32-291"><a href="#cb32-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-292"><a href="#cb32-292" aria-hidden="true" tabindex="-1"></a><span class="fu">### Identify desired data structure</span></span>
+<span id="cb32-292"><a href="#cb32-292" aria-hidden="true" tabindex="-1"></a><span class="al">![Australian Marriage Data](solution_images/australiandata.png)</span></span>
 <span id="cb32-293"><a href="#cb32-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-294"><a href="#cb32-294" aria-hidden="true" tabindex="-1"></a>Inspection reveals several critical issues to address: - Typical long header (skip = 7) - No single row with variable names - Two redundant values (count and percentage - percentage is easy to recover from complete count data) - Total columns that are redundant (remove) - The sum of "Yes" and "No" votes appears to be redundant with Response Clear in columns I and J - District and Division are in the same column</span>
+<span id="cb32-294"><a href="#cb32-294" aria-hidden="true" tabindex="-1"></a><span class="fu">### Identify desired data structure</span></span>
 <span id="cb32-295"><a href="#cb32-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-296"><a href="#cb32-296" aria-hidden="true" tabindex="-1"></a>In this example, we are going to identify the desired structure early in the process, because clever naming of variables makes it much easier to use pivot functions. We will skip reading in redundant data (proportions and "totals" columns), and then can identify four potentially distinct pieces of information. Three grouping variables: *Division* (in column 1), *District* (also in column 1), and citizen *Response* (yes, no, unclear, and non-response), plus one value: aggregated response *Count*.</span>
+<span id="cb32-296"><a href="#cb32-296" aria-hidden="true" tabindex="-1"></a>Inspection reveals several critical issues to address: - Typical long header (skip = 7) - No single row with variable names - Two redundant values (count and percentage - percentage is easy to recover from complete count data) - Total columns that are redundant (remove) - The sum of "Yes" and "No" votes appears to be redundant with Response Clear in columns I and J - District and Division are in the same column</span>
 <span id="cb32-297"><a href="#cb32-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-298"><a href="#cb32-298" aria-hidden="true" tabindex="-1"></a>Our basic data reading and cleaning process should therefore follow these steps:</span>
+<span id="cb32-298"><a href="#cb32-298" aria-hidden="true" tabindex="-1"></a>In this example, we are going to identify the desired structure early in the process, because clever naming of variables makes it much easier to use pivot functions. We will skip reading in redundant data (proportions and "totals" columns), and then can identify four potentially distinct pieces of information. Three grouping variables: *Division* (in column 1), *District* (also in column 1), and citizen *Response* (yes, no, unclear, and non-response), plus one value: aggregated response *Count*.</span>
 <span id="cb32-299"><a href="#cb32-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-300"><a href="#cb32-300" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Read in data, skipping unneeded columns and renaming variables</span>
-<span id="cb32-301"><a href="#cb32-301" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Create *Division* and *District* variables using <span class="in">`separate()`</span> and <span class="in">`fill()`</span></span>
-<span id="cb32-302"><a href="#cb32-302" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>pivot_longer() four response variables into 2 new *Response* and *Count* variables (double the number of rows)</span>
-<span id="cb32-303"><a href="#cb32-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-304"><a href="#cb32-304" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
-<span id="cb32-305"><a href="#cb32-305" aria-hidden="true" tabindex="-1"></a><span class="fu">### Read Data</span></span>
-<span id="cb32-306"><a href="#cb32-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-307"><a href="#cb32-307" aria-hidden="true" tabindex="-1"></a>It is best to confine serious hard-coding to the initial data read in step, to make it easy to locate and make changes or replicate in the future. So, we will use a combination of tools introduced earlier to read and reformat the data: <span class="in">`skip`</span> and <span class="in">`col_names`</span> to read in the data, <span class="in">`select`</span> to get rid of unneeded columns, and <span class="in">`filter`</span> to get rid of unneeded rows. We also use the <span class="in">`drop_na`</span> function to filter unwanted rows.</span>
+<span id="cb32-300"><a href="#cb32-300" aria-hidden="true" tabindex="-1"></a>Our basic data reading and cleaning process should therefore follow these steps:</span>
+<span id="cb32-301"><a href="#cb32-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-302"><a href="#cb32-302" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Read in data, skipping unneeded columns and renaming variables</span>
+<span id="cb32-303"><a href="#cb32-303" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Create *Division* and *District* variables using <span class="in">`separate()`</span> and <span class="in">`fill()`</span></span>
+<span id="cb32-304"><a href="#cb32-304" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>pivot_longer() four response variables into 2 new *Response* and *Count* variables (double the number of rows)</span>
+<span id="cb32-305"><a href="#cb32-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-306"><a href="#cb32-306" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
+<span id="cb32-307"><a href="#cb32-307" aria-hidden="true" tabindex="-1"></a><span class="fu">### Read Data</span></span>
 <span id="cb32-308"><a href="#cb32-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-311"><a href="#cb32-311" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-312"><a href="#cb32-312" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: australia1</span></span>
-<span id="cb32-313"><a href="#cb32-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-314"><a href="#cb32-314" aria-hidden="true" tabindex="-1"></a>vote_orig <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"australian_marriage_law_postal_survey_2017_-_response_final.xls"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-315"><a href="#cb32-315" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_excel</span>(<span class="at">sheet=</span><span class="st">"Table 2"</span>,</span>
-<span id="cb32-316"><a href="#cb32-316" aria-hidden="true" tabindex="-1"></a>           <span class="at">skip=</span><span class="dv">7</span>,</span>
-<span id="cb32-317"><a href="#cb32-317" aria-hidden="true" tabindex="-1"></a>           <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"District"</span>, <span class="st">"Yes"</span>, <span class="st">"del"</span>, <span class="st">"No"</span>, <span class="fu">rep</span>(<span class="st">"del"</span>, <span class="dv">6</span>), <span class="st">"Illegible"</span>, <span class="st">"del"</span>, <span class="st">"No Response"</span>, <span class="fu">rep</span>(<span class="st">"del"</span>, <span class="dv">3</span>)))<span class="sc">%&gt;%</span></span>
-<span id="cb32-318"><a href="#cb32-318" aria-hidden="true" tabindex="-1"></a>  <span class="co">#select(!starts_with("del"))%&gt;%</span></span>
-<span id="cb32-319"><a href="#cb32-319" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">matches</span>(<span class="st">"del"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb32-320"><a href="#cb32-320" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(District)<span class="sc">%&gt;%</span></span>
-<span id="cb32-321"><a href="#cb32-321" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(District, <span class="st">"(Total)"</span>))<span class="sc">%&gt;%</span></span>
-<span id="cb32-322"><a href="#cb32-322" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_starts</span>(District, <span class="st">"</span><span class="sc">\\</span><span class="st">("</span>))</span>
-<span id="cb32-323"><a href="#cb32-323" aria-hidden="true" tabindex="-1"></a>vote_orig</span>
-<span id="cb32-324"><a href="#cb32-324" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-325"><a href="#cb32-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-326"><a href="#cb32-326" aria-hidden="true" tabindex="-1"></a><span class="fu">### Separate *District* and *Division*</span></span>
+<span id="cb32-309"><a href="#cb32-309" aria-hidden="true" tabindex="-1"></a>It is best to confine serious hard-coding to the initial data read in step, to make it easy to locate and make changes or replicate in the future. So, we will use a combination of tools introduced earlier to read and reformat the data: <span class="in">`skip`</span> and <span class="in">`col_names`</span> to read in the data, <span class="in">`select`</span> to get rid of unneeded columns, and <span class="in">`filter`</span> to get rid of unneeded rows. We also use the <span class="in">`drop_na`</span> function to filter unwanted rows.</span>
+<span id="cb32-310"><a href="#cb32-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-313"><a href="#cb32-313" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-314"><a href="#cb32-314" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: australia1</span></span>
+<span id="cb32-315"><a href="#cb32-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-316"><a href="#cb32-316" aria-hidden="true" tabindex="-1"></a>vote_orig <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"australian_marriage_law_postal_survey_2017_-_response_final.xls"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-317"><a href="#cb32-317" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_excel</span>(<span class="at">sheet=</span><span class="st">"Table 2"</span>,</span>
+<span id="cb32-318"><a href="#cb32-318" aria-hidden="true" tabindex="-1"></a>           <span class="at">skip=</span><span class="dv">7</span>,</span>
+<span id="cb32-319"><a href="#cb32-319" aria-hidden="true" tabindex="-1"></a>           <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"District"</span>, <span class="st">"Yes"</span>, <span class="st">"del"</span>, <span class="st">"No"</span>, <span class="fu">rep</span>(<span class="st">"del"</span>, <span class="dv">6</span>), <span class="st">"Illegible"</span>, <span class="st">"del"</span>, <span class="st">"No Response"</span>, <span class="fu">rep</span>(<span class="st">"del"</span>, <span class="dv">3</span>)))<span class="sc">%&gt;%</span></span>
+<span id="cb32-320"><a href="#cb32-320" aria-hidden="true" tabindex="-1"></a>  <span class="co">#select(!starts_with("del"))%&gt;%</span></span>
+<span id="cb32-321"><a href="#cb32-321" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">matches</span>(<span class="st">"del"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb32-322"><a href="#cb32-322" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(District)<span class="sc">%&gt;%</span></span>
+<span id="cb32-323"><a href="#cb32-323" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(District, <span class="st">"(Total)"</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb32-324"><a href="#cb32-324" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_starts</span>(District, <span class="st">"</span><span class="sc">\\</span><span class="st">("</span>))</span>
+<span id="cb32-325"><a href="#cb32-325" aria-hidden="true" tabindex="-1"></a>vote_orig</span>
+<span id="cb32-326"><a href="#cb32-326" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-327"><a href="#cb32-327" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-328"><a href="#cb32-328" aria-hidden="true" tabindex="-1"></a>The most glaring remaining issue is that the administrative *Division* is not in its own column, but is in its own row within the *District* column. The following code uses case_when to make a new *Division* variable with an entry (e.g., New South Wales Division) where there is a Division name in the *District* column, and otherwise it create just an empty space. After that, <span class="in">`fill`</span> can be used to fill in empty spaces with the most recent Division name. We then filter out rows with only the title information.</span>
+<span id="cb32-328"><a href="#cb32-328" aria-hidden="true" tabindex="-1"></a><span class="fu">### Separate *District* and *Division*</span></span>
 <span id="cb32-329"><a href="#cb32-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-332"><a href="#cb32-332" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-333"><a href="#cb32-333" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: australia2</span></span>
-<span id="cb32-334"><a href="#cb32-334" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-335"><a href="#cb32-335" aria-hidden="true" tabindex="-1"></a>vote<span class="ot">&lt;-</span> vote_orig<span class="sc">%&gt;%</span></span>
-<span id="cb32-336"><a href="#cb32-336" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Division =</span> <span class="fu">case_when</span>(</span>
-<span id="cb32-337"><a href="#cb32-337" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_ends</span>(District, <span class="st">"Divisions"</span>) <span class="sc">~</span> District,</span>
-<span id="cb32-338"><a href="#cb32-338" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span> )) <span class="sc">%&gt;%</span></span>
-<span id="cb32-339"><a href="#cb32-339" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill</span>(Division, <span class="at">.direction =</span> <span class="st">"down"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-340"><a href="#cb32-340" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(District, <span class="st">"Division|Australia"</span>))</span>
-<span id="cb32-341"><a href="#cb32-341" aria-hidden="true" tabindex="-1"></a>vote</span>
-<span id="cb32-342"><a href="#cb32-342" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-343"><a href="#cb32-343" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-344"><a href="#cb32-344" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pivot_longer</span></span>
+<span id="cb32-330"><a href="#cb32-330" aria-hidden="true" tabindex="-1"></a>The most glaring remaining issue is that the administrative *Division* is not in its own column, but is in its own row within the *District* column. The following code uses case_when to make a new *Division* variable with an entry (e.g., New South Wales Division) where there is a Division name in the *District* column, and otherwise it create just an empty space. After that, <span class="in">`fill`</span> can be used to fill in empty spaces with the most recent Division name. We then filter out rows with only the title information.</span>
+<span id="cb32-331"><a href="#cb32-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-334"><a href="#cb32-334" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-335"><a href="#cb32-335" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: australia2</span></span>
+<span id="cb32-336"><a href="#cb32-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-337"><a href="#cb32-337" aria-hidden="true" tabindex="-1"></a>vote<span class="ot">&lt;-</span> vote_orig <span class="sc">%&gt;%</span></span>
+<span id="cb32-338"><a href="#cb32-338" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Division =</span> <span class="fu">case_when</span>(</span>
+<span id="cb32-339"><a href="#cb32-339" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_ends</span>(District, <span class="st">"Divisions"</span>) <span class="sc">~</span> District,</span>
+<span id="cb32-340"><a href="#cb32-340" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span> )) <span class="sc">%&gt;%</span></span>
+<span id="cb32-341"><a href="#cb32-341" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill</span>(Division, <span class="at">.direction =</span> <span class="st">"down"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-342"><a href="#cb32-342" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(District, <span class="st">"Division|Australia"</span>))</span>
+<span id="cb32-343"><a href="#cb32-343" aria-hidden="true" tabindex="-1"></a>vote</span>
+<span id="cb32-344"><a href="#cb32-344" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-345"><a href="#cb32-345" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-346"><a href="#cb32-346" aria-hidden="true" tabindex="-1"></a>Supposed we wanted to create a stacked bar chart to compare the % who votes Yes to the people who either said No or didn't vote. Or if we wanted to use division level characteristics to predict the proportion of people voting in a specific way? In both cases, we would need tidy data, which requires us to pivot longer into the original (aggregated) data format: Division, District, Response, Count. We should end up with 600 rows and 4 columns.</span>
+<span id="cb32-346"><a href="#cb32-346" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pivot_longer</span></span>
 <span id="cb32-347"><a href="#cb32-347" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-350"><a href="#cb32-350" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-351"><a href="#cb32-351" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: australia3</span></span>
-<span id="cb32-352"><a href="#cb32-352" aria-hidden="true" tabindex="-1"></a><span class="co">#| </span></span>
-<span id="cb32-353"><a href="#cb32-353" aria-hidden="true" tabindex="-1"></a>vote_long<span class="ot">&lt;-</span> vote<span class="sc">%&gt;%</span></span>
-<span id="cb32-354"><a href="#cb32-354" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb32-355"><a href="#cb32-355" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> Yes<span class="sc">:</span><span class="st">`</span><span class="at">No Response</span><span class="st">`</span>,</span>
-<span id="cb32-356"><a href="#cb32-356" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Response"</span>,</span>
-<span id="cb32-357"><a href="#cb32-357" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"Count"</span></span>
-<span id="cb32-358"><a href="#cb32-358" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb32-359"><a href="#cb32-359" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Division=</span><span class="fu">str_remove</span>(Division, <span class="st">" Divisions"</span>))</span>
-<span id="cb32-360"><a href="#cb32-360" aria-hidden="true" tabindex="-1"></a>vote_long</span>
-<span id="cb32-361"><a href="#cb32-361" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-362"><a href="#cb32-362" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb32-363"><a href="#cb32-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-364"><a href="#cb32-364" aria-hidden="true" tabindex="-1"></a><span class="fu">## USA Households ⭐⭐⭐⭐</span></span>
-<span id="cb32-365"><a href="#cb32-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-366"><a href="#cb32-366" aria-hidden="true" tabindex="-1"></a>The excel workbook "USA Households by Total Money Income, Race, and Hispanic Origin of Householder 1967 to 2019" is clearly a table of census-type household data (e.g., Current Population Study or CPS, American Community Study or ACS, etc.) Row 3 of the workbook provides <span class="co">[</span><span class="ot">a link to more details about the origin of the data used to produce the table.</span><span class="co">](https://www2.census.gov/programs-surveys/cps/techdocs/cpsmar20.pdf)</span></span>
-<span id="cb32-367"><a href="#cb32-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-368"><a href="#cb32-368" aria-hidden="true" tabindex="-1"></a>The cases in this example are essentially year-identity groups, where I use the term identity to refer to the wide range of ways that the census can cluster racial and identity. While there are 12 categories in the data, many of these overlap and/or are not available in specific years. For example, one category is "All Races", and it overlaps with all other categories but cannot be easily eliminated.</span>
-<span id="cb32-369"><a href="#cb32-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-370"><a href="#cb32-370" aria-hidden="true" tabindex="-1"></a><span class="al">![Excel Workbook Screenshot](solution_images/us_hholds.png)</span></span>
-<span id="cb32-371"><a href="#cb32-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-372"><a href="#cb32-372" aria-hidden="true" tabindex="-1"></a><span class="fu">### Identify desired data structure</span></span>
-<span id="cb32-373"><a href="#cb32-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-374"><a href="#cb32-374" aria-hidden="true" tabindex="-1"></a>Inspection of the excel workbook reveals several critical features of the data.</span>
-<span id="cb32-375"><a href="#cb32-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-376"><a href="#cb32-376" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>column names (of a sort) are in rows 4 and 5 (skip=5 and rename)</span>
-<span id="cb32-377"><a href="#cb32-377" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>first column includes *year* and *race/hispanic origin* households</span>
-<span id="cb32-378"><a href="#cb32-378" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>first column appears to have notes of some sort (remove notes)</span>
-<span id="cb32-379"><a href="#cb32-379" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>there are end notes starting in row 358 (n_max = 352)</span>
-<span id="cb32-380"><a href="#cb32-380" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>"Total" column appears to be redundant proportion info</span>
-<span id="cb32-381"><a href="#cb32-381" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-382"><a href="#cb32-382" aria-hidden="true" tabindex="-1"></a>The data appears to have two grouping variables (*year* and *identity*), plus several values:</span>
-<span id="cb32-383"><a href="#cb32-383" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-384"><a href="#cb32-384" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>a count of number of households</span>
-<span id="cb32-385"><a href="#cb32-385" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>median and mean income (and associated margin of error)</span>
-<span id="cb32-386"><a href="#cb32-386" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>proportion of households with hhold income in one of 9 designated ranges or brackets</span>
-<span id="cb32-387"><a href="#cb32-387" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-388"><a href="#cb32-388" aria-hidden="true" tabindex="-1"></a>The final data should potentially be split into two data tables - one with averages for a group of households, the other with proportions information based on income brackets. There is less clarity about how to handle the potential overlap between *race* and *hispanic* group identity information.</span>
-<span id="cb32-389"><a href="#cb32-389" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-390"><a href="#cb32-390" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
-<span id="cb32-391"><a href="#cb32-391" aria-hidden="true" tabindex="-1"></a><span class="fu">### Read data</span></span>
-<span id="cb32-392"><a href="#cb32-392" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-393"><a href="#cb32-393" aria-hidden="true" tabindex="-1"></a>To make it easy to pivot, we will read in income brackets cleanly, along with clear variable names for the estimated average (and standard error) of hhold income for each designated identity group.</span>
-<span id="cb32-394"><a href="#cb32-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-397"><a href="#cb32-397" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-398"><a href="#cb32-398" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: hh1</span></span>
-<span id="cb32-399"><a href="#cb32-399" aria-hidden="true" tabindex="-1"></a>income_brackets <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">i1 =</span> <span class="st">"Under $15,000"</span>,</span>
-<span id="cb32-400"><a href="#cb32-400" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i2 =</span> <span class="st">"$15,000 to $24,999"</span>,</span>
-<span id="cb32-401"><a href="#cb32-401" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i3 =</span> <span class="st">"$25,000 to $34,999"</span>,</span>
-<span id="cb32-402"><a href="#cb32-402" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i4=</span> <span class="st">"$35,000 to $49,999"</span>,</span>
-<span id="cb32-403"><a href="#cb32-403" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i5 =</span> <span class="st">"$50,000 to $74,999"</span>,</span>
-<span id="cb32-404"><a href="#cb32-404" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i6 =</span> <span class="st">"$75,000 to $99,999"</span>,</span>
-<span id="cb32-405"><a href="#cb32-405" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i7 =</span> <span class="st">"$100,000 to $149,999"</span>,</span>
-<span id="cb32-406"><a href="#cb32-406" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i8 =</span> <span class="st">"$150,000 to $199,999"</span>,</span>
-<span id="cb32-407"><a href="#cb32-407" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i9 =</span> <span class="st">"$200,000 and over"</span>)</span>
-<span id="cb32-408"><a href="#cb32-408" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-409"><a href="#cb32-409" aria-hidden="true" tabindex="-1"></a>ushh_orig <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"USA Households by Total Money Income, Race, and Hispanic Origin of Householder 1967 to 2019.xlsx"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-410"><a href="#cb32-410" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_excel</span>(<span class="at">skip=</span><span class="dv">5</span>,</span>
-<span id="cb32-411"><a href="#cb32-411" aria-hidden="true" tabindex="-1"></a>         <span class="at">n_max =</span> <span class="dv">352</span>,</span>
-<span id="cb32-412"><a href="#cb32-412" aria-hidden="true" tabindex="-1"></a>         <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"hholds"</span>, <span class="st">"del"</span>,</span>
-<span id="cb32-413"><a href="#cb32-413" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">str_c</span>(<span class="st">"income"</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>,<span class="at">sep=</span><span class="st">"_i"</span>),</span>
-<span id="cb32-414"><a href="#cb32-414" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"median_inc"</span>, <span class="st">"median_se"</span>, </span>
-<span id="cb32-415"><a href="#cb32-415" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"mean_inc"</span>,<span class="st">"mean_se"</span>))<span class="sc">%&gt;%</span></span>
-<span id="cb32-416"><a href="#cb32-416" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>del)</span>
-<span id="cb32-417"><a href="#cb32-417" aria-hidden="true" tabindex="-1"></a>ushh_orig </span>
-<span id="cb32-418"><a href="#cb32-418" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-419"><a href="#cb32-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-420"><a href="#cb32-420" aria-hidden="true" tabindex="-1"></a><span class="fu">### Clean and separate *year*</span></span>
-<span id="cb32-421"><a href="#cb32-421" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-422"><a href="#cb32-422" aria-hidden="true" tabindex="-1"></a>The current year column has both year and identity information on the hholds, as well as notes that need to be removed. Because identity labels have spaces, we will need to remove those first before our typical approach to removing notes using separate is going to work.</span>
-<span id="cb32-423"><a href="#cb32-423" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-424"><a href="#cb32-424" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb32-425"><a href="#cb32-425" aria-hidden="true" tabindex="-1"></a><span class="fu">## Regex and Regexr</span></span>
-<span id="cb32-426"><a href="#cb32-426" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-427"><a href="#cb32-427" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Regular expressions</span><span class="co">](https://stringr.tidyverse.org/articles/regular-expressions.html)</span> are a critical tool for messy, real world data where you will need to search, replace, and extract information from string variables. Learning regex is tough, but <span class="co">[</span><span class="ot">Regexer</span><span class="co">](https://regexr.com/)</span> makes it much easier!</span>
-<span id="cb32-428"><a href="#cb32-428" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb32-429"><a href="#cb32-429" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-432"><a href="#cb32-432" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-433"><a href="#cb32-433" aria-hidden="true" tabindex="-1"></a>ushh_orig<span class="sc">%&gt;%</span></span>
-<span id="cb32-434"><a href="#cb32-434" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(year, <span class="st">"[[:alpha:]]"</span>))</span>
-<span id="cb32-435"><a href="#cb32-435" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-436"><a href="#cb32-436" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-437"><a href="#cb32-437" aria-hidden="true" tabindex="-1"></a>Now that we know how to use regular expressions to find the household identity information, we can quickly separate out the identity information from the years, then do the standard fill prior to removing the unneeded category rows.</span>
-<span id="cb32-438"><a href="#cb32-438" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-439"><a href="#cb32-439" aria-hidden="true" tabindex="-1"></a>Once that is done, we can use separate to remove the notes from the year column. Removing notes from the *identity* column is a bit trickier, and requires regex to find cases where there is a space then at least one numeric digit. The notes are important for helping orient yourself to the data, and if I were taking my time, I would document the relevant notes in the text at this point, to remind myself if I need to remember details about how the categories were created and/or why they vary over time.</span>
-<span id="cb32-440"><a href="#cb32-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-441"><a href="#cb32-441" aria-hidden="true" tabindex="-1"></a>Note that several variables are read in as non-numeric, so I'm fixing them in a single statement!</span>
-<span id="cb32-442"><a href="#cb32-442" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-445"><a href="#cb32-445" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-446"><a href="#cb32-446" aria-hidden="true" tabindex="-1"></a>ushh_id_tmp<span class="ot">&lt;-</span>ushh_orig<span class="sc">%&gt;%</span></span>
-<span id="cb32-447"><a href="#cb32-447" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">identity =</span> <span class="fu">case_when</span>(</span>
-<span id="cb32-448"><a href="#cb32-448" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(year, <span class="st">"[[:alpha:]]"</span>) <span class="sc">~</span> year,</span>
-<span id="cb32-449"><a href="#cb32-449" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span></span>
-<span id="cb32-450"><a href="#cb32-450" aria-hidden="true" tabindex="-1"></a>  ))<span class="sc">%&gt;%</span></span>
-<span id="cb32-451"><a href="#cb32-451" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill</span>(identity)<span class="sc">%&gt;%</span></span>
-<span id="cb32-452"><a href="#cb32-452" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(year, <span class="st">"[[:alpha:]]"</span>))</span>
-<span id="cb32-453"><a href="#cb32-453" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-454"><a href="#cb32-454" aria-hidden="true" tabindex="-1"></a>ushh_id<span class="ot">&lt;-</span>ushh_id_tmp<span class="sc">%&gt;%</span></span>
-<span id="cb32-455"><a href="#cb32-455" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(year, <span class="at">into=</span><span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"delete"</span>), <span class="at">sep=</span><span class="st">" "</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb32-456"><a href="#cb32-456" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">identity =</span> <span class="fu">str_remove</span>(identity, <span class="st">" [0-9]+"</span>),</span>
-<span id="cb32-457"><a href="#cb32-457" aria-hidden="true" tabindex="-1"></a>         <span class="fu">across</span>(<span class="fu">any_of</span>(<span class="fu">c</span>(<span class="st">"hholds"</span>, <span class="st">"mean_inc"</span>, <span class="st">"mean_se"</span>, <span class="st">"year"</span>)), </span>
-<span id="cb32-458"><a href="#cb32-458" aria-hidden="true" tabindex="-1"></a>                as.numeric))<span class="sc">%&gt;%</span></span>
-<span id="cb32-459"><a href="#cb32-459" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>delete)</span>
-<span id="cb32-460"><a href="#cb32-460" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-461"><a href="#cb32-461" aria-hidden="true" tabindex="-1"></a>ushh_id</span>
-<span id="cb32-462"><a href="#cb32-462" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-463"><a href="#cb32-463" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-464"><a href="#cb32-464" aria-hidden="true" tabindex="-1"></a><span class="fu">### Sanity check *identity*</span></span>
-<span id="cb32-465"><a href="#cb32-465" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-466"><a href="#cb32-466" aria-hidden="true" tabindex="-1"></a>Even from the detailed notes, it is difficult to fully understand what is going on with the identity variable, and whether all of the values are available in every year. A simple sanity check is to pick out several years mentioned in the notes and see if the number of households are available for all categories, and also check to see if there are specific categories that add up to the "all races" category.</span>
-<span id="cb32-467"><a href="#cb32-467" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-470"><a href="#cb32-470" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-471"><a href="#cb32-471" aria-hidden="true" tabindex="-1"></a>ushh_id<span class="sc">%&gt;%</span></span>
-<span id="cb32-472"><a href="#cb32-472" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year<span class="sc">%in%</span><span class="fu">c</span>(<span class="dv">1970</span>, <span class="dv">1972</span>, <span class="dv">1980</span>, <span class="dv">2001</span>, <span class="dv">2002</span>))<span class="sc">%&gt;%</span></span>
-<span id="cb32-473"><a href="#cb32-473" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(identity, hholds, year)<span class="sc">%&gt;%</span></span>
-<span id="cb32-474"><a href="#cb32-474" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">values_from=</span>hholds, <span class="at">names_from=</span>year)</span>
-<span id="cb32-475"><a href="#cb32-475" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-476"><a href="#cb32-476" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-477"><a href="#cb32-477" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-478"><a href="#cb32-478" aria-hidden="true" tabindex="-1"></a>Based on these examples, we can now confirm that the survey did not include a question about Hispanic background prior to 1972^28^, that only "White" and "Black" (and not "Asian") were systematically recorded prior to 2002, and that other mentioned dates of changes are not relevant to the categories represented in the data. Additionally, we can see from the example years that it would be reasonable to create a consistent time series that collapses the "White" and "White Alone" and "Black" and "Black Alone labels.</span>
-<span id="cb32-479"><a href="#cb32-479" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-480"><a href="#cb32-480" aria-hidden="true" tabindex="-1"></a>While it might appear plausible to create distinct variables for *race* and *hispanic,* there is an instructive note in the worksheet that suggests this is probably not possible:</span>
-<span id="cb32-481"><a href="#cb32-481" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-482"><a href="#cb32-482" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Because Hispanics may be any race, data in this report for Hispanics overlap with data for racial groups. Hispanic origin was reported by 15.6 percent of White householders who reported only one race, 5.0 percent of Black householders who reported only one race, and 2.5 percent of Asian householders who reported only one race. Data users should exercise caution when interpreting aggregate results for the Hispanic population and for race groups because these populations consist of many distinct groups that differ in socioeconomic characteristics, culture, and recency of immigration. Data were first collected for Hispanics in 1972.</span></span>
-<span id="cb32-483"><a href="#cb32-483" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-484"><a href="#cb32-484" aria-hidden="true" tabindex="-1"></a>In fact, when we try to get the various hhouse number estimates to add up to the TOTAL households, it is nearly impossible to do so. For now, the most expeditious and likely acceptable approach may be to simply keep a reasonable set of categories that minimizes category overlaps.</span>
-<span id="cb32-485"><a href="#cb32-485" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-486"><a href="#cb32-486" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb32-487"><a href="#cb32-487" aria-hidden="true" tabindex="-1"></a><span class="fu">## Keep your original data</span></span>
-<span id="cb32-488"><a href="#cb32-488" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-489"><a href="#cb32-489" aria-hidden="true" tabindex="-1"></a>Original data that has been carefully documented can be overly detailed and broken into categories that make systematic analysis difficult. When you simplify data categories for exploratory work, keep the original data so that you can reintroduce it at the appropriate point.</span>
-<span id="cb32-490"><a href="#cb32-490" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb32-491"><a href="#cb32-491" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-494"><a href="#cb32-494" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-495"><a href="#cb32-495" aria-hidden="true" tabindex="-1"></a>ushh <span class="ot">&lt;-</span>ushh_id<span class="sc">%&gt;%</span></span>
-<span id="cb32-496"><a href="#cb32-496" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gp_identity =</span> <span class="fu">case_when</span>(</span>
-<span id="cb32-497"><a href="#cb32-497" aria-hidden="true" tabindex="-1"></a>    identity <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"BLACK"</span>, <span class="st">"BLACK ALONE"</span>) <span class="sc">~</span> <span class="st">"gp_black"</span>,</span>
-<span id="cb32-498"><a href="#cb32-498" aria-hidden="true" tabindex="-1"></a>    identity <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"ASIAN ALONE OR IN COMBINATION"</span>,</span>
-<span id="cb32-499"><a href="#cb32-499" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"ASIAN AND PACIFIC ISLANDER"</span>) <span class="sc">~</span> <span class="st">"gp_asian"</span>,</span>
-<span id="cb32-500"><a href="#cb32-500" aria-hidden="true" tabindex="-1"></a>    identity <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"WHITE, NOT HISPANIC"</span>, </span>
-<span id="cb32-501"><a href="#cb32-501" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"WHITE ALONE, NOT HISPANIC"</span>) <span class="sc">~</span> <span class="st">"gp_white"</span>,</span>
-<span id="cb32-502"><a href="#cb32-502" aria-hidden="true" tabindex="-1"></a>    identity <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"HISPANIC (ANY RACE)"</span>) <span class="sc">~</span> <span class="st">"gp_hisp"</span>,</span>
-<span id="cb32-503"><a href="#cb32-503" aria-hidden="true" tabindex="-1"></a>    identity <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"ALL RACES"</span>) <span class="sc">~</span> <span class="st">"gp_all"</span></span>
-<span id="cb32-504"><a href="#cb32-504" aria-hidden="true" tabindex="-1"></a>  ))<span class="sc">%&gt;%</span></span>
-<span id="cb32-505"><a href="#cb32-505" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(gp_identity))<span class="sc">%&gt;%</span></span>
-<span id="cb32-506"><a href="#cb32-506" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, gp_identity)<span class="sc">%&gt;%</span></span>
-<span id="cb32-507"><a href="#cb32-507" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(<span class="fu">starts_with</span>(<span class="st">"inc"</span>),<span class="fu">starts_with</span>(<span class="st">"me"</span>),</span>
-<span id="cb32-508"><a href="#cb32-508" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"hholds"</span>), </span>
-<span id="cb32-509"><a href="#cb32-509" aria-hidden="true" tabindex="-1"></a>                   <span class="sc">~</span><span class="fu">sum</span>(.x, <span class="at">na.rm=</span><span class="cn">TRUE</span>)))<span class="sc">%&gt;%</span></span>
-<span id="cb32-510"><a href="#cb32-510" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb32-511"><a href="#cb32-511" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-512"><a href="#cb32-512" aria-hidden="true" tabindex="-1"></a>ushh</span>
-<span id="cb32-513"><a href="#cb32-513" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-514"><a href="#cb32-514" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-517"><a href="#cb32-517" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-518"><a href="#cb32-518" aria-hidden="true" tabindex="-1"></a>ushh<span class="sc">%&gt;%</span></span>
-<span id="cb32-519"><a href="#cb32-519" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year<span class="sc">%in%</span><span class="fu">c</span>(<span class="dv">1972</span>, <span class="dv">2001</span>, <span class="dv">2002</span>))<span class="sc">%&gt;%</span></span>
-<span id="cb32-520"><a href="#cb32-520" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(gp_identity, hholds, year)<span class="sc">%&gt;%</span></span>
-<span id="cb32-521"><a href="#cb32-521" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">values_from=</span>hholds, <span class="at">names_from=</span>year)</span>
-<span id="cb32-522"><a href="#cb32-522" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-523"><a href="#cb32-523" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-524"><a href="#cb32-524" aria-hidden="true" tabindex="-1"></a><span class="fu">### Split the data</span></span>
-<span id="cb32-525"><a href="#cb32-525" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-526"><a href="#cb32-526" aria-hidden="true" tabindex="-1"></a>We have identified reasonable groups where the parts approximately add up to the whole. They are not perfect, but not horrible given the incomplete and overlapping categories. To get much better, we would need to work with the original ACS or IPUMS microdata.</span>
-<span id="cb32-527"><a href="#cb32-527" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-528"><a href="#cb32-528" aria-hidden="true" tabindex="-1"></a>Now, there may be times we need to split the data - for example, if we want to graph the income brackets as part of the total households. Lets see if we can split and pivot the data.</span>
-<span id="cb32-529"><a href="#cb32-529" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-532"><a href="#cb32-532" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-533"><a href="#cb32-533" aria-hidden="true" tabindex="-1"></a>ushh_brackets <span class="ot">&lt;-</span>ushh<span class="sc">%&gt;%</span></span>
-<span id="cb32-534"><a href="#cb32-534" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()<span class="sc">%&gt;%</span></span>
-<span id="cb32-535"><a href="#cb32-535" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, gp_identity, hholds, <span class="fu">starts_with</span>(<span class="st">"income"</span>))<span class="sc">%&gt;%</span></span>
-<span id="cb32-536"><a href="#cb32-536" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">starts_with</span>(<span class="st">"income"</span>),</span>
-<span id="cb32-537"><a href="#cb32-537" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_prefix=</span> <span class="st">"income_"</span>,</span>
-<span id="cb32-538"><a href="#cb32-538" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"income_bracket"</span>,</span>
-<span id="cb32-539"><a href="#cb32-539" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"percent"</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb32-540"><a href="#cb32-540" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hholds_bracket =</span> <span class="fu">round</span>(hholds<span class="sc">*</span>(percent<span class="sc">/</span><span class="dv">100</span>)),</span>
-<span id="cb32-541"><a href="#cb32-541" aria-hidden="true" tabindex="-1"></a>         <span class="at">income_bracket =</span> <span class="fu">recode</span>(income_bracket,<span class="sc">!!!</span>income_brackets))</span>
-<span id="cb32-542"><a href="#cb32-542" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-543"><a href="#cb32-543" aria-hidden="true" tabindex="-1"></a>ushh_brackets</span>
-<span id="cb32-544"><a href="#cb32-544" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-545"><a href="#cb32-545" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb32-348"><a href="#cb32-348" aria-hidden="true" tabindex="-1"></a>Supposed we wanted to create a stacked bar chart to compare the % who votes Yes to the people who either said No or didn't vote. Or if we wanted to use division level characteristics to predict the proportion of people voting in a specific way? In both cases, we would need tidy data, which requires us to pivot longer into the original (aggregated) data format: Division, District, Response, Count. We should end up with 600 rows and 4 columns.</span>
+<span id="cb32-349"><a href="#cb32-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-352"><a href="#cb32-352" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-353"><a href="#cb32-353" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: australia3</span></span>
+<span id="cb32-354"><a href="#cb32-354" aria-hidden="true" tabindex="-1"></a>vote_long<span class="ot">&lt;-</span> vote <span class="sc">%&gt;%</span></span>
+<span id="cb32-355"><a href="#cb32-355" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb32-356"><a href="#cb32-356" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> Yes<span class="sc">:</span><span class="st">`</span><span class="at">No Response</span><span class="st">`</span>,</span>
+<span id="cb32-357"><a href="#cb32-357" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Response"</span>,</span>
+<span id="cb32-358"><a href="#cb32-358" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"Count"</span></span>
+<span id="cb32-359"><a href="#cb32-359" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb32-360"><a href="#cb32-360" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Division=</span><span class="fu">str_remove</span>(Division, <span class="st">" Divisions"</span>))</span>
+<span id="cb32-361"><a href="#cb32-361" aria-hidden="true" tabindex="-1"></a>vote_long</span>
+<span id="cb32-362"><a href="#cb32-362" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-363"><a href="#cb32-363" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb32-364"><a href="#cb32-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-365"><a href="#cb32-365" aria-hidden="true" tabindex="-1"></a><span class="fu">## USA Households ⭐⭐⭐⭐</span></span>
+<span id="cb32-366"><a href="#cb32-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-367"><a href="#cb32-367" aria-hidden="true" tabindex="-1"></a>The excel workbook "USA Households by Total Money Income, Race, and Hispanic Origin of Householder 1967 to 2019" is clearly a table of census-type household data (e.g., Current Population Study or CPS, American Community Study or ACS, etc.) Row 3 of the workbook provides <span class="co">[</span><span class="ot">a link to more details about the origin of the data used to produce the table.</span><span class="co">](https://www2.census.gov/programs-surveys/cps/techdocs/cpsmar20.pdf)</span></span>
+<span id="cb32-368"><a href="#cb32-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-369"><a href="#cb32-369" aria-hidden="true" tabindex="-1"></a>The cases in this example are essentially year-identity groups, where I use the term identity to refer to the wide range of ways that the census can cluster racial identity. While there are 12 categories in the data, many of these overlap and/or are not available in specific years. For example, one category is "All Races", and it overlaps with all other categories but cannot be easily eliminated.</span>
+<span id="cb32-370"><a href="#cb32-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-371"><a href="#cb32-371" aria-hidden="true" tabindex="-1"></a><span class="al">![Excel Workbook Screenshot](solution_images/us_hholds.png)</span></span>
+<span id="cb32-372"><a href="#cb32-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-373"><a href="#cb32-373" aria-hidden="true" tabindex="-1"></a><span class="fu">### Identify desired data structure</span></span>
+<span id="cb32-374"><a href="#cb32-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-375"><a href="#cb32-375" aria-hidden="true" tabindex="-1"></a>Inspection of the excel workbook reveals several critical features of the data.</span>
+<span id="cb32-376"><a href="#cb32-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-377"><a href="#cb32-377" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>column names (of a sort) are in rows 4 and 5 (skip=5 and rename)</span>
+<span id="cb32-378"><a href="#cb32-378" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>first column includes *year* and *race/hispanic origin* households</span>
+<span id="cb32-379"><a href="#cb32-379" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>first column appears to have notes of some sort (remove notes)</span>
+<span id="cb32-380"><a href="#cb32-380" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>there are end notes starting in row 358 (n_max = 352)</span>
+<span id="cb32-381"><a href="#cb32-381" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>"Total" column appears to be redundant proportion info</span>
+<span id="cb32-382"><a href="#cb32-382" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-383"><a href="#cb32-383" aria-hidden="true" tabindex="-1"></a>The data appears to have two grouping variables (*year* and *identity*), plus several values:</span>
+<span id="cb32-384"><a href="#cb32-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-385"><a href="#cb32-385" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>a count of number of households</span>
+<span id="cb32-386"><a href="#cb32-386" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>median and mean income (and associated margin of error)</span>
+<span id="cb32-387"><a href="#cb32-387" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>proportion of households with hhold income in one of 9 designated ranges or brackets</span>
+<span id="cb32-388"><a href="#cb32-388" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-389"><a href="#cb32-389" aria-hidden="true" tabindex="-1"></a>The final data should potentially be split into two data tables - one with averages for a group of households, the other with proportion information based on income brackets. There is less clarity about how to handle the potential overlap between *race* and *hispanic* group identity information.</span>
+<span id="cb32-390"><a href="#cb32-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-391"><a href="#cb32-391" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
+<span id="cb32-392"><a href="#cb32-392" aria-hidden="true" tabindex="-1"></a><span class="fu">### Read data</span></span>
+<span id="cb32-393"><a href="#cb32-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-394"><a href="#cb32-394" aria-hidden="true" tabindex="-1"></a>To make it easy to pivot, we will read in income brackets cleanly, along with clear variable names for the estimated average (and standard error) of hhold income for each designated identity group.</span>
+<span id="cb32-395"><a href="#cb32-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-398"><a href="#cb32-398" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-399"><a href="#cb32-399" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: hh1</span></span>
+<span id="cb32-400"><a href="#cb32-400" aria-hidden="true" tabindex="-1"></a>income_brackets <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">i1 =</span> <span class="st">"Under $15,000"</span>,</span>
+<span id="cb32-401"><a href="#cb32-401" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i2 =</span> <span class="st">"$15,000 to $24,999"</span>,</span>
+<span id="cb32-402"><a href="#cb32-402" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i3 =</span> <span class="st">"$25,000 to $34,999"</span>,</span>
+<span id="cb32-403"><a href="#cb32-403" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i4=</span> <span class="st">"$35,000 to $49,999"</span>,</span>
+<span id="cb32-404"><a href="#cb32-404" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i5 =</span> <span class="st">"$50,000 to $74,999"</span>,</span>
+<span id="cb32-405"><a href="#cb32-405" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i6 =</span> <span class="st">"$75,000 to $99,999"</span>,</span>
+<span id="cb32-406"><a href="#cb32-406" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i7 =</span> <span class="st">"$100,000 to $149,999"</span>,</span>
+<span id="cb32-407"><a href="#cb32-407" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i8 =</span> <span class="st">"$150,000 to $199,999"</span>,</span>
+<span id="cb32-408"><a href="#cb32-408" aria-hidden="true" tabindex="-1"></a>                     <span class="at">i9 =</span> <span class="st">"$200,000 and over"</span>)</span>
+<span id="cb32-409"><a href="#cb32-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-410"><a href="#cb32-410" aria-hidden="true" tabindex="-1"></a>ushh_orig <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"USA Households by Total Money Income, Race, and Hispanic Origin of Householder 1967 to 2019.xlsx"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-411"><a href="#cb32-411" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_excel</span>(<span class="at">skip=</span><span class="dv">5</span>,</span>
+<span id="cb32-412"><a href="#cb32-412" aria-hidden="true" tabindex="-1"></a>         <span class="at">n_max =</span> <span class="dv">352</span>,</span>
+<span id="cb32-413"><a href="#cb32-413" aria-hidden="true" tabindex="-1"></a>         <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"hholds"</span>, <span class="st">"del"</span>,</span>
+<span id="cb32-414"><a href="#cb32-414" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">str_c</span>(<span class="st">"income"</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>,<span class="at">sep=</span><span class="st">"_i"</span>),</span>
+<span id="cb32-415"><a href="#cb32-415" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"median_inc"</span>, <span class="st">"median_se"</span>, </span>
+<span id="cb32-416"><a href="#cb32-416" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"mean_inc"</span>,<span class="st">"mean_se"</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb32-417"><a href="#cb32-417" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>del)</span>
+<span id="cb32-418"><a href="#cb32-418" aria-hidden="true" tabindex="-1"></a>ushh_orig </span>
+<span id="cb32-419"><a href="#cb32-419" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-420"><a href="#cb32-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-421"><a href="#cb32-421" aria-hidden="true" tabindex="-1"></a><span class="fu">### Clean and separate *year*</span></span>
+<span id="cb32-422"><a href="#cb32-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-423"><a href="#cb32-423" aria-hidden="true" tabindex="-1"></a>The current year column has both year and identity information on the hholds, as well as notes that need to be removed. Because identity labels have spaces, we will need to remove those first before our typical approach to removing notes using separate is going to work.</span>
+<span id="cb32-424"><a href="#cb32-424" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-425"><a href="#cb32-425" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb32-426"><a href="#cb32-426" aria-hidden="true" tabindex="-1"></a><span class="fu">## Regex and Regexr</span></span>
+<span id="cb32-427"><a href="#cb32-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-428"><a href="#cb32-428" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Regular expressions</span><span class="co">](https://stringr.tidyverse.org/articles/regular-expressions.html)</span> are a critical tool for messy, real world data where you will need to search, replace, and extract information from string variables. Learning regex is tough, but <span class="co">[</span><span class="ot">Regexer</span><span class="co">](https://regexr.com/)</span> makes it much easier!</span>
+<span id="cb32-429"><a href="#cb32-429" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb32-430"><a href="#cb32-430" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-433"><a href="#cb32-433" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-434"><a href="#cb32-434" aria-hidden="true" tabindex="-1"></a>ushh_orig <span class="sc">%&gt;%</span></span>
+<span id="cb32-435"><a href="#cb32-435" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(year, <span class="st">"[[:alpha:]]"</span>))</span>
+<span id="cb32-436"><a href="#cb32-436" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-437"><a href="#cb32-437" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-438"><a href="#cb32-438" aria-hidden="true" tabindex="-1"></a>Now that we know how to use regular expressions to find the household identity information, we can quickly separate out the identity information from the years, then do the standard fill prior to removing the unneeded category rows.</span>
+<span id="cb32-439"><a href="#cb32-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-440"><a href="#cb32-440" aria-hidden="true" tabindex="-1"></a>Once that is done, we can use separate to remove the notes from the year column. Removing notes from the *identity* column is a bit trickier, and requires regex to find cases where there is a space then at least one numeric digit. The notes are important for helping orient yourself to the data, and if I were taking my time, I would document the relevant notes in the text at this point, to remind myself if I need to remember details about how the categories were created and/or why they vary over time.</span>
+<span id="cb32-441"><a href="#cb32-441" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-442"><a href="#cb32-442" aria-hidden="true" tabindex="-1"></a>Note that several variables are read in as non-numeric, so I'm fixing them in a single statement!</span>
+<span id="cb32-443"><a href="#cb32-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-446"><a href="#cb32-446" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-447"><a href="#cb32-447" aria-hidden="true" tabindex="-1"></a>ushh_id_tmp<span class="ot">&lt;-</span>ushh_orig<span class="sc">%&gt;%</span></span>
+<span id="cb32-448"><a href="#cb32-448" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">identity =</span> <span class="fu">case_when</span>(</span>
+<span id="cb32-449"><a href="#cb32-449" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(year, <span class="st">"[[:alpha:]]"</span>) <span class="sc">~</span> year,</span>
+<span id="cb32-450"><a href="#cb32-450" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span></span>
+<span id="cb32-451"><a href="#cb32-451" aria-hidden="true" tabindex="-1"></a>  ))<span class="sc">%&gt;%</span></span>
+<span id="cb32-452"><a href="#cb32-452" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill</span>(identity)<span class="sc">%&gt;%</span></span>
+<span id="cb32-453"><a href="#cb32-453" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(year, <span class="st">"[[:alpha:]]"</span>))</span>
+<span id="cb32-454"><a href="#cb32-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-455"><a href="#cb32-455" aria-hidden="true" tabindex="-1"></a>ushh_id<span class="ot">&lt;-</span>ushh_id_tmp<span class="sc">%&gt;%</span></span>
+<span id="cb32-456"><a href="#cb32-456" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(year, <span class="at">into=</span><span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"delete"</span>), <span class="at">sep=</span><span class="st">" "</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb32-457"><a href="#cb32-457" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">identity =</span> <span class="fu">str_remove</span>(identity, <span class="st">" [0-9]+"</span>),</span>
+<span id="cb32-458"><a href="#cb32-458" aria-hidden="true" tabindex="-1"></a>         <span class="fu">across</span>(<span class="fu">any_of</span>(<span class="fu">c</span>(<span class="st">"hholds"</span>, <span class="st">"mean_inc"</span>, <span class="st">"mean_se"</span>, <span class="st">"year"</span>)), </span>
+<span id="cb32-459"><a href="#cb32-459" aria-hidden="true" tabindex="-1"></a>                as.numeric))<span class="sc">%&gt;%</span></span>
+<span id="cb32-460"><a href="#cb32-460" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>delete)</span>
+<span id="cb32-461"><a href="#cb32-461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-462"><a href="#cb32-462" aria-hidden="true" tabindex="-1"></a>ushh_id</span>
+<span id="cb32-463"><a href="#cb32-463" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-464"><a href="#cb32-464" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-465"><a href="#cb32-465" aria-hidden="true" tabindex="-1"></a><span class="fu">### Sanity check *identity*</span></span>
+<span id="cb32-466"><a href="#cb32-466" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-467"><a href="#cb32-467" aria-hidden="true" tabindex="-1"></a>Even from the detailed notes, it is difficult to fully understand what is going on with the identity variable, and whether all of the values are available in every year. A simple sanity check is to pick out several years mentioned in the notes and see if the number of households are available for all categories, and also check to see if there are specific categories that add up to the "all races" category.</span>
+<span id="cb32-468"><a href="#cb32-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-471"><a href="#cb32-471" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-472"><a href="#cb32-472" aria-hidden="true" tabindex="-1"></a>ushh_id<span class="sc">%&gt;%</span></span>
+<span id="cb32-473"><a href="#cb32-473" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year<span class="sc">%in%</span><span class="fu">c</span>(<span class="dv">1970</span>, <span class="dv">1972</span>, <span class="dv">1980</span>, <span class="dv">2001</span>, <span class="dv">2002</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb32-474"><a href="#cb32-474" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(identity, hholds, year)<span class="sc">%&gt;%</span></span>
+<span id="cb32-475"><a href="#cb32-475" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">values_from=</span>hholds, <span class="at">names_from=</span>year)</span>
+<span id="cb32-476"><a href="#cb32-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-477"><a href="#cb32-477" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-478"><a href="#cb32-478" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-479"><a href="#cb32-479" aria-hidden="true" tabindex="-1"></a>Based on these examples, we can now confirm that the survey did not include a question about Hispanic background prior to 1972^28^, that only "White" and "Black" (and not "Asian") were systematically recorded prior to 2002, and that other mentioned dates of changes are not relevant to the categories represented in the data. Additionally, we can see from the example years that it would be reasonable to create a consistent time series that collapses the "White" and "White Alone" and "Black" and "Black Alone labels.</span>
+<span id="cb32-480"><a href="#cb32-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-481"><a href="#cb32-481" aria-hidden="true" tabindex="-1"></a>While it might appear plausible to create distinct variables for *race* and *hispanic,* there is an instructive note in the worksheet that suggests this is probably not possible:</span>
+<span id="cb32-482"><a href="#cb32-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-483"><a href="#cb32-483" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Because Hispanics may be any race, data in this report for Hispanics overlap with data for racial groups. Hispanic origin was reported by 15.6 percent of White householders who reported only one race, 5.0 percent of Black householders who reported only one race, and 2.5 percent of Asian householders who reported only one race. Data users should exercise caution when interpreting aggregate results for the Hispanic population and for race groups because these populations consist of many distinct groups that differ in socioeconomic characteristics, culture, and recency of immigration. Data were first collected for Hispanics in 1972.</span></span>
+<span id="cb32-484"><a href="#cb32-484" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-485"><a href="#cb32-485" aria-hidden="true" tabindex="-1"></a>In fact, when we try to get the various hhouse number estimates to add up to the TOTAL households, it is nearly impossible to do so. For now, the most expeditious and likely acceptable approach may be to simply keep a reasonable set of categories that minimizes category overlaps.</span>
+<span id="cb32-486"><a href="#cb32-486" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-487"><a href="#cb32-487" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb32-488"><a href="#cb32-488" aria-hidden="true" tabindex="-1"></a><span class="fu">## Keep your original data</span></span>
+<span id="cb32-489"><a href="#cb32-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-490"><a href="#cb32-490" aria-hidden="true" tabindex="-1"></a>Original data that has been carefully documented can be overly detailed and broken into categories that make systematic analysis difficult. When you simplify data categories for exploratory work, keep the original data so that you can reintroduce it at the appropriate point.</span>
+<span id="cb32-491"><a href="#cb32-491" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb32-492"><a href="#cb32-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-495"><a href="#cb32-495" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-496"><a href="#cb32-496" aria-hidden="true" tabindex="-1"></a>ushh <span class="ot">&lt;-</span> ushh_id<span class="sc">%&gt;%</span></span>
+<span id="cb32-497"><a href="#cb32-497" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gp_identity =</span> <span class="fu">case_when</span>(</span>
+<span id="cb32-498"><a href="#cb32-498" aria-hidden="true" tabindex="-1"></a>    identity <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"BLACK"</span>, <span class="st">"BLACK ALONE"</span>) <span class="sc">~</span> <span class="st">"gp_black"</span>,</span>
+<span id="cb32-499"><a href="#cb32-499" aria-hidden="true" tabindex="-1"></a>    identity <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"ASIAN ALONE OR IN COMBINATION"</span>,</span>
+<span id="cb32-500"><a href="#cb32-500" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"ASIAN AND PACIFIC ISLANDER"</span>) <span class="sc">~</span> <span class="st">"gp_asian"</span>,</span>
+<span id="cb32-501"><a href="#cb32-501" aria-hidden="true" tabindex="-1"></a>    identity <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"WHITE, NOT HISPANIC"</span>, </span>
+<span id="cb32-502"><a href="#cb32-502" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"WHITE ALONE, NOT HISPANIC"</span>) <span class="sc">~</span> <span class="st">"gp_white"</span>,</span>
+<span id="cb32-503"><a href="#cb32-503" aria-hidden="true" tabindex="-1"></a>    identity <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"HISPANIC (ANY RACE)"</span>) <span class="sc">~</span> <span class="st">"gp_hisp"</span>,</span>
+<span id="cb32-504"><a href="#cb32-504" aria-hidden="true" tabindex="-1"></a>    identity <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"ALL RACES"</span>) <span class="sc">~</span> <span class="st">"gp_all"</span></span>
+<span id="cb32-505"><a href="#cb32-505" aria-hidden="true" tabindex="-1"></a>  ))<span class="sc">%&gt;%</span></span>
+<span id="cb32-506"><a href="#cb32-506" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(gp_identity))<span class="sc">%&gt;%</span></span>
+<span id="cb32-507"><a href="#cb32-507" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, gp_identity)<span class="sc">%&gt;%</span></span>
+<span id="cb32-508"><a href="#cb32-508" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(<span class="fu">starts_with</span>(<span class="st">"inc"</span>),<span class="fu">starts_with</span>(<span class="st">"me"</span>),</span>
+<span id="cb32-509"><a href="#cb32-509" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"hholds"</span>), </span>
+<span id="cb32-510"><a href="#cb32-510" aria-hidden="true" tabindex="-1"></a>                   <span class="sc">~</span><span class="fu">sum</span>(.x, <span class="at">na.rm=</span><span class="cn">TRUE</span>)))<span class="sc">%&gt;%</span></span>
+<span id="cb32-511"><a href="#cb32-511" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb32-512"><a href="#cb32-512" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-513"><a href="#cb32-513" aria-hidden="true" tabindex="-1"></a>ushh</span>
+<span id="cb32-514"><a href="#cb32-514" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-515"><a href="#cb32-515" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-518"><a href="#cb32-518" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-519"><a href="#cb32-519" aria-hidden="true" tabindex="-1"></a>ushh<span class="sc">%&gt;%</span></span>
+<span id="cb32-520"><a href="#cb32-520" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year<span class="sc">%in%</span><span class="fu">c</span>(<span class="dv">1972</span>, <span class="dv">2001</span>, <span class="dv">2002</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb32-521"><a href="#cb32-521" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(gp_identity, hholds, year)<span class="sc">%&gt;%</span></span>
+<span id="cb32-522"><a href="#cb32-522" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">values_from=</span>hholds, <span class="at">names_from=</span>year)</span>
+<span id="cb32-523"><a href="#cb32-523" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-524"><a href="#cb32-524" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-525"><a href="#cb32-525" aria-hidden="true" tabindex="-1"></a><span class="fu">### Split the data</span></span>
+<span id="cb32-526"><a href="#cb32-526" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-527"><a href="#cb32-527" aria-hidden="true" tabindex="-1"></a>We have identified reasonable groups where the parts approximately add up to the whole. They are not perfect, but not horrible given the incomplete and overlapping categories. To get much better, we would need to work with the original ACS or IPUMS microdata.</span>
+<span id="cb32-528"><a href="#cb32-528" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-529"><a href="#cb32-529" aria-hidden="true" tabindex="-1"></a>Now, there may be times we need to split the data - for example, if we want to graph the income brackets as part of the total households. Lets see if we can split and pivot the data.</span>
+<span id="cb32-530"><a href="#cb32-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-533"><a href="#cb32-533" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-534"><a href="#cb32-534" aria-hidden="true" tabindex="-1"></a>ushh_brackets <span class="ot">&lt;-</span>ushh<span class="sc">%&gt;%</span></span>
+<span id="cb32-535"><a href="#cb32-535" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()<span class="sc">%&gt;%</span></span>
+<span id="cb32-536"><a href="#cb32-536" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, gp_identity, hholds, <span class="fu">starts_with</span>(<span class="st">"income"</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb32-537"><a href="#cb32-537" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">starts_with</span>(<span class="st">"income"</span>),</span>
+<span id="cb32-538"><a href="#cb32-538" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_prefix=</span> <span class="st">"income_"</span>,</span>
+<span id="cb32-539"><a href="#cb32-539" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"income_bracket"</span>,</span>
+<span id="cb32-540"><a href="#cb32-540" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"percent"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb32-541"><a href="#cb32-541" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hholds_bracket =</span> <span class="fu">round</span>(hholds<span class="sc">*</span>(percent<span class="sc">/</span><span class="dv">100</span>)),</span>
+<span id="cb32-542"><a href="#cb32-542" aria-hidden="true" tabindex="-1"></a>         <span class="at">income_bracket =</span> <span class="fu">recode</span>(income_bracket,<span class="sc">!!!</span>income_brackets))</span>
+<span id="cb32-543"><a href="#cb32-543" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-544"><a href="#cb32-544" aria-hidden="true" tabindex="-1"></a>ushh_brackets</span>
+<span id="cb32-545"><a href="#cb32-545" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-546"><a href="#cb32-546" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

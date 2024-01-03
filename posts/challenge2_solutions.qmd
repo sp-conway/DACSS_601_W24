@@ -1,7 +1,7 @@
 ---
 title: "Challenge 2 Solutions"
 author: "Sean Conway"
-description: "Data wrangling: using group() and summarise()"
+description: "Data wrangling: using group_by() and summarise()"
 date: "12/30/2023"
 format:
   html:
@@ -69,7 +69,7 @@ Instead of counting the number of distinct values one at a time, I am doing an o
 :::
 
 ```{r}
-railroad%>%
+railroad %>%
   summarise(across(c(state,county), n_distinct))
 ```
 
@@ -162,6 +162,7 @@ t1<-birds%>%
   group_by(Year, Item)%>%
   summarise(avg_stocks = mean(Value, na.rm=TRUE),
             med_stocks = median(Value, na.rm=TRUE))%>%
+  ungroup() %>%
   pivot_wider(names_from = Year, values_from = c(avg_stocks, med_stocks))
 
 t1
@@ -184,14 +185,16 @@ The data are a de-identified extract of real hotel demand data, [made available 
 
 ### Read and make sense of the data
 
-The hotel bookings data set is new to challenge 2, so we need to go through the same process we did during challenge 1 to find out more about the data. Lets read in the data and use the `summmaryTools` package to get an overview of the data set.
+The hotel bookings data set is new to challenge 2, so we need to go through the same process we did during challenge 1 to find out more about the data. 
 
 ```{r}
-bookings <- here("posts","_data","hotel_bookings.csv") %>% read_csv()
+bookings <- here("posts","_data","hotel_bookings.csv") %>% 
+  read_csv()
 bookings
+summary(bookings)
 ```
 
-Wow - there is a lot of information available here. Lets scan it and see what jumps out. First we can see that the summary function claims that there are almost 32,000 duplicates in the data. However, this is likely an artifact of the way that the bookings have been de-identified, and may reflect bookings with identical details but different individuals who made the bookings.
+Wow - there is a lot of information available here. Lets scan it and see what jumps out.  
 
 #### Missing data
 
@@ -216,7 +219,7 @@ We are provided with limited information about the **hotel.** Hotels are identif
 
 There is a flag for whether a booking is **cancelled**. This means that our universe of cases includes bookings where the guests showed up, as well as bookings that were later cancelled - we can add that to our data description.
 
-There are multiple fields with the **arrival date** - year, month, etc. For now, we can tell that the arrival date of the bookings ranges between 2015 and 2017. More precise identification of the date range could be more easily done next challenge when we can recode the arrival date information using `lubridate`[^1].But maybe it is possible to find out which values of month co-occur with specific years?
+There are multiple fields with the **arrival date** - year, month, etc. For now, we can tell that the arrival date of the bookings ranges between 2015 and 2017. More precise identification of the date range could be more easily done when we can recode the arrival date information using `lubridate`[^1].But maybe it is possible to find out which values of month co-occur with specific years?
 
 ### Which values of Y are nested within X?
 
@@ -225,7 +228,7 @@ To approach this question, we can narrow the dataset down to just the two variab
 ```{r}
 bookings%>%
   select(arrival_date_year, arrival_date_month)%>%
-  distinct()
+  distinct() 
 ```
 
 Great - now we now that all bookings have arrival dates between June 2015 and August 2017, and can add that to the data description. Just for fun, lets see if we can confirm that the dates are the same for both hotels.
@@ -239,7 +242,7 @@ This would be easier to investigate with proper date variables, but I am using `
 ```{r}
 d<-bookings%>%
   select(arrival_date_year, arrival_date_month)%>%
-  n_distinct
+  n_distinct()
 
 bookings%>%
   select(hotel, arrival_date_year, arrival_date_month)%>%
@@ -251,16 +254,18 @@ Lets suppose we want to know whether or not the two hotels offer the same types 
 
 ```{r}
 bookings%>%
-  group_by(hotel)%>%
-  count(reserved_room_type)
+  group_by(hotel, reserved_room_type)%>%
+  summarise(n=n()) %>%
+  ungroup()
 ```
 
 In this case, however, it is tough to directly compare - it appears that the hotel-roomtype pairs are not as consistent as the year-month pairs for the same hotels. A quick `pivot-wider` makes this comparison a little easier to visualize. Here we can see that the Resort Hotel has two additional room types: "H" and "L".
 
 ```{r}
 bookings%>%
-  group_by(hotel)%>%
-  count(reserved_room_type)%>%
+  group_by(hotel, reserved_room_type)%>%
+  summarise(n=n()) %>%
+  ungroup() %>%
   pivot_wider(names_from= hotel, values_from = n)
 ```
 
@@ -277,7 +282,7 @@ I am using the `mean` function with the option `na.rm=TRUE` to deal with the fou
 ```{r}
 #| tbl-cap: Average Price and Occupancy, by hotel and room type
 
-t1<-bookings%>%
+t2 <- bookings%>%
   group_by(hotel, reserved_room_type)%>%
   summarise(price = mean(adr),
             adults = mean(adults),
@@ -285,7 +290,7 @@ t1<-bookings%>%
             )%>%
   pivot_wider(names_from= hotel, 
               values_from = c(price, adults, children))
-t1
+t2
 ```
 
 
