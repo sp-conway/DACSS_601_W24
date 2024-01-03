@@ -107,6 +107,7 @@ Here a few other uses of `stringr`:
 -   splitting a string into multiple:
 
 ```{r}
+#| class-output: hscroll
 str_split(snl_1$aid, " ", n=2) #get actor first/last names
 ```
 
