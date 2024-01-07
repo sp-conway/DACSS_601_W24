@@ -1,8 +1,8 @@
 ---
 title: "Challenge 4 Solutions"
 author: "Sean Conway"
-description: "More data wrangling: mutate"
-date: "6/13/2023"
+description: "More data wrangling: pivoting"
+date: "1/7/2024"
 format:
   html:
     df-print: paged
@@ -41,34 +41,6 @@ Today's challenge is to:
 
 Two tidyverse packages will be used heavily today: [`lubridate`](https://lubridate.tidyverse.org/) (which is not automatically loaded) and [`stringr`](https://stringr.tidyverse.org/) (which is part of core tidyverse).
 
-::: callout-tip
-
-I use the [here](https://here.r-lib.org/) package to handle directories whenever I work in an `R` project. This helps simplify the file path issues that can arise when collaborating with others (for example, working on a course blog with others!).  
-
-The package (mainly) consists of one function: `here()`, which helps build a file path. When run with no arguments, the function always returns a string of the home directory for the `R` project the user is working in.  
-
-```{r}
-here()
-```
-  
-The user can then specify additional "sub-directories" as strings, separated by a comma.  
-
-```{r}
-here("posts","_data")
-```
-
-This file path will be different for any user who checks out this `R` project, but any operations using the file path will still work (providing the appropriate file exists).  
-
-```{r}
-test_file_name <- here("posts","_data","cereal.csv")
-test_file_name
-file.exists(test_file_name)
-```
-  
-While `here` is not the only solution for file paths, it's one of several very suitable options.    
-
-:::  
-
 ::: panel-tabset
 ## ABC Poll ⭐
 
@@ -92,17 +64,6 @@ n_distinct(abc_poll_orig$ppstaten)
 
 The ABC Poll appears to be a national sample survey (presumably from 2019) with 527 respondents. There are 10 political attitudes questions, plus party identification, in addition to 15 demographic variables (some with re-coded information) and 5 survey administration variables.
 
-```{r}
-print(summarytools::dfSummary(abc_poll_orig,
-                        varnumbers = FALSE,
-                        plain.ascii  = FALSE, 
-                        style        = "grid", 
-                        graph.magnif = 0.70, 
-                        valid.col    = FALSE),
-      method = 'render',
-      table.classes = 'table-condensed')
-```
-
 ::: panel-tabset
 #### Mutate PartyID
 
@@ -113,7 +74,7 @@ There are lots of string variables that might need to be modified for analysis o
 table(abc_poll_orig$QPID)
 
 #mutate
-abc_poll<-abc_poll_orig%>%
+abc_poll <- abc_poll_orig%>%
   mutate(partyid = str_remove(QPID, "A[n]* "),
          partyid = case_when(
            str_detect(QPID, "Skipped")~NA_character_,
@@ -135,12 +96,12 @@ The ethnic identity variable is long and could be tough to include in graphs, le
 table(abc_poll$ppethm)
 
 #mutate
-abc_poll<-abc_poll%>%
+abc_poll1 <- abc_poll%>%
   mutate(ethnic = str_remove(ppethm, ", Non-Hispanic"))%>%
   select(-ppethm)
 
 #sanity check
-table(abc_poll$ethnic)
+table(abc_poll1$ethnic)
 ```
 
 ## Removing "Skipped"
@@ -148,11 +109,11 @@ table(abc_poll$ethnic)
 What about the political variables that all have "Skipped" - a value that should probably be replaced with `NA` for analysis. Lets use the `across` function to make this easier.
 
 ```{r}
-abc_poll_1 <- abc_poll%>%
+abc_poll2 <- abc_poll1%>%
   mutate(across(starts_with("Q"), ~ na_if(.x, "Skipped")))
 
 # purrr - a bit advanced for this particular challenge
-map(select(abc_poll, starts_with("Q1")), table, useNA="ifany")
+map(select(abc_poll2, starts_with("Q1")), table, useNA="ifany")
 ```
 
 ## Factor order
@@ -166,7 +127,7 @@ The `factor` variable type links variable labels to an underlying numeric order,
 :::
 
 ```{r}
-table(abc_poll$ppeducat)
+table(abc_poll2$ppeducat)
 edulabs <- unique(abc_poll$ppeducat)
 edulabs
 
@@ -175,13 +136,13 @@ levs <- c("Less than high school",
           "Some college",
           "Bachelors degree or higher")
 
-abc_poll_1<-abc_poll_1%>%
+abc_poll3 <- abc_poll2%>%
   mutate(educ = factor(ppeducat, 
                        levels=levs)) %>% #edulabs[c(4,1,3,2)]))%>%
   select(-ppeducat)
 rm(edulabs)
 
-table(abc_poll_1$educ)
+table(abc_poll3$educ)
 ```
 :::
 
@@ -210,7 +171,7 @@ eggs_orig<- here("posts","_data","organiceggpoultry.xls") %>%
 We are going to be removing the note from the first column of the data, and splitting the year and month, and pivoting into long format prior to transforming the year and month columns into a date.
 
 ```{r}
-eggs<-eggs_orig%>%
+eggs1 <- eggs_orig%>%
   mutate(date = str_remove(date, " /1"))%>%
   separate(date, into=c("month", "year"), sep=" ")%>%
   fill(year) %>%
@@ -225,31 +186,22 @@ Now, we need to create a date from a month and year. I can see that the months a
 I'm going to combine the month with the now complete year column, and the parse the "month-year" format using `my()`.
 
 ```{r}
-eggs<-eggs%>%
+eggs2 <- eggs1%>%
   mutate(date = str_c(month, year, sep=" "),
          date = my(date))
 
-select(eggs, month, year, date)
+select(eggs2, month, year, date)
 ```
 
 Interesting - `lubridate` automatically fills in the first day of the month. Maybe we would prefer the last day, or even the middle of the month?
 
-Note that we can't easily use `make_datetime()` for this example, as we would then need to transform the irregular month names into numeric values.  
-
-```{r}
-eggs<-eggs%>%
-  mutate(date = make_datetime(month, "15", year))
-
-select(eggs, month, year, date)
-```
-
 The `mdy()` function works just fine, if we put all the information in the proper format, though.  
 
 ```{r}
-eggs<-eggs%>%
+eggs22 <- eggs1%>%
   mutate(date = mdy(str_c(month,"15",year,sep="/")))
 
-select(eggs, month, year, date)
+select(eggs22, month, year, date)
 ```
 
 
@@ -313,25 +265,25 @@ summary(bookings$date_arrival)
 There are other relevant time variables in the data set that may be worth exploring. For example, we are given a *lead time* measure in days (integer), but we could recover a date with `lubridate`. This would allow us to more easily visually explore, for example, if some people were more likely to make bookings over the winter for summer trips, but in fall for winter trips - or some other seasonal pattern.
 
 ```{r}
-bookings<-bookings%>%
+bookings1 <- bookings%>%
   mutate(date_booking = date_arrival-days(lead_time))
 
-summary(bookings$date_booking)
-bookings %>%
+summary(bookings1$date_booking)
+bookings1 %>%
   select(date_arrival, date_booking, lead_time)
 ```
 
 We can also go in the reverse order. So if we wanted to know how many days before a booking there was last a change in the reservation status, we can generate this by comparing arrival date to reservation status date.
 
 ```{r}
-summary(bookings$reservation_status_date)
+summary(bookings1$reservation_status_date)
 
-bookings<-bookings%>%
+bookings2 <- bookings1%>%
   mutate(change_days = interval(reservation_status_date,
                                 date_arrival),
          change_days = change_days %/% days(1))
 
-summary(bookings$change_days)
+summary(bookings2$change_days)
 ```
 
 ## Debt ⭐⭐⭐⭐⭐
