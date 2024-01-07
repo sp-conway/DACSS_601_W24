@@ -132,7 +132,7 @@ snl_1 %>%
   arrange(desc(name_length))
 ```
 
-### Regular expressions  
+### Regular expressions
 
 Sometimes patterns in strings are not so easily expressed (e.g., "cast" or "guest"). For example, we may want to search within strings for specific types of characters, such as punctuation, numbers, or lowercase characters. Or we may want to extract only part of a string, such as survey responses where the text response is preceded by "Response ".
 
@@ -142,7 +142,7 @@ Regular expressions include match characters, alternates, anchors, and look arou
 
 For these, we'll use the `str_view()` function, which, according to the documentation, *is used to print the underlying representation of a string and to see how a `pattern` matches.* The first argument to `str_view()` is the string we're looking in, and the second argument is the pattern we want to match.
 
-#### match characters  
+#### match characters
 
 First, we'll go over a couple match characters. Note that since "\\" is a *special character* in `R`, we have to use 1 extra "\\"s every time we want to use one.
 
@@ -152,7 +152,7 @@ str_view("123 ABC 8910 XYZ","[:digit:]") # match any digits
 str_view("HELLO world","[:upper:]") # match any uppercase letters
 ```
 
-#### alternates  
+#### alternates
 
 Alternates let us specify the criteria by which we want to match multiple patterns to.
 
@@ -170,7 +170,7 @@ str_view("quick brown fox","^quick b") # start of
 str_view("lazy dog","y dog$") # end of
 ```
 
-#### look arounds  
+#### look arounds
 
 Look arounds specify ways to match patterns based on what surrounds (or does not surround) your strings.
 
@@ -189,7 +189,7 @@ str_view("abccccaaaccccaaaccc","c{1,3}") # between 1 & 3
 str_view("abccaacccbbccccccac","c{2,}") # 2 or more
 ```
 
-## Dates  
+## Dates
 
 Dates are a specific type of data that refer to a particular point in time. There are technically multiple versions of this type of data, but we'll be working with `<date>` type.
 
@@ -247,6 +247,6 @@ hotels2
 
 Dates will become extremely relevant when we start visualizing flow relationships next week. We also didn't discuss time type data, which are a more advanced topic.
 
-## Conclusion 
+## Conclusion
 
 Strings and dates are ubiquitous in data science. You need to know how to work with them, though using cheatsheets (like the stringr one) is okay!
