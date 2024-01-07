@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/example-univariate_bivariate_vis.html",
       "/posts/challenge4_solutions.html",
       "/posts/example-strings_and_dates.html",
       "/posts/example-reproducible_examples.html",
