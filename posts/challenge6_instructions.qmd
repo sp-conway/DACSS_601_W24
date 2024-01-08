@@ -39,7 +39,8 @@ Today's challenge is to:
 4)  create at least one graph including time (evolution)
    - try to make them "publication" ready (optional)
    - Explain why you choose the specific graph type
-5)  Create at least one graph depicting part-whole or flow relationships
+5)  Create at least one graph depicting part-whole  relationships
+   - By part whole, we just mean how one variable's constituent parts differ (or don't). For example, does the gender of computer programmers affect salary?
    - try to make them "publication" ready (optional)
    - Explain why you choose the specific graph type
 
