@@ -109,7 +109,7 @@ table(abc_poll1$ethnic)
 What about the political variables that all have "Skipped" - a value that should probably be replaced with `NA` for analysis. Lets use the `across` function to make this easier.
 
 ```{r}
-abc_poll2 <- abc_poll1%>%
+abc_poll2 <- abc_poll1 %>%
   mutate(across(starts_with("Q"), ~ na_if(.x, "Skipped")))
 
 # purrr - a bit advanced for this particular challenge
@@ -128,8 +128,6 @@ The `factor` variable type links variable labels to an underlying numeric order,
 
 ```{r}
 table(abc_poll2$ppeducat)
-edulabs <- unique(abc_poll$ppeducat)
-edulabs
 
 levs <- c("Less than high school",
           "High school",
@@ -140,7 +138,6 @@ abc_poll3 <- abc_poll2%>%
   mutate(educ = factor(ppeducat, 
                        levels=levs)) %>% #edulabs[c(4,1,3,2)]))%>%
   select(-ppeducat)
-rm(edulabs)
 
 table(abc_poll3$educ)
 ```
@@ -227,7 +224,7 @@ fed_rates<-fed_rates_orig%>%
   mutate(date = str_c(Year, Month, Day, sep="-"),
          date = ymd(date))
 
-summary(fed_rates$date)
+select(fed_rates,date)
 ```
 
 ::: callout-note
@@ -259,14 +256,14 @@ bookings<-bookings_orig%>%
          date_arrival = dmy(date_arrival))%>%
   select(-starts_with("arrival"))
 
-summary(bookings$date_arrival)
+select(bookings,date_arrival)
 ```
 
 There are other relevant time variables in the data set that may be worth exploring. For example, we are given a *lead time* measure in days (integer), but we could recover a date with `lubridate`. This would allow us to more easily visually explore, for example, if some people were more likely to make bookings over the winter for summer trips, but in fall for winter trips - or some other seasonal pattern.
 
 ```{r}
 bookings1 <- bookings%>%
-  mutate(date_booking = date_arrival-days(lead_time))
+  mutate(date_booking = date_arrival-lead_time)
 
 summary(bookings1$date_booking)
 bookings1 %>%
@@ -286,9 +283,18 @@ bookings2 <- bookings1%>%
 summary(bookings2$change_days)
 ```
 
+We can also use `unite()`, rather than `mutate()` and `str_c()`, to combine multiple columns without having to remove the old ones, as `unite()` does it automatically.  
+
+```{r}
+bookings3 <- bookings_orig %>%
+  unite(arrival_date_year,arrival_date_month,arrival_date_day_of_month,sep="-",col="date1") %>%
+  mutate(date1=ymd(date1))
+select(bookings3, contains("date"))
+```
+
 ## Debt ⭐⭐⭐⭐⭐
 
-This data set runs from the first quarter of 2003 to the second quarter of 2021, and includes quarterly measures of the total amount of household debt associated with 6 different types of loans - *mortgage*,*HE revolving*, *auto*, *credit card*, *student*, and *other* - plus a *total* household debt including all 6 loan types. This is another fantastic macroeconomic data product from the [New York Federal Reserve.](https://www.newyorkfed.org/microeconomics/hhdc) Detailed notes on the website reveal that the data are from an Equifax, and explain why data prior to 2003 is no longer part of the primary data publication.
+This data set runs from the first quarter of 2003 to the second quarter of 2021, and includes quarterly measures of the total amount of household debt associated with 6 different types of loans - *mortgage*,*HE revolving*, *auto*, *credit card*, *student*, and *other* - plus a *total* household debt including all 6 loan types. This is another fantastic macroeconomic data product from the [New York Federal Reserve.](https://www.newyorkfed.org/microeconomics/hhdc) Detailed notes on the website reveal that the data are from Equifax, and explain why data prior to 2003 is no longer part of the primary data publication.
 
 ```{r}
 debt_orig<-here("posts","_data","debt_in_trillions.xlsx") %>%

@@ -53,9 +53,9 @@ mtcars %>%
   select(am,vs)
 ```
 
-## Univariate Visualizations  
+## Univariate Visualizations
 
-### Numerical variables  
+### Numerical variables
 
 ggplot works by passing variables to aesthetics, concrete visual aspects of a plot. Let's say we want to create a histogram to examine the distribution of a numerical variable, like `mpg`, the miles per gallon of a car. A histogram works by putting numerical observations into discrete *bins* and plotting the height of each bin based on the number of observations.
 
@@ -92,7 +92,7 @@ ggplot(mtcars,aes(hp))+
   geom_boxplot()
 ```
 
-### Categorical variables  
+### Categorical variables
 
 Not all variables are numeric. Often we may wish to visualize the counts (or *frequencies*) of a categorical variable.
 
@@ -112,25 +112,25 @@ ggplot(mtcars,aes(am))+
        title = "transmission frequencies")
 ```
 
-## Bivariate visualizations  
+## Bivariate visualizations
 
 Sometimes we wish to visualize two variables at once. For example, we may wish to see if cars that weigh more tend to have lower mpg, or if automatic cars are more likely to have straight-shaped engines. In these scenarios, we need *bivariate visualizations*.
 
-### Visualizing two numerical variables  
+### Visualizing two numerical variables
 
 A common bivariate plot is a scatterplot, where we plot two numerical variables against each other, with each "dot" being an individual data point.
 
 ```{r}
-ggplot(mtcars, aes(x=mpg,y=hp))+
+ggplot(mtcars, aes(x=wt,y=mpg))+
   geom_point()
 ```
 
 ```{r}
-ggplot(mtcars, aes(mpg,hp))+ # x and y are first two arguments so no need to use x= and y=
+ggplot(mtcars, aes(wt,mpg))+ # x and y are first two arguments so no need to use x= and y=
   geom_point()
 ```
 
-### Visualizing two categorical variables  
+### Visualizing two categorical variables
 
 To visualize two categorical variables, first we have to compute their counts.[^1]
 
@@ -164,12 +164,12 @@ By default, `geom_col()` creates stacked bar graphs. I often find these difficul
 ```{r}
 ggplot(mtcars_counts,aes(x=vs,y=n,fill=am))+
   geom_col(position = "dodge")+
-  scale_color_discrete(name="transmission type")+
+  scale_fill_discrete(name="transmission type")+
   labs(x="engine shape",
        y="frequency")
 ```
 
-### Visualizing one categorical and one numerical variable  
+### Visualizing one categorical and one numerical variable
 
 We often care about the relationship between a categorical variable and a numerical variable. For example, is the distribution of miles-per-gallon different for automatic vs. manual tranmission?
 
@@ -182,6 +182,6 @@ ggplot(mtcars,aes(am,mpg))+
 
 Here we can see that manual transmission cars tend to have a much higher mpg than automatic cars.
 
-## Conclusion  
+## Conclusion
 
 We'll talk much more about data visualization, including flow relationships, in the next few lectures. This just serves as an introduction to data visualization and the ggplot method of data plotting.

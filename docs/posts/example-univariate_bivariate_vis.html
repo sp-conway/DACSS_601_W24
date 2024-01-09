@@ -362,14 +362,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="visualizing-two-numerical-variables">Visualizing two numerical variables</h3>
 <p>A common bivariate plot is a scatterplot, where we plot two numerical variables against each other, with each “dot” being an individual data point.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x=</span>mpg,<span class="at">y=</span>hp))<span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x=</span>wt,<span class="at">y=</span>mpg))<span class="sc">+</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="example-univariate_bivariate_vis_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(mpg,hp))<span class="sc">+</span> <span class="co"># x and y are first two arguments so no need to use x= and y=</span></span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(wt,mpg))<span class="sc">+</span> <span class="co"># x and y are first two arguments so no need to use x= and y=</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="example-univariate_bivariate_vis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
@@ -416,7 +416,7 @@ argument.</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars_counts,<span class="fu">aes</span>(<span class="at">x=</span>vs,<span class="at">y=</span>n,<span class="at">fill=</span>am))<span class="sc">+</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)<span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="at">name=</span><span class="st">"transmission type"</span>)<span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_discrete</span>(<span class="at">name=</span><span class="st">"transmission type"</span>)<span class="sc">+</span></span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"engine shape"</span>,</span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">"frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -908,9 +908,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb23-57"><a href="#cb23-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(am,vs)</span>
 <span id="cb23-58"><a href="#cb23-58" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb23-59"><a href="#cb23-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a><span class="fu">## Univariate Visualizations  </span></span>
+<span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a><span class="fu">## Univariate Visualizations</span></span>
 <span id="cb23-61"><a href="#cb23-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-62"><a href="#cb23-62" aria-hidden="true" tabindex="-1"></a><span class="fu">### Numerical variables  </span></span>
+<span id="cb23-62"><a href="#cb23-62" aria-hidden="true" tabindex="-1"></a><span class="fu">### Numerical variables</span></span>
 <span id="cb23-63"><a href="#cb23-63" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-64"><a href="#cb23-64" aria-hidden="true" tabindex="-1"></a>ggplot works by passing variables to aesthetics, concrete visual aspects of a plot. Let's say we want to create a histogram to examine the distribution of a numerical variable, like <span class="in">`mpg`</span>, the miles per gallon of a car. A histogram works by putting numerical observations into discrete *bins* and plotting the height of each bin based on the number of observations.</span>
 <span id="cb23-65"><a href="#cb23-65" aria-hidden="true" tabindex="-1"></a></span>
@@ -947,7 +947,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb23-106"><a href="#cb23-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span>
 <span id="cb23-107"><a href="#cb23-107" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb23-108"><a href="#cb23-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-109"><a href="#cb23-109" aria-hidden="true" tabindex="-1"></a><span class="fu">### Categorical variables  </span></span>
+<span id="cb23-109"><a href="#cb23-109" aria-hidden="true" tabindex="-1"></a><span class="fu">### Categorical variables</span></span>
 <span id="cb23-110"><a href="#cb23-110" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-111"><a href="#cb23-111" aria-hidden="true" tabindex="-1"></a>Not all variables are numeric. Often we may wish to visualize the counts (or *frequencies*) of a categorical variable.</span>
 <span id="cb23-112"><a href="#cb23-112" aria-hidden="true" tabindex="-1"></a></span>
@@ -967,25 +967,25 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb23-130"><a href="#cb23-130" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"transmission frequencies"</span>)</span>
 <span id="cb23-131"><a href="#cb23-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb23-132"><a href="#cb23-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-133"><a href="#cb23-133" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bivariate visualizations  </span></span>
+<span id="cb23-133"><a href="#cb23-133" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bivariate visualizations</span></span>
 <span id="cb23-134"><a href="#cb23-134" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-135"><a href="#cb23-135" aria-hidden="true" tabindex="-1"></a>Sometimes we wish to visualize two variables at once. For example, we may wish to see if cars that weigh more tend to have lower mpg, or if automatic cars are more likely to have straight-shaped engines. In these scenarios, we need *bivariate visualizations*.</span>
 <span id="cb23-136"><a href="#cb23-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-137"><a href="#cb23-137" aria-hidden="true" tabindex="-1"></a><span class="fu">### Visualizing two numerical variables  </span></span>
+<span id="cb23-137"><a href="#cb23-137" aria-hidden="true" tabindex="-1"></a><span class="fu">### Visualizing two numerical variables</span></span>
 <span id="cb23-138"><a href="#cb23-138" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-139"><a href="#cb23-139" aria-hidden="true" tabindex="-1"></a>A common bivariate plot is a scatterplot, where we plot two numerical variables against each other, with each "dot" being an individual data point.</span>
 <span id="cb23-140"><a href="#cb23-140" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-143"><a href="#cb23-143" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb23-144"><a href="#cb23-144" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x=</span>mpg,<span class="at">y=</span>hp))<span class="sc">+</span></span>
+<span id="cb23-144"><a href="#cb23-144" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x=</span>wt,<span class="at">y=</span>mpg))<span class="sc">+</span></span>
 <span id="cb23-145"><a href="#cb23-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
 <span id="cb23-146"><a href="#cb23-146" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb23-147"><a href="#cb23-147" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-150"><a href="#cb23-150" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb23-151"><a href="#cb23-151" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(mpg,hp))<span class="sc">+</span> <span class="co"># x and y are first two arguments so no need to use x= and y=</span></span>
+<span id="cb23-151"><a href="#cb23-151" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(wt,mpg))<span class="sc">+</span> <span class="co"># x and y are first two arguments so no need to use x= and y=</span></span>
 <span id="cb23-152"><a href="#cb23-152" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
 <span id="cb23-153"><a href="#cb23-153" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb23-154"><a href="#cb23-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-155"><a href="#cb23-155" aria-hidden="true" tabindex="-1"></a><span class="fu">### Visualizing two categorical variables  </span></span>
+<span id="cb23-155"><a href="#cb23-155" aria-hidden="true" tabindex="-1"></a><span class="fu">### Visualizing two categorical variables</span></span>
 <span id="cb23-156"><a href="#cb23-156" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-157"><a href="#cb23-157" aria-hidden="true" tabindex="-1"></a>To visualize two categorical variables, first we have to compute their counts.<span class="ot">[^1]</span></span>
 <span id="cb23-158"><a href="#cb23-158" aria-hidden="true" tabindex="-1"></a></span>
@@ -1019,12 +1019,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb23-192"><a href="#cb23-192" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb23-193"><a href="#cb23-193" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars_counts,<span class="fu">aes</span>(<span class="at">x=</span>vs,<span class="at">y=</span>n,<span class="at">fill=</span>am))<span class="sc">+</span></span>
 <span id="cb23-194"><a href="#cb23-194" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)<span class="sc">+</span></span>
-<span id="cb23-195"><a href="#cb23-195" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="at">name=</span><span class="st">"transmission type"</span>)<span class="sc">+</span></span>
+<span id="cb23-195"><a href="#cb23-195" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_discrete</span>(<span class="at">name=</span><span class="st">"transmission type"</span>)<span class="sc">+</span></span>
 <span id="cb23-196"><a href="#cb23-196" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"engine shape"</span>,</span>
 <span id="cb23-197"><a href="#cb23-197" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">"frequency"</span>)</span>
 <span id="cb23-198"><a href="#cb23-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb23-199"><a href="#cb23-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-200"><a href="#cb23-200" aria-hidden="true" tabindex="-1"></a><span class="fu">### Visualizing one categorical and one numerical variable  </span></span>
+<span id="cb23-200"><a href="#cb23-200" aria-hidden="true" tabindex="-1"></a><span class="fu">### Visualizing one categorical and one numerical variable</span></span>
 <span id="cb23-201"><a href="#cb23-201" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-202"><a href="#cb23-202" aria-hidden="true" tabindex="-1"></a>We often care about the relationship between a categorical variable and a numerical variable. For example, is the distribution of miles-per-gallon different for automatic vs. manual tranmission?</span>
 <span id="cb23-203"><a href="#cb23-203" aria-hidden="true" tabindex="-1"></a></span>
@@ -1037,7 +1037,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb23-212"><a href="#cb23-212" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-213"><a href="#cb23-213" aria-hidden="true" tabindex="-1"></a>Here we can see that manual transmission cars tend to have a much higher mpg than automatic cars.</span>
 <span id="cb23-214"><a href="#cb23-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-215"><a href="#cb23-215" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion  </span></span>
+<span id="cb23-215"><a href="#cb23-215" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
 <span id="cb23-216"><a href="#cb23-216" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-217"><a href="#cb23-217" aria-hidden="true" tabindex="-1"></a>We'll talk much more about data visualization, including flow relationships, in the next few lectures. This just serves as an introduction to data visualization and the ggplot method of data plotting.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
