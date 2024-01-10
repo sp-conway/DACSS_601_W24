@@ -34,7 +34,7 @@ Overview
 
 Today, we're going to get into more complex visualizations. Specifically, we will discuss visualizations that incorporate time and categorical variables (AKA groups). Some of this demonstration will touch on the idea of "customizing ggplot", which we will touch on more fully next week.
 
-We will use four datasets, all of which come with the `ggplot2` package: `economics`, `mpg`, `presidential`, and `txhousing`. We'll start off by converting these into tibbles and storing them in our environment explicitly.
+We will use four datasets, all of which come loaded in the `ggplot2` package: `economics`, `mpg`, `presidential`, and `txhousing`. We'll start off by converting these into tibbles and storing them in our environment explicitly.
 
 ```{r}
 economics <- as_tibble(economics)
@@ -65,7 +65,9 @@ economics %>%
   geom_path()
 ```
 
-With some minor variation from year to year, it looks like the number of unemployed people has generally been increasing. However, this is likely confounded by the total population increasing.
+With some minor variation from year to year, it looks like the number of unemployed people has generally been increasing. However, this is likely confounded by the total population increasing. We can check[^1] by plotting `date` on the x axis and `pop` (total population in thousands) on the y axis.
+
+[^1]: This is a fairly obvious point, but it's nonetheless good to double check. If nothing else, it shows that these date are indeed valid.
 
 ```{r}
 economics %>%
@@ -114,7 +116,7 @@ txhousing %>%
   distinct(city)
 ```
 
-Some of these "cities" appear to be counties, and there are also 46 of them. To simplify things, we'll focus on the [5 largest Texas cities](https://www.texas-demographics.com/cities_by_population), which in descending order, are Houston, San Antonio, Dallas, Austin, and Fort Worth.
+Some of these "cities" appear to be counties, and there are also 46 of them. That's a lot to compare in one plot. To simplify things, we'll focus on the [5 largest Texas cities](https://www.texas-demographics.com/cities_by_population), which in descending order of population size are **Houston, San Antonio, Dallas, Austin, and Fort Worth**.
 
 We will also create `date` column by combining month and year using `str_c()` and the `my()` function from lubridate.
 
@@ -125,7 +127,8 @@ txhousing_1 <- txhousing %>%
                      "Dallas",
                      "Austin",
                      "Fort Worth")) %>%
-  mutate(date=my(str_c(month,year,sep="-")))
+  mutate(date=str_c(month,year,sep="-"),
+         date=my(date))
 txhousing_1
 ```
 
@@ -159,18 +162,18 @@ txhousing_total %>%
   labs(x="Year",y="Total Sales")
 ```
 
-Now we can see more significant trends. We see that there was a dip in number of sales around the 2008 housing crisis. This occurred for each city. We also see that although San Antonio is the second largest city in Texas, it had the fourth-largest amount of housing sales among these cities.
+Now we can see more significant trends. We see that there was a dip in number of sales around the 2008 housing crisis. This occurred for each city. We also see that although San Antonio is the second largest city in Texas, it had only the fourth-largest amount of housing sales among these cities.
 
 Now let's try plotting `total_volume` of sales (the total number of dollars in housing sales), for each year and city.
 
-We also change the `labels` on the y axis to be in `dollar_format`, using the [`scales`](https://scales.r-lib.org/) package.
+We also change the scale of the y axis to be in billions of dollars, using the `label_currency()` function from the [`scales`](https://scales.r-lib.org/) package. We specify that the suffix should be "B", and the scale should be 1e-9 (dividing all y values by this number to put it in units of billions).
 
 ```{r}
 txhousing_total %>%
   ggplot(aes(year,total_volume,col=city))+
   geom_path()+
   scale_x_continuous(breaks = seq(2000,2015,2))+
-  scale_y_continuous(labels=scales::dollar_format())+
+  scale_y_continuous(labels=scales::label_currency(suffix="B",scale=1e-9),n.breaks = 10)+
   labs(x="Year",y="Total Sales")
 ```
 
@@ -203,9 +206,9 @@ presidential_total_dur %>%
   geom_col()
 ```
 
-It appears that republicans have spent about 5000 more days in office![^1]
+It appears that republicans have spent about 5000 more days in office![^2]
 
-[^1]: Note that this doesn't include Joe Biden's presidency, which as of this posting, has not ended. The Democratic total would be slightly higher, but the trend would be the same.
+[^2]: Note that this doesn't include Joe Biden's presidency, which as of this posting, has not ended. The Democratic total would be slightly higher, but the trend would be the same.
 
 ### `mpg`
 
