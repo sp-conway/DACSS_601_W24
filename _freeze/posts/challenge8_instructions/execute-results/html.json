@@ -1,0 +1,14 @@
+{
+  "hash": "9a3417713adc31775d5a60fd369aa3f8",
+  "result": {
+    "markdown": "---\ntitle: \"Challenge 8 Instructions\"\nauthor: \"Sean Conway\"\ndescription: \"Joining Data\"\ndate: \"1/10/2024\"\nformat:\n  html:\n    toc: true\n    code-copy: true\n    code-tools: true\ncategories:\n  - challenge_8\n  - railroads\n  - snl\n  - faostat\n  - debt\n---\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\nlibrary(ggplot2)\n\nknitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)\n```\n:::\n\n\n## Challenge Overview\n\nToday's challenge is to:\n\n1)  read in multiple data sets, and describe the data set using both words and any supporting information (e.g., tables, etc)\n2)  tidy data as needed.\n3)  mutate variables as needed.\n4)  join two or more data sets and analyze some aspect of the joined data. \n\n## Read in data\n\nRead in one (or more) of the following datasets, using the correct R package and command.\n\n  - military marriages ⭐\n  - faostat ⭐⭐\n  - snl ⭐⭐⭐⭐\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

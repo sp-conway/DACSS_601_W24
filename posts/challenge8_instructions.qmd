@@ -1,0 +1,47 @@
+---
+title: "Challenge 8 Instructions"
+author: "Sean Conway"
+description: "Joining Data"
+date: "1/10/2024"
+format:
+  html:
+    toc: true
+    code-copy: true
+    code-tools: true
+categories:
+  - challenge_8
+  - railroads
+  - snl
+  - faostat
+  - debt
+---
+
+```{r}
+#| label: setup
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(ggplot2)
+
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+## Challenge Overview
+
+Today's challenge is to:
+
+1)  read in multiple data sets, and describe the data set using both words and any supporting information (e.g., tables, etc)
+2)  tidy data as needed.
+3)  mutate variables as needed.
+4)  join two or more data sets and analyze some aspect of the joined data. 
+
+## Read in data
+
+Read in one (or more) of the following datasets, using the correct R package and command.
+
+  - military marriages ⭐
+  - faostat ⭐⭐
+  - snl ⭐⭐⭐⭐
+
+

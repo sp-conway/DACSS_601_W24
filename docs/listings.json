@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/challenge8_instructions.html",
       "/posts/challenge7_instructions.html",
       "/posts/example-vis_time_and_groups.html",
       "/posts/example-univariate_bivariate_vis.html",
@@ -20,7 +21,9 @@
       "/posts/challenge2_instructions.html",
       "/posts/example-groupby_summarize.html",
       "/posts/example-data_import.html",
-      "/posts/challenge1_instructions.html"
+      "/posts/challenge1_instructions.html",
+      "/posts/challenge10_instructions.html",
+      "/posts/challenge9_instructions.html"
     ]
   }
 ]

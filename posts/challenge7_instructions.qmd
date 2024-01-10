@@ -32,8 +32,8 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 Today's challenge is to:
 
 1)  read in a data set, and describe the data set using both words and any supporting information (e.g., tables, etc)
-2)  tidy data (as needed, including sanity checks)
-3)  mutate variables as needed (including sanity checks)
-4)  Recreate at least two graphs from previous exercises, but introduce at least one additional dimension that you omitted before using ggplot functionality (color, shape, line, facet, etc) The goal is not to create unneeded [chart ink (Tufte)](https://www.edwardtufte.com/tufte/), but to concisely capture variation in additional dimensions that were collapsed in your earlier 2 or 3 dimensional graphs.
-   - Explain why you choose the specific graph type
+2)  tidy data as needed.  
+3)  mutate variables as needed.
+4)  Make at least two graphs using ggplot functionality (color, shape, line, facet, etc), in particular trying to use functionality that you haven't used before.  
+   - Explain why you choose the specific graph type.
 5) If you haven't tried in previous weeks, work this week to make your graphs "publication" ready with titles, captions, and pretty axis labels and other viewer-friendly features.  
