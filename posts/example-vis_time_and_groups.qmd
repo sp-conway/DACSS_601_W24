@@ -27,10 +27,9 @@ categories:
 #| warning: false
 knitr::opts_chunk$set(echo = T)
 library(tidyverse)
-library(lubridate)
 ```
 
-Overview
+## Overview
 
 Today, we're going to get into more complex visualizations. Specifically, we will discuss visualizations that incorporate time and categorical variables (AKA groups). Some of this demonstration will touch on the idea of "customizing ggplot", which we will touch on more fully next week.
 
@@ -51,7 +50,7 @@ According to the documentation,
 
 > *This dataset was produced from US economic time series data available from <https://fred.stlouisfed.org/>.*
 
-This dataset contains a number of economics markers, documented every month beginning in July 1967 and ending in April 2015. We will mostly focus on the variable `unemploy`, which marks the number of unemployed people in thousands.
+This dataset contains a number of economic markers, documented every month beginning in July 1967 and ending in April 2015. We will mostly focus on the variable `unemploy`, which marks the number of unemployed people in thousands.
 
 ```{r}
 economics
@@ -80,6 +79,7 @@ We should instead compute the unemployment *rate* (the percentage of people unem
 ```{r}
 economics1 <- economics %>%
   mutate(unemploy_rate=(unemploy/pop)*100)
+economics1
 economics1 %>%
   ggplot(aes(date,unemploy_rate))+
   geom_path()
@@ -93,7 +93,7 @@ Let's see if we can't make that plot a little nicer to look at. We'll convert th
 economics1 %>%
   ggplot(aes(date,unemploy_rate))+
   geom_path()+
-  scale_x_date(limits=range(economics$date),breaks="5 years",date_labels = "%Y")+
+  scale_x_date(limits=range(economics1$date),breaks="5 years",date_labels = "%Y")+
   scale_y_continuous(limits=c(0,ceiling(max(economics1$unemploy_rate))))+
   labs(x="Year",y="Unemployment Rate",
        title="US Unemployment Rate, 1967-2015")
@@ -132,7 +132,7 @@ txhousing_1 <- txhousing %>%
 txhousing_1
 ```
 
-Let's see if we can't examine how `sales`, the number of home sales, has varied over time. We will also compare this separately for each city, to see if some cities have more sales than others. We'll plot `date` on the x axis, `sales` on the y axis, and use the `col` axis to specify that we'll draw a different line for each city. We will draw the line using `geom_path()`.
+Let's see if we can't examine how `sales`, the number of home sales, has varied over time. We will also compare this separately for each city, to see if some cities have more sales than others. We'll plot `date` on the x axis, `sales` on the y axis, and use the `col` aesthetic to specify that we'll draw a different line for each city. We will draw the line using `geom_path()`.
 
 ```{r}
 txhousing_1 %>%
@@ -159,6 +159,7 @@ txhousing_total %>%
   ggplot(aes(year,total_sales,col=city))+
   geom_path()+
   scale_x_continuous(breaks = seq(2000,2015,2))+
+  scale_y_continuous(limits = c(0,ceiling(max(txhousing_total$total_sales))))+
   labs(x="Year",y="Total Sales")
 ```
 
@@ -174,7 +175,7 @@ txhousing_total %>%
   geom_path()+
   scale_x_continuous(breaks = seq(2000,2015,2))+
   scale_y_continuous(labels=scales::label_currency(suffix="B",scale=1e-9),n.breaks = 10)+
-  labs(x="Year",y="Total Sales")
+  labs(x="Year",y="Total Volume of Sales")
 ```
 
 We see the same trends as in the number of sales plot.
@@ -204,6 +205,11 @@ presidential_total_dur
 presidential_total_dur %>%
   ggplot(aes(party,total))+
   geom_col()
+presidential_total_dur1 <- presidential_total_dur %>%
+  mutate(prop=total/sum(total))
+presidential_total_dur1 %>%
+  ggplot(aes(party,prop))+
+  geom_col()
 ```
 
 It appears that republicans have spent about 5000 more days in office![^2]
@@ -225,7 +231,7 @@ mpg %>%
 
 We'll first filter the data to only include the 2008 vehicles, as it's likely that more of these are still on the road in 2024. We will then `group_by` `manufacturer`, and compute mean highway mpg, `hwy` , as well as the [*standard error*](https://en.wikipedia.org/wiki/Standard_error)*.* We haven't discussed this, so don't worry too much about it. It's a statistical measure that tries to incorporate both sample size and variance to get an estimate of what the *true population mean* might be.
 
-We compute both the lower and upper values of the standard error, because we're going to make error bars. This is an advanced topic. We store these statistics in the dataframe `mpg_avgs` .
+We compute both the lower and upper values of the standard error (+- 1 SE), because we're going to make error bars. This is an advanced topic. We store these statistics in the dataframe `mpg_avgs` .
 
 ```{r}
 mpg_avgs <- mpg %>%
@@ -234,8 +240,9 @@ mpg_avgs <- mpg %>%
   summarise(m_hwy_mpg=mean(hwy,na.rm=T),
             sd_hwy_mpg=sd(hwy,na.rm=T),
             se_lower=m_hwy_mpg-sd_hwy_mpg/sqrt(n()),
-           se_upper=m_hwy_mpg+sd_hwy_mpg/sqrt(n() )) %>%
-  ungroup()
+            se_upper=m_hwy_mpg+sd_hwy_mpg/sqrt(n() )) %>%
+  ungroup() %>%
+  filter(!is.na(sd_hwy_mpg))
 mpg_avgs
 ```
 
@@ -266,7 +273,7 @@ We also use the `theme()` function to specify that the x axis text should be rot
 ```{r}
 mpg_avgs %>%
   ggplot(aes(reorder(manufacturer,-m_hwy_mpg),m_hwy_mpg))+
-  geom_col()+
+  geom_col(fill="purple")+
   geom_errorbar(aes(ymin=se_lower,ymax=se_upper),width=.35)+
   labs(x="Manufacturer",y="Mean hwy mpg")+
   theme(axis.text.x = element_text(angle=90))
