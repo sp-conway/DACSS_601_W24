@@ -2,7 +2,7 @@
 title: "Challenge 9 Instructions"
 author: "Sean Conway"
 description: "Creating a function"
-date: "5/30/2023"
+date: "1/10/2024"
 format:
   html:
     toc: true
@@ -28,11 +28,13 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 Today's challenge is simple. Create a function, and use it to perform a data analysis / cleaning / visualization task:
 
 Examples of such functions are:
-1) A function that reads in and cleans a dataset.  
+1) A function that reads in and cleans a dataset. 
 2) A function that computes summary statistics (e.g., computes the z score for a variable).  
 3) A function that plots a histogram.  
 
 That's it!
+
+This is an intentionally straightforward challenge. You can use any dataset in the challenge datasets folder.  
 
 
 
