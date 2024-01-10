@@ -43,7 +43,7 @@ presidential <- as_tibble(presidential)
 txhousing <- as_tibble(txhousing)
 ```
 
-## Demos  
+## Demos
 
 ### `economics`
 
@@ -176,7 +176,7 @@ txhousing_total %>%
 
 We see the same trends as in the number of sales plot.
 
-### `presidential`  
+### `presidential`
 
 The `presidential` dataset is a very simple dataset. It contains the `name`, inauguration date (`start`), end date (`end`) and political `party` for US presidents, beginning with Dwight Eisenhower in 1953 and ending with Donald Trump in 2016.
 
@@ -271,7 +271,7 @@ mpg_avgs %>%
 
 Our plot is now a *lot* cleaner. The trends are easier to see.
 
-## Conclusion  
+## Conclusion
 
 This demonstration has focused on various ways we can plot time and groups, two common aspects of many research areas. These analyses have been largely *exploratory* - where we have general research questions (but no specific hypotheses) and create visualizations to answer them.
 

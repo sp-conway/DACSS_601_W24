@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/challenge7_instructions.html",
       "/posts/example-vis_time_and_groups.html",
       "/posts/example-univariate_bivariate_vis.html",
       "/posts/challenge4_solutions.html",
