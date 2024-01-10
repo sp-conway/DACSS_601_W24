@@ -1,0 +1,278 @@
+---
+title: "Visualizing time & groups"
+author: "Sean Conway"
+editor: visual
+description: "Visualizing time & groups"  
+date: "1/10/2024"
+editor_options: 
+  chunk_output_type: console
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: false
+    code-copy: true
+    code-tools: true
+    css: ".../styles.scss"
+categories:
+  - visualization
+  - ggplot2
+  - time
+  - groups
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+knitr::opts_chunk$set(echo = T)
+library(tidyverse)
+library(lubridate)
+```
+
+Overview
+
+Today, we're going to get into more complex visualizations. Specifically, we will discuss visualizations that incorporate time and categorical variables (AKA groups). Some of this demonstration will touch on the idea of "customizing ggplot", which we will touch on more fully next week.
+
+We will use four datasets, all of which come with the `ggplot2` package: `economics`, `mpg`, `presidential`, and `txhousing`. We'll start off by converting these into tibbles and storing them in our environment explicitly.
+
+```{r}
+economics <- as_tibble(economics)
+mpg <- as_tibble(mpg)
+presidential <- as_tibble(presidential)
+txhousing <- as_tibble(txhousing)
+```
+
+## Demos  
+
+### `economics`
+
+According to the documentation,
+
+> *This dataset was produced from US economic time series data available from <https://fred.stlouisfed.org/>.*
+
+This dataset contains a number of economics markers, documented every month beginning in July 1967 and ending in April 2015. We will mostly focus on the variable `unemploy`, which marks the number of unemployed people in thousands.
+
+```{r}
+economics
+```
+
+Let's examine how unemployment total varies over time. We will plot `date` on the x axis and `unemploy` on the y axis, using `geom_path()` to draw a line across each data point.
+
+```{r}
+economics %>%
+  ggplot(aes(date,unemploy))+
+  geom_path()
+```
+
+With some minor variation from year to year, it looks like the number of unemployed people has generally been increasing. However, this is likely confounded by the total population increasing.
+
+```{r}
+economics %>%
+  ggplot(aes(date,pop))+
+  geom_path()
+```
+
+We should instead compute the unemployment *rate* (the percentage of people unemployed at any given time), by dividing `unemploy` by `pop` at each time point, and then multiplying it by 100 to convert proportion to percentage.
+
+```{r}
+economics1 <- economics %>%
+  mutate(unemploy_rate=(unemploy/pop)*100)
+economics1 %>%
+  ggplot(aes(date,unemploy_rate))+
+  geom_path()
+```
+
+It's clear that unemployment is a bit higher than it was in the late 60s, but that the various jumps over time are more substantial.
+
+Let's see if we can't make that plot a little nicer to look at. We'll convert the x axis to `date` type using the `scale_x_date()` function and add limits to it as well as 5 year breaks. We'll also modify the limits of the y axis to make sure 0 is included (to provide a reference point). Lastly, we add axis labels and a nice title to the plot.
+
+```{r}
+economics1 %>%
+  ggplot(aes(date,unemploy_rate))+
+  geom_path()+
+  scale_x_date(limits=range(economics$date),breaks="5 years",date_labels = "%Y")+
+  scale_y_continuous(limits=c(0,ceiling(max(economics1$unemploy_rate))))+
+  labs(x="Year",y="Unemployment Rate",
+       title="US Unemployment Rate, 1967-2015")
+```
+
+### `txhousing`
+
+```{r}
+txhousing
+```
+
+The `txhousing` data contains
+
+> *Information about the housing market in Texas provided by the TAMU real estate center*.
+
+This data contains information about sales and listing of homes from a number of Texas cities beginning in 2000 and ending in 2015.
+
+```{r}
+txhousing %>%
+  distinct(city)
+```
+
+Some of these "cities" appear to be counties, and there are also 46 of them. To simplify things, we'll focus on the [5 largest Texas cities](https://www.texas-demographics.com/cities_by_population), which in descending order, are Houston, San Antonio, Dallas, Austin, and Fort Worth.
+
+We will also create `date` column by combining month and year using `str_c()` and the `my()` function from lubridate.
+
+```{r}
+txhousing_1 <- txhousing %>%
+  filter(city %in% c("Houston",
+                     "San Antonio",
+                     "Dallas",
+                     "Austin",
+                     "Fort Worth")) %>%
+  mutate(date=my(str_c(month,year,sep="-")))
+txhousing_1
+```
+
+Let's see if we can't examine how `sales`, the number of home sales, has varied over time. We will also compare this separately for each city, to see if some cities have more sales than others. We'll plot `date` on the x axis, `sales` on the y axis, and use the `col` axis to specify that we'll draw a different line for each city. We will draw the line using `geom_path()`.
+
+```{r}
+txhousing_1 %>%
+  ggplot(aes(date, sales,col=city))+
+  geom_path()
+```
+
+Woah, there's a lot of "squiggles" in those lines! Clearly, there's a lot of month-to-month variation that needs to be cleaned up. To remove some of this variability, we'll use `group_by()` and `summarise()` to compute the total number of `sales` and total `volume` of sales for each city and year. We'll also make city a `factor` type, specifying the levels in descending order of population size.
+
+```{r}
+txhousing_total <- txhousing_1 %>%
+  group_by(city,year) %>%
+  summarise(total_sales=sum(sales),
+            total_volume=sum(volume)) %>%
+  ungroup() %>%
+  mutate(city=factor(city,levels=c("Houston","San Antonio","Dallas","Austin","Fort Worth")))
+txhousing_total
+```
+
+Now let's plot this relationship. We also clean up the x axis breaks and add axis labels.
+
+```{r}
+txhousing_total %>%
+  ggplot(aes(year,total_sales,col=city))+
+  geom_path()+
+  scale_x_continuous(breaks = seq(2000,2015,2))+
+  labs(x="Year",y="Total Sales")
+```
+
+Now we can see more significant trends. We see that there was a dip in number of sales around the 2008 housing crisis. This occurred for each city. We also see that although San Antonio is the second largest city in Texas, it had the fourth-largest amount of housing sales among these cities.
+
+Now let's try plotting `total_volume` of sales (the total number of dollars in housing sales), for each year and city.
+
+We also change the `labels` on the y axis to be in `dollar_format`, using the [`scales`](https://scales.r-lib.org/) package.
+
+```{r}
+txhousing_total %>%
+  ggplot(aes(year,total_volume,col=city))+
+  geom_path()+
+  scale_x_continuous(breaks = seq(2000,2015,2))+
+  scale_y_continuous(labels=scales::dollar_format())+
+  labs(x="Year",y="Total Sales")
+```
+
+We see the same trends as in the number of sales plot.
+
+### `presidential`  
+
+The `presidential` dataset is a very simple dataset. It contains the `name`, inauguration date (`start`), end date (`end`) and political `party` for US presidents, beginning with Dwight Eisenhower in 1953 and ending with Donald Trump in 2016.
+
+```{r}
+presidential
+```
+
+Despite the simplicity, we can still make an interesting visualization here. Note that both `start` and `end` are `date` type variables. This means we can perform arithmetic operations here. We can compute the total duration (`dur`) of each presidency. This contains the number of days spent in office. Then we can compute the *total* number of days spent in office by each political party (Republican vs. Democrat) from this time period.
+
+```{r}
+presidential1 <- presidential %>%
+  mutate(dur=end-start)
+presidential1
+presidential_total_dur <- presidential1 %>%
+  group_by(party) %>%
+  summarise(total=as.numeric(sum(dur)) )%>%
+  ungroup()
+presidential_total_dur
+```
+
+```{r}
+presidential_total_dur %>%
+  ggplot(aes(party,total))+
+  geom_col()
+```
+
+It appears that republicans have spent about 5000 more days in office![^1]
+
+[^1]: Note that this doesn't include Joe Biden's presidency, which as of this posting, has not ended. The Democratic total would be slightly higher, but the trend would be the same.
+
+### `mpg`
+
+Lastly, we work with the `mpg` dataset, which
+
+> *contains a subset of the fuel economy data that the EPA makes available on <https://fueleconomy.gov/>. It contains only models which had a new release every year between 1999 and 2008 - this was used as a proxy for the popularity of the car.*
+
+We're going to try to see, on average, which manufacturers tend to make vehicles that are more fuel efficient. There are 15 total manufacturers in this dataset, which at first glance seem to be some of the most commonly driven vehicles in the US.
+
+```{r}
+mpg %>%
+  distinct(manufacturer)
+```
+
+We'll first filter the data to only include the 2008 vehicles, as it's likely that more of these are still on the road in 2024. We will then `group_by` `manufacturer`, and compute mean highway mpg, `hwy` , as well as the [*standard error*](https://en.wikipedia.org/wiki/Standard_error)*.* We haven't discussed this, so don't worry too much about it. It's a statistical measure that tries to incorporate both sample size and variance to get an estimate of what the *true population mean* might be.
+
+We compute both the lower and upper values of the standard error, because we're going to make error bars. This is an advanced topic. We store these statistics in the dataframe `mpg_avgs` .
+
+```{r}
+mpg_avgs <- mpg %>%
+  filter(year==2008) %>%
+  group_by(manufacturer) %>%
+  summarise(m_hwy_mpg=mean(hwy,na.rm=T),
+            sd_hwy_mpg=sd(hwy,na.rm=T),
+            se_lower=m_hwy_mpg-sd_hwy_mpg/sqrt(n()),
+           se_upper=m_hwy_mpg+sd_hwy_mpg/sqrt(n() )) %>%
+  ungroup()
+mpg_avgs
+```
+
+Now let's see if we can plot this via a bar plot. We will plot `manufacturer` on the x axis and `m_hwy_mpg` (mean highway mpg) on the y axis. We will plot the bars using `geom_col()` and draw the lower and upper ends of the error bars using the `ymin` and `ymax` arguments, respectively, to the `geom_errorbar()` function. We again use `labs()` to add in some axis labels.
+
+```{r}
+mpg_avgs %>%
+  ggplot(aes(manufacturer,m_hwy_mpg))+
+  geom_col()+
+  geom_errorbar(aes(ymin=se_lower,ymax=se_upper))+
+  labs(x="Manufacturer",y="Mean hwy mpg")
+```
+
+This plot is useful: it appears that Honda and Volkswagen have the highest mean mpg. However, the plot is a little messy. First of all, the manufacturer labels sometimes overlap with each other. Also, the bars should probably be ordered based on mean mpg, rather than alphabetically, which ggplot defaults to.
+
+Below, we use the `reorder()` function to specify that the variable `manufacturer` should be *reordered* based on descending values of `m_hwy_mpg` . We represent this with a `-` operator. Without the `-` sign, the bars would be in *ascending* order.
+
+We also make our error bars narrower, by modifying the width argument. By default, the error bars will be as wide as the bars, but that's a little large. The unit of size is "point", or as the user `agstudy` points out on [Stack Overflow](https://stackoverflow.com/questions/17311917/ggplot2-the-unit-of-size)
+
+> The answer is : The unit is the points. It is the unit of fontsize in the `grid` package. In `?unit`, we find the following definition
+>
+> ```         
+> "points" Points. There are 72.27 points per inch.
+> ```
+
+We also use the `theme()` function to specify that the x axis text should be rotated 90 degrees. [Theme](https://ggplot2.tidyverse.org/reference/theme.html) allows you to modify the "non-data" parts of a plot. There are many, many ways to customize these aspects. We'll discuss this more next week.
+
+```{r}
+mpg_avgs %>%
+  ggplot(aes(reorder(manufacturer,-m_hwy_mpg),m_hwy_mpg))+
+  geom_col()+
+  geom_errorbar(aes(ymin=se_lower,ymax=se_upper),width=.35)+
+  labs(x="Manufacturer",y="Mean hwy mpg")+
+  theme(axis.text.x = element_text(angle=90))
+```
+
+Our plot is now a *lot* cleaner. The trends are easier to see.
+
+## Conclusion  
+
+This demonstration has focused on various ways we can plot time and groups, two common aspects of many research areas. These analyses have been largely *exploratory* - where we have general research questions (but no specific hypotheses) and create visualizations to answer them.
+
+Next week, we will discuss ways to further explore data via visualization while customizing our plots.
