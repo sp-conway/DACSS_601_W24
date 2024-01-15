@@ -28,6 +28,7 @@ categories:
 #| warning: false
 knitr::opts_chunk$set(echo = T)
 library(tidyverse)
+library(khroma)
 ```
 
 ## Overview
@@ -230,6 +231,44 @@ ggplot(mtcars1, aes(mpg, hp))+
   geom_point(size=2.5,alpha=.75)+
   facet_grid(am~vs,scales="free")+
   labs(x="Miles per gallon",y="Horsepower",title="Relationship between mpg & horsepower, split by transmission & engine shape")+
+  ggthemes::theme_few()+
+  theme(plot.title = element_text(hjust=0.5))
+```
+
+### An alternative visualization  
+
+Rather than facetting by both `am` and `vs`, we may consider an alternative visualization. That is, we could `facet` by `am` and color each point by `vs`. This eliminates the issue of having few data points in each panel while still allowing us to consider multiple dimensions.
+
+```{r}
+ggplot(mtcars1, aes(mpg,hp,col=vs))+
+  geom_point()+
+  facet_wrap(vars(am))
+```
+
+This plot shows us that the negative relationship between `mpg` and `hp` still holds for automatic and manual transmissions, and also that straight engines tend to have higher `mpg` values, regardless of the transmission!
+
+Now, let's try customizing this figure to be more reader friendly.
+
+-   We modify the size and transparency of each point
+
+-   We add in axis labels and a title.
+
+-   We center that title.
+
+-   We use `ggthemes::theme_few()` to clean up the background
+
+-   We use the `scale_color_okabeito()` function from the [`khroma`](https://github.com/tesselle/khroma) package to modify the color scale to be color-blind friendly. This is crucial to do whenever the interpretation of a plot requires the reader to be able to distinguish discrete colors from one another.
+
+-   We also use the `name` argument of the `scale_color_okabeito()`[^3] to change the name of the legend.
+
+[^3]: This works with any `scale_color_` or `scale_fill_` function, ggplot functions that allow you to modify the scale of a variable whose display is based on color.
+
+```{r}
+ggplot(mtcars1, aes(mpg,hp,col=vs))+
+  geom_point(alpha=.8,size=2.5)+
+  facet_wrap(vars(am),scales="free")+
+  labs(x="Miles per gallon",y="Horsepower",title="Horsepower & Mpg \nBased on Transmission & Engine")+
+  scale_color_okabeito(name="Engine shape")+
   ggthemes::theme_few()+
   theme(plot.title = element_text(hjust=0.5))
 ```
