@@ -45,7 +45,7 @@ We're going to take a look at the relationship between wind speed and air pressu
 
 We start off by loading the data into our environment using the `data()` function[^1].
 
-[^1]: We do already have access to the data because we loaded `tidyverse` , which loads `dplyr` . However, I usually prefer to expliclty load the data into my `R` global environment,
+[^1]: We do already have access to the data because we loaded `tidyverse` , which loads `dplyr` . However, I usually prefer to explicitly load the data into my `R` global environment.
 
 ```{r}
 data("storms")
@@ -60,7 +60,7 @@ storms_1 <- storms %>%
 storms_1
 ```
 
-These hurricanes were measured fairly frequently. Beginning in 1979, they were measured every six hours. \
+These hurricanes were measured fairly frequently. Beginning in 1979, they were measured every six hours.\
 To simplify our analysis, we are going to compute the *maximum* wind speed and air pressure for each hurricane.
 
 We will use `group_by()` `name` and `year`, and use `summarise()` to compute the maximum wind speed and maximum air pressure for each hurricane.
@@ -82,7 +82,7 @@ Then, we use `left_join()` to get the `category` variable back in our data.[^2]
 storms_max <- storms_1 %>%
   group_by(name, year) %>%
   summarise(max_wind=max(wind),
-            max_pressure=max(max(pressure))) %>%
+            max_pressure=max(pressure)) %>%
   ungroup() %>%
   left_join(distinct(storms_1,name,year,category)) %>%
   mutate(category=as.factor(category))
@@ -196,6 +196,10 @@ ggplot(mtcars1, aes(mpg, hp))+
 
 It does appear that the negative relationship between `mpg` and `hp` holds regardless of the type of transmission.
 
+Now, let's try to add a *fourth* dimension to the plot - `vs`, which indicates v-shaped or straight engines.
+
+Here, we need to use `facet_grid()` to specify the rows and columns of our plot. `facet_grid()` takes a formula of `row~column` variables and creates a $\textrm{row x column}$ grid of plots. We will also use `scales="free"` to allow our plots to have different axis ranges.
+
 ```{r}
 ggplot(mtcars1, aes(mpg, hp))+
   geom_point()+
@@ -204,17 +208,13 @@ ggplot(mtcars1, aes(mpg, hp))+
   scale_y_continuous(limits=range(mtcars1$hp))
 ```
 
-Now, let's try to add a *fourth* dimension to the plot - `vs`, which indicates v-shaped or straight engines.
-
-Here, we need to use `facet_grid()` to specify the rows and columns of our plot. `facet_grid()` takes a formula of `row~column` variables and creates a $\textrm{row x column}$ grid of plots. We will also use `scales="free"` to allow our plots to have different axis ranges.
-
 ```{r}
 ggplot(mtcars1, aes(mpg, hp))+
   geom_point()+
   facet_grid(am~vs,scales="free")
 ```
 
-It again seems that the negative relationship *generally* holds, though maybe not for straight/manual cars. However, one **strong** caveat here is that there are very few data points per plot. We should take this all with a grain of salt.
+It again seems that the negative relationship *generally* holds, though maybe not for straight & manual cars. However, one **strong** caveat here is that there are very few data points per plot. We should take this all with a grain of salt.
 
 Below, we customize our plot even more:
 
@@ -230,12 +230,12 @@ Below, we customize our plot even more:
 ggplot(mtcars1, aes(mpg, hp))+
   geom_point(size=2.5,alpha=.75)+
   facet_grid(am~vs,scales="free")+
-  labs(x="Miles per gallon",y="Horsepower",title="Relationship between mpg & horsepower, split by transmission & engine shape")+
+  labs(x="Miles per gallon",y="Horsepower",title="Relationship between mpg & horsepower \nSplit by transmission & engine shape")+
   ggthemes::theme_few()+
   theme(plot.title = element_text(hjust=0.5))
 ```
 
-### An alternative visualization  
+### An alternative visualization
 
 Rather than facetting by both `am` and `vs`, we may consider an alternative visualization. That is, we could `facet` by `am` and color each point by `vs`. This eliminates the issue of having few data points in each panel while still allowing us to consider multiple dimensions.
 
@@ -265,7 +265,7 @@ Now, let's try customizing this figure to be more reader friendly.
 
 ```{r}
 ggplot(mtcars1, aes(mpg,hp,col=vs))+
-  geom_point(alpha=.8,size=2.5)+
+  geom_point(alpha=.65,size=2.5)+
   facet_wrap(vars(am),scales="free")+
   labs(x="Miles per gallon",y="Horsepower",title="Horsepower & Mpg \nBased on Transmission & Engine")+
   scale_color_okabeito(name="Engine shape")+
@@ -273,7 +273,7 @@ ggplot(mtcars1, aes(mpg,hp,col=vs))+
   theme(plot.title = element_text(hjust=0.5))
 ```
 
-## Conclusion  
+## Conclusion
 
-As you work further with a dataset, you will often find yourself needing to consider multiple dimensions. The tools of ggplot, especially the `facet_` functions, will be crucial for doing so. \
+As you work further with a dataset, you will often find yourself needing to consider multiple dimensions. The tools of ggplot, especially the `facet_` functions, will be crucial for doing so.\
 Furthermore, you will need to customize your plots to be as readable as possible. This is no small task (and it can be subjective at times), but you should do your best to allow a general audience to understand any figures you make.
