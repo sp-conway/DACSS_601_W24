@@ -1,0 +1,240 @@
+---
+title: "Visualization with multiple dimensions / customizing ggplot"
+author: "Sean Conway"
+editor: visual
+description: "Visualization with multiple dimensions / customizing ggplot"  
+date: "1/15/2024"
+editor_options: 
+  chunk_output_type: console
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: false
+    code-copy: true
+    code-tools: true
+    css: ".../styles.scss"
+categories:
+  - visualization
+  - ggplot2
+  - facets
+  - theme
+  - customization
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+knitr::opts_chunk$set(echo = T)
+library(tidyverse)
+```
+
+## Overview
+
+In this demonstration, we're going to work through ways to incorporate multiple dimensions (i.e., $>2$ ) into a `ggplot2` visualization. We will also discuss ways to "customize" your plots to get them looking clean & presentable to readers.
+
+## `storms`
+
+We'll start off with the `storms` dataset, which comes pre-loaded in `dplyr`. As per the documentation:
+
+> *This dataset is the NOAA Atlantic hurricane database best track data, <https://www.nhc.noaa.gov/data/#hurdat>. The data includes the positions and attributes of storms from 1975-2022. Storms from 1979 onward are measured every six hours during the lifetime of the storm. Storms in earlier years have some missing data.*
+
+We're going to take a look at the relationship between wind speed and air pressure in hurricanes. We will also consider how this varies across hurricanes of differing categories.
+
+We start off by loading the data into our environment using the `data()` function[^1].
+
+[^1]: We do already have access to the data because we loaded `tidyverse` , which loads `dplyr` . However, I usually prefer to expliclty load the data into my `R` global environment,
+
+```{r}
+data("storms")
+storms
+```
+
+Next, we filter the data to remove the rows where `category` is `NA`. This was **not** done arbitrarily. The documentation for these data tells us that `NA` values are not actually hurricanes. Given that we are only interested in hurricanes, we can remove those rows.
+
+```{r}
+storms_1 <- storms %>%
+  filter(!is.na(category))
+storms_1
+```
+
+These hurricanes were measured fairly frequently. Beginning in 1979, they were measured every six hours. \
+To simplify our analysis, we are going to compute the *maximum* wind speed and air pressure for each hurricane.
+
+We will use `group_by()` `name` and `year`, and use `summarise()` to compute the maximum wind speed and maximum air pressure for each hurricane.
+
+The reason we need to group by *both* name and year is that there are a handful of hurricanes whose names are repeated in different years. We can verify this using `distinct()` and `arrange()` .
+
+```{r}
+distinct(storms_1, name, year) %>% 
+  arrange(name)
+```
+
+Below, we do the grouped summary.
+
+Then, we use `left_join()` to get the `category` variable back in our data.[^2]
+
+[^2]: We'll talk more about joins on Wednesday 1/17, but for now, all we need to know is that this gets the `category` variable back in there,
+
+```{r}
+storms_max <- storms_1 %>%
+  group_by(name, year) %>%
+  summarise(max_wind=max(wind),
+            max_pressure=max(max(pressure))) %>%
+  ungroup() %>%
+  left_join(distinct(storms_1,name,year,category)) %>%
+  mutate(category=as.factor(category))
+storms_max
+```
+
+Now, we can focus on making our plot. We're going to make a scatterplot to see if there's a relationship between maximum wind speed and maximum air pressure.
+
+```{r}
+ggplot(storms_max, aes(max_wind, max_pressure))+
+  geom_point()
+```
+
+It doesn't appear that there is a relationship. However, let's try using `facet_wrap()` to split the plot up based on category. It may be the case that the relationship is *conditional* on hurricane category.
+
+```{r}
+ggplot(storms_max, aes(max_wind, max_pressure))+
+  geom_point()+
+  facet_wrap(vars(category))
+```
+
+It doesn't look like there's much going on here. But, remember, that is okay!
+
+We can still clean this plot up more. We can use the `scales="free"` argument to `facet_wrap()` to ensure that each plot gets its own x and y axis ranges.
+
+```{r}
+ggplot(storms_max, aes(max_wind, max_pressure))+
+  geom_point()+
+  facet_wrap(vars(category), scales="free")
+```
+
+Looking good. \
+Notice that there are some regions where the points are more dense. To better understand this density, we use the `alpha` argument to `geom_point()` to modify the transparency of each point. By default, `alpha=1`, meaning the points are completely opaque. If `alpha=0`, the points are completely transparent and thus invisible!
+
+We'll make `alpha=.5`.
+
+```{r}
+ggplot(storms_max, aes(max_wind, max_pressure))+
+  geom_point(alpha=.5)+
+  facet_wrap(vars(category), scales="free")
+```
+
+Lastly, we make a few more modifications.
+
+-   We modify the x axis to have 4 breaks.
+
+-   We use the `labeller` argument to specify a function that labels the panels of `facet_wrap()`
+
+    -   We use `label_both()`, which, according to the documentation, *"displays both the variable name and the factor value"*
+
+-   We add in x and y labels and a title.
+
+-   By default, ggplot figures have a gray background with white gridlines. I find this to be distracting, so I usually like to modify it. We could use the [`theme()`](https://ggplot2.tidyverse.org/reference/theme.html) function to manually change everything, but I like using the [`ggthemes`](https://github.com/jrnold/ggthemes) package to quickly add a pre-built theme. We will use the `theme_few()` function, we implements some suggestions of data visualization researcher [Stephen Few](https://www.perceptualedge.com/articles/visual_business_intelligence/rules_for_using_color.pdf).
+
+```{r}
+ggplot(storms_max, aes(max_wind, max_pressure))+
+  geom_point(alpha=.5)+
+  facet_wrap(vars(category), scales="free", labeller = label_both)+
+  scale_x_continuous(n.breaks = 4)+
+  labs(x="Maximum wind speed (knots)",
+       y="Maximum air pressue (millibars)",
+       title="Hurricane wind speed and pressure")+
+  ggthemes::theme_few()
+```
+
+## `mtcars`
+
+We will also work with the `mtcars` dataset again. We'll try making some more scatterplots, split up by categorical variables
+
+```{r}
+mtcars1 <- mtcars %>% 
+  as_tibble() %>%
+  mutate(
+    vs=case_when(
+      vs==0 ~ "v-shaped",
+      vs==1 ~ "straight"
+      ),
+    am=case_when(
+      am==0 ~ "automatic",
+      am==1 ~ "manual"
+    )
+  )
+mtcars1
+```
+
+Let's try recreating a plot from a previous lecture, where we plot the relationship between `mpg` and `hp`.
+
+```{r}
+ggplot(mtcars1, aes(mpg, hp))+
+  geom_point()
+```
+
+It looks good, but let's try customizing the x and y axes.
+
+```{r}
+ggplot(mtcars1, aes(mpg, hp))+
+  geom_point()+
+  scale_x_continuous(limits=range(mtcars1$mpg))+
+  scale_y_continuous(limits=range(mtcars1$hp))
+```
+
+Now that the plot looks good, let's try splitting up the plot by facetting based on the variable `am` - automatic vs. manual transmission.
+
+```{r}
+ggplot(mtcars1, aes(mpg, hp))+
+  geom_point()+
+  facet_wrap(vars(am))+
+  scale_x_continuous(limits=range(mtcars1$mpg))+
+  scale_y_continuous(limits=range(mtcars1$hp))
+```
+
+It does appear that the negative relationship between `mpg` and `hp` holds regardless of the type of transmission.
+
+```{r}
+ggplot(mtcars1, aes(mpg, hp))+
+  geom_point()+
+  facet_grid(am~vs)+
+  scale_x_continuous(limits=range(mtcars1$mpg))+
+  scale_y_continuous(limits=range(mtcars1$hp))
+```
+
+Now, let's try to add a *fourth* dimension to the plot - `vs`, which indicates v-shaped or straight engines.
+
+Here, we need to use `facet_grid()` to specify the rows and columns of our plot. `facet_grid()` takes a formula of `row~column` variables and creates a $\textrm{row x column}$ grid of plots. We will also use `scales="free"` to allow our plots to have different axis ranges.
+
+```{r}
+ggplot(mtcars1, aes(mpg, hp))+
+  geom_point()+
+  facet_grid(am~vs,scales="free")
+```
+
+It again seems that the negative relationship *generally* holds, though maybe not for straight/manual cars. However, one **strong** caveat here is that there are very few data points per plot. We should take this all with a grain of salt.
+
+Below, we customize our plot even more:
+
+-   changing the size and transparency of our points using the `size` and `alpha` arguments
+
+-   adding in axis labels and a title
+
+-   again using the `theme_few()` function from `ggthemes` to create a cleaner background
+
+-   using the `theme()` function, along with the `plot.title` argument and `element_text()` function to center the title of our plot.
+
+```{r}
+ggplot(mtcars1, aes(mpg, hp))+
+  geom_point(size=2.5,alpha=.75)+
+  facet_grid(am~vs,scales="free")+
+  labs(x="Miles per gallon",y="Horsepower",title="Relationship between mpg & horsepower, split by transmission & engine shape")+
+  ggthemes::theme_few()+
+  theme(plot.title = element_text(hjust=0.5))
+```
+
+## Conclusion  
+
+As you work further with a dataset, you will often find yourself needing to consider multiple dimensions. The tools of ggplot, especially the `facet_` functions, will be crucial for doing so. \
+Furthermore, you will need to customize your plots to be as readable as possible. This is no small task (and it can be subjective at times), but you should do your best to allow a general audience to understand any figures you make.
