@@ -975,7 +975,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>We start off by loading the data into our environment using the <span class="in">`data()`</span> function<span class="ot">[^1]</span>.</span>
 <span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a><span class="ot">[^1]: </span>We do already have access to the data because we loaded <span class="in">`tidyverse`</span> , which loads <span class="in">`dplyr`</span> . However, I usually prefer to expliclty load the data into my <span class="in">`R`</span> global environment,</span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a><span class="ot">[^1]: </span>We do already have access to the data because we loaded <span class="in">`tidyverse`</span> , which loads <span class="in">`dplyr`</span> . However, I usually prefer to explicitly load the data into my <span class="in">`R`</span> global environment.</span>
 <span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb22-55"><a href="#cb22-55" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"storms"</span>)</span>
@@ -990,7 +990,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-66"><a href="#cb22-66" aria-hidden="true" tabindex="-1"></a>storms_1</span>
 <span id="cb22-67"><a href="#cb22-67" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb22-68"><a href="#cb22-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-69"><a href="#cb22-69" aria-hidden="true" tabindex="-1"></a>These hurricanes were measured fairly frequently. Beginning in 1979, they were measured every six hours. \</span>
+<span id="cb22-69"><a href="#cb22-69" aria-hidden="true" tabindex="-1"></a>These hurricanes were measured fairly frequently. Beginning in 1979, they were measured every six hours.\</span>
 <span id="cb22-70"><a href="#cb22-70" aria-hidden="true" tabindex="-1"></a>To simplify our analysis, we are going to compute the *maximum* wind speed and air pressure for each hurricane.</span>
 <span id="cb22-71"><a href="#cb22-71" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-72"><a href="#cb22-72" aria-hidden="true" tabindex="-1"></a>We will use <span class="in">`group_by()`</span> <span class="in">`name`</span> and <span class="in">`year`</span>, and use <span class="in">`summarise()`</span> to compute the maximum wind speed and maximum air pressure for each hurricane.</span>
@@ -1012,7 +1012,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-92"><a href="#cb22-92" aria-hidden="true" tabindex="-1"></a>storms_max <span class="ot">&lt;-</span> storms_1 <span class="sc">%&gt;%</span></span>
 <span id="cb22-93"><a href="#cb22-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(name, year) <span class="sc">%&gt;%</span></span>
 <span id="cb22-94"><a href="#cb22-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">max_wind=</span><span class="fu">max</span>(wind),</span>
-<span id="cb22-95"><a href="#cb22-95" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_pressure=</span><span class="fu">max</span>(<span class="fu">max</span>(pressure))) <span class="sc">%&gt;%</span></span>
+<span id="cb22-95"><a href="#cb22-95" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_pressure=</span><span class="fu">max</span>(pressure)) <span class="sc">%&gt;%</span></span>
 <span id="cb22-96"><a href="#cb22-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb22-97"><a href="#cb22-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">distinct</span>(storms_1,name,year,category)) <span class="sc">%&gt;%</span></span>
 <span id="cb22-98"><a href="#cb22-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">category=</span><span class="fu">as.factor</span>(category))</span>
@@ -1044,7 +1044,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-130"><a href="#cb22-130" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(category), <span class="at">scales=</span><span class="st">"free"</span>)</span>
 <span id="cb22-131"><a href="#cb22-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb22-132"><a href="#cb22-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-133"><a href="#cb22-133" aria-hidden="true" tabindex="-1"></a>Looking good. \</span>
+<span id="cb22-133"><a href="#cb22-133" aria-hidden="true" tabindex="-1"></a>Looking good.\</span>
 <span id="cb22-134"><a href="#cb22-134" aria-hidden="true" tabindex="-1"></a>Notice that there are some regions where the points are more dense. To better understand this density, we use the <span class="in">`alpha`</span> argument to <span class="in">`geom_point()`</span> to modify the transparency of each point. By default, <span class="in">`alpha=1`</span>, meaning the points are completely opaque. If <span class="in">`alpha=0`</span>, the points are completely transparent and thus invisible!</span>
 <span id="cb22-135"><a href="#cb22-135" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-136"><a href="#cb22-136" aria-hidden="true" tabindex="-1"></a>We'll make <span class="in">`alpha=.5`</span>.</span>
@@ -1126,17 +1126,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-224"><a href="#cb22-224" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-225"><a href="#cb22-225" aria-hidden="true" tabindex="-1"></a>It does appear that the negative relationship between <span class="in">`mpg`</span> and <span class="in">`hp`</span> holds regardless of the type of transmission.</span>
 <span id="cb22-226"><a href="#cb22-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-229"><a href="#cb22-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb22-230"><a href="#cb22-230" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars1, <span class="fu">aes</span>(mpg, hp))<span class="sc">+</span></span>
-<span id="cb22-231"><a href="#cb22-231" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb22-232"><a href="#cb22-232" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(am<span class="sc">~</span>vs)<span class="sc">+</span></span>
-<span id="cb22-233"><a href="#cb22-233" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits=</span><span class="fu">range</span>(mtcars1<span class="sc">$</span>mpg))<span class="sc">+</span></span>
-<span id="cb22-234"><a href="#cb22-234" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">range</span>(mtcars1<span class="sc">$</span>hp))</span>
-<span id="cb22-235"><a href="#cb22-235" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-236"><a href="#cb22-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-237"><a href="#cb22-237" aria-hidden="true" tabindex="-1"></a>Now, let's try to add a *fourth* dimension to the plot - <span class="in">`vs`</span>, which indicates v-shaped or straight engines.</span>
-<span id="cb22-238"><a href="#cb22-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-239"><a href="#cb22-239" aria-hidden="true" tabindex="-1"></a>Here, we need to use <span class="in">`facet_grid()`</span> to specify the rows and columns of our plot. <span class="in">`facet_grid()`</span> takes a formula of <span class="in">`row~column`</span> variables and creates a $\textrm{row x column}$ grid of plots. We will also use <span class="in">`scales="free"`</span> to allow our plots to have different axis ranges.</span>
+<span id="cb22-227"><a href="#cb22-227" aria-hidden="true" tabindex="-1"></a>Now, let's try to add a *fourth* dimension to the plot - <span class="in">`vs`</span>, which indicates v-shaped or straight engines.</span>
+<span id="cb22-228"><a href="#cb22-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-229"><a href="#cb22-229" aria-hidden="true" tabindex="-1"></a>Here, we need to use <span class="in">`facet_grid()`</span> to specify the rows and columns of our plot. <span class="in">`facet_grid()`</span> takes a formula of <span class="in">`row~column`</span> variables and creates a $\textrm{row x column}$ grid of plots. We will also use <span class="in">`scales="free"`</span> to allow our plots to have different axis ranges.</span>
+<span id="cb22-230"><a href="#cb22-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-233"><a href="#cb22-233" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb22-234"><a href="#cb22-234" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars1, <span class="fu">aes</span>(mpg, hp))<span class="sc">+</span></span>
+<span id="cb22-235"><a href="#cb22-235" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb22-236"><a href="#cb22-236" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(am<span class="sc">~</span>vs)<span class="sc">+</span></span>
+<span id="cb22-237"><a href="#cb22-237" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits=</span><span class="fu">range</span>(mtcars1<span class="sc">$</span>mpg))<span class="sc">+</span></span>
+<span id="cb22-238"><a href="#cb22-238" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">range</span>(mtcars1<span class="sc">$</span>hp))</span>
+<span id="cb22-239"><a href="#cb22-239" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb22-240"><a href="#cb22-240" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-243"><a href="#cb22-243" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb22-244"><a href="#cb22-244" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars1, <span class="fu">aes</span>(mpg, hp))<span class="sc">+</span></span>
@@ -1144,7 +1144,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-246"><a href="#cb22-246" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(am<span class="sc">~</span>vs,<span class="at">scales=</span><span class="st">"free"</span>)</span>
 <span id="cb22-247"><a href="#cb22-247" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb22-248"><a href="#cb22-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-249"><a href="#cb22-249" aria-hidden="true" tabindex="-1"></a>It again seems that the negative relationship *generally* holds, though maybe not for straight/manual cars. However, one **strong** caveat here is that there are very few data points per plot. We should take this all with a grain of salt.</span>
+<span id="cb22-249"><a href="#cb22-249" aria-hidden="true" tabindex="-1"></a>It again seems that the negative relationship *generally* holds, though maybe not for straight &amp; manual cars. However, one **strong** caveat here is that there are very few data points per plot. We should take this all with a grain of salt.</span>
 <span id="cb22-250"><a href="#cb22-250" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-251"><a href="#cb22-251" aria-hidden="true" tabindex="-1"></a>Below, we customize our plot even more:</span>
 <span id="cb22-252"><a href="#cb22-252" aria-hidden="true" tabindex="-1"></a></span>
@@ -1160,12 +1160,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-264"><a href="#cb22-264" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars1, <span class="fu">aes</span>(mpg, hp))<span class="sc">+</span></span>
 <span id="cb22-265"><a href="#cb22-265" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="fl">2.5</span>,<span class="at">alpha=</span>.<span class="dv">75</span>)<span class="sc">+</span></span>
 <span id="cb22-266"><a href="#cb22-266" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(am<span class="sc">~</span>vs,<span class="at">scales=</span><span class="st">"free"</span>)<span class="sc">+</span></span>
-<span id="cb22-267"><a href="#cb22-267" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Miles per gallon"</span>,<span class="at">y=</span><span class="st">"Horsepower"</span>,<span class="at">title=</span><span class="st">"Relationship between mpg &amp; horsepower, split by transmission &amp; engine shape"</span>)<span class="sc">+</span></span>
+<span id="cb22-267"><a href="#cb22-267" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Miles per gallon"</span>,<span class="at">y=</span><span class="st">"Horsepower"</span>,<span class="at">title=</span><span class="st">"Relationship between mpg &amp; horsepower </span><span class="sc">\n</span><span class="st">Split by transmission &amp; engine shape"</span>)<span class="sc">+</span></span>
 <span id="cb22-268"><a href="#cb22-268" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
 <span id="cb22-269"><a href="#cb22-269" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="fl">0.5</span>))</span>
 <span id="cb22-270"><a href="#cb22-270" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb22-271"><a href="#cb22-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-272"><a href="#cb22-272" aria-hidden="true" tabindex="-1"></a><span class="fu">### An alternative visualization  </span></span>
+<span id="cb22-272"><a href="#cb22-272" aria-hidden="true" tabindex="-1"></a><span class="fu">### An alternative visualization</span></span>
 <span id="cb22-273"><a href="#cb22-273" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-274"><a href="#cb22-274" aria-hidden="true" tabindex="-1"></a>Rather than facetting by both <span class="in">`am`</span> and <span class="in">`vs`</span>, we may consider an alternative visualization. That is, we could <span class="in">`facet`</span> by <span class="in">`am`</span> and color each point by <span class="in">`vs`</span>. This eliminates the issue of having few data points in each panel while still allowing us to consider multiple dimensions.</span>
 <span id="cb22-275"><a href="#cb22-275" aria-hidden="true" tabindex="-1"></a></span>
@@ -1195,7 +1195,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-301"><a href="#cb22-301" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-304"><a href="#cb22-304" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb22-305"><a href="#cb22-305" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars1, <span class="fu">aes</span>(mpg,hp,<span class="at">col=</span>vs))<span class="sc">+</span></span>
-<span id="cb22-306"><a href="#cb22-306" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span>.<span class="dv">8</span>,<span class="at">size=</span><span class="fl">2.5</span>)<span class="sc">+</span></span>
+<span id="cb22-306"><a href="#cb22-306" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span>.<span class="dv">65</span>,<span class="at">size=</span><span class="fl">2.5</span>)<span class="sc">+</span></span>
 <span id="cb22-307"><a href="#cb22-307" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(am),<span class="at">scales=</span><span class="st">"free"</span>)<span class="sc">+</span></span>
 <span id="cb22-308"><a href="#cb22-308" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Miles per gallon"</span>,<span class="at">y=</span><span class="st">"Horsepower"</span>,<span class="at">title=</span><span class="st">"Horsepower &amp; Mpg </span><span class="sc">\n</span><span class="st">Based on Transmission &amp; Engine"</span>)<span class="sc">+</span></span>
 <span id="cb22-309"><a href="#cb22-309" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_okabeito</span>(<span class="at">name=</span><span class="st">"Engine shape"</span>)<span class="sc">+</span></span>
@@ -1203,9 +1203,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-311"><a href="#cb22-311" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="fl">0.5</span>))</span>
 <span id="cb22-312"><a href="#cb22-312" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb22-313"><a href="#cb22-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-314"><a href="#cb22-314" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion  </span></span>
+<span id="cb22-314"><a href="#cb22-314" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
 <span id="cb22-315"><a href="#cb22-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-316"><a href="#cb22-316" aria-hidden="true" tabindex="-1"></a>As you work further with a dataset, you will often find yourself needing to consider multiple dimensions. The tools of ggplot, especially the <span class="in">`facet_`</span> functions, will be crucial for doing so. \</span>
+<span id="cb22-316"><a href="#cb22-316" aria-hidden="true" tabindex="-1"></a>As you work further with a dataset, you will often find yourself needing to consider multiple dimensions. The tools of ggplot, especially the <span class="in">`facet_`</span> functions, will be crucial for doing so.\</span>
 <span id="cb22-317"><a href="#cb22-317" aria-hidden="true" tabindex="-1"></a>Furthermore, you will need to customize your plots to be as readable as possible. This is no small task (and it can be subjective at times), but you should do your best to allow a general audience to understand any figures you make.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>

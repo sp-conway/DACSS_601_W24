@@ -114,7 +114,7 @@ ggplot(storms_max, aes(max_wind, max_pressure))+
   facet_wrap(vars(category), scales="free")
 ```
 
-Looking good. \
+Looking good.\
 Notice that there are some regions where the points are more dense. To better understand this density, we use the `alpha` argument to `geom_point()` to modify the transparency of each point. By default, `alpha=1`, meaning the points are completely opaque. If `alpha=0`, the points are completely transparent and thus invisible!
 
 We'll make `alpha=.5`.
