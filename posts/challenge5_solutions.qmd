@@ -57,7 +57,7 @@ There is even an [R Graph Gallery book](https://bookdown.org/content/b298e479-b1
 
 ## cereal ⭐
 
-The cereal dataset includes sodium and sugar content for 20 popular cereals, along with an indicator of cereal category (A, B, or C) but we are not sure what that variable corresponds to.
+The cereal dataset includes sodium and sugar content for 20 popular cereals, along with an indicator of cereal category (A, B, or C), but we are not sure what that variable corresponds to.
 
 ```{r}
 cereal<-here("posts","_data","cereal.csv") %>%
@@ -145,7 +145,7 @@ cereal %>%
   ggplot(aes(reorder(Cereal,-Sodium),Sodium,fill=Type))+
   geom_col()+
   geom_text(aes(label=Sodium),hjust=-.5)+
-  scale_y_continuous(limits=c(0,350))+
+  scale_y_continuous(limits=c(0,380))+
   coord_flip()
 ```
 
@@ -240,7 +240,6 @@ Given what we saw above, lets try a logged and unlogged scatterplot for Cases vs
 #| layout-ncol: 2
 #| fig-cap: 
 #|   - "Relationship between Cases and Total Cost of Pathogens"
-#|   - "Logged Relationship between Cases and Total Cost"
 
 ggplot(pathogen, aes(x=Cases, y=Cost, label=pathogens)) +
   geom_point() +
@@ -248,10 +247,9 @@ ggplot(pathogen, aes(x=Cases, y=Cost, label=pathogens)) +
   geom_text()
 
 ggplot(pathogen, aes(x=Cases, y=Cost, label=pathogens)) +
-  geom_point()+
-  scale_x_continuous(trans = "log10", labels = scales::comma)+
-  scale_y_continuous(trans = "log10", labels = scales::comma)+
-  ggrepel::geom_label_repel()
+  geom_point() +
+  ggrepel::geom_label_repel() + 
+  scale_x_continuous(labels = scales::comma)
 
 ```
 
@@ -311,7 +309,7 @@ vote_long%>%
   mutate(perc = Count/sum(Count))%>%
   ggplot(., aes(y=perc, x=Response))+
   #geom_bar(stat="Identity", alpha=.75) +
-  geom_col()+
+  geom_col(fill="purple")+
   scale_y_continuous(name= "Percent of Citizens", 
                      label = scales::percent) +
   geom_text(aes(label = Count), size=3, vjust=-.5)
@@ -389,7 +387,7 @@ Woah, there's clearly a few outliers here.
 range(airb$price)
 
 airb_filtered <- airb %>%
-  filter(price>0 & price<2500)
+  filter(price>0 & price<1250)
 airb_filtered %>%
   ggplot(aes(price))+
   geom_histogram()
@@ -404,15 +402,14 @@ Let's consider the different types of rooms and how they relate to price.
 ```{r}
 airb_filtered %>%
   ggplot(aes(room_type,price))+
-  geom_boxplot()+
-  theme(axis.text.x=element_text(angle=90))
+  geom_boxplot()
 ```
 
 ```{r}
 airb_filtered %>%
   ggplot(aes(price))+
   geom_histogram()+
-  facet_wrap(vars(neighbourhood_group),scales="free")
+  facet_wrap(vars(neighbourhood_group),scales="free_y")
 ```
 
 There's clearly a lot of variability in the data, but it looks like entire homes cost more than private rooms, which in turn cost more than shared rooms.
@@ -487,7 +484,9 @@ Lets create some numerical variables that we can visualize!
 railroad_summaries <- railroad%>%
   group_by(state)%>%
   summarise(state_employees = sum(employees),
-         state_counties = n_distinct(county))
+         state_counties = n_distinct(county)) %>%
+  ungroup() %>%
+  filter(str_detect(state,"CANADA",T))
 ```
 
 ### Univariate Visualizations
@@ -499,7 +498,7 @@ ggplot(railroad_summaries, aes(state_employees))+
   geom_histogram(bins=20)
 ```
 
-Woah! There's a lot outliers here.
+Woah! There's some real outliers here.
 
 ### Bivariate Visualization(s)
 
@@ -544,7 +543,7 @@ pub_sch %>%
   distinct(SURVYEAR)
 ```
 
-We'll use `select()` to pull out the variables that will make the dataset a bit more manageable. There are likely **many** variables of interest contained in these data that would paint a more nuanced picture of public education in the US, but we may have to email the DOE for the documentation for those.
+We'll use `select()` to pull out the variables that will make the dataset a bit more manageable. There are likely **many** variables of interest contained in these data that would paint a more nuanced picture of public education in the US, but we may have to email the DOE for the documentation of those.
 
 ```{r}
 pub_sch1 <- pub_sch %>%
@@ -561,7 +560,7 @@ ggplot(pub_sch1,aes(STUTERATIO))+
   geom_histogram()
 ```
 
-Wow, those are a skewed histogram. We should probably remove some outliers to make it more readable.
+Wow, those are skewed histograms. We should probably remove some outliers to make it more readable.
 
 Let's compute data quantiles to see if there are some extreme outliers.
 

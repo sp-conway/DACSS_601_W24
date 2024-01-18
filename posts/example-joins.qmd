@@ -1,0 +1,227 @@
+---
+title: "Joins"
+author: "Sean Conway"
+editor: visual
+description: "Joins"  
+date: "1/17/2024"
+editor_options: 
+  chunk_output_type: console
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: false
+    code-copy: true
+    code-tools: true
+    css: ".../styles.scss"
+categories:
+  - joins
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+knitr::opts_chunk$set(echo = T)
+library(tidyverse)
+library(nycflights13)
+```
+
+## Overview
+
+```{r}
+data("airlines")
+data("airports")
+data("flights")
+data("planes")
+data("weather")
+```
+
+Today we'll be discussing `joins`, via the `nycflights13` package.
+
+Much of this content is a rehash of [the chapter on relational data from R4DS](https://r4ds.had.co.nz/relational-data.html). This should expand on that content and (hopefully) clear some things up for you.
+
+### The data  
+
+The `nycflights13` package is a commonly used dataset with its own `R` package.
+
+According to the documentation:
+
+> Airline on-time data for all flights departing NYC in 2013. Also includes useful 'metadata' on airlines, airports, weather, and planes.
+
+The package contains five datasets:
+
+-   `airlines`, a tibble of airlines, containing both `carrier` ID and the airline `name`
+
+    ```{r}
+    airlines
+    ```
+
+-   `airports` , a tibble of airports, containing the `faa` ID, airport name and location information
+
+    ```{r}
+    airports
+    ```
+
+-   `planes`, a tibble of planes, with the key identified being `tailnum`
+
+    ```{r}
+    planes
+    ```
+
+-   `weather`, a tibble of the weather conditions every hour of 2013:
+
+    ```{r}
+    weather
+    ```
+
+-   `flights`, a tibble of the flights leaving NYC in 2013
+
+    ```{r}
+    flights
+    ```
+
+### Analysis  
+
+To me, the best way to understand joins is to understand the circumstances under which we might need to perform them.
+
+For example, let's say we wanted to see which airlines are faster than others, on average. We might pick a representative flight (say, JFK -\> LAX), and compute the mean air time for each carrier.
+
+```{r}
+jfk_lax_flights <- flights %>%
+  filter(str_detect(origin,"JFK") & str_detect(dest,"LAX"))
+jfk_lax_flights 
+jfk_lax_flights %>%
+  group_by(carrier) %>%
+  summarise(n=n()) %>%
+  ungroup() # unequal n, but that's okay for our purposes
+flight_summary_1 <- jfk_lax_flights %>%
+  group_by(carrier) %>%
+  summarise(m_air=mean(air_time,na.rm = T)) %>%
+  ungroup() %>%
+  arrange(m_air)
+flight_summary_1
+```
+
+We have our mean air times, except...oh no! The carrier ID is very uninformative to most people. We need to find a way to get the airline name into this dataframe.
+
+For this, we need to use `left_join()` to match `flight_summary_1` and `airlines` We provide `left_join()` to arguments: the first data frame, `x`, and the second data frame `y`. `left_join()`, will keep every row of `x`, and match `y` based on a **key**. In our case, the key is `carrier`.
+
+```{r}
+left_join(flight_summary_1, airlines,by = "carrier")
+left_join(flight_summary_1,airlines) # without the by argument, left_join will try to find matching key(s) and will tell us what it used
+```
+
+We don't need to specify `by`, though it's good practice.
+
+`right_join()` works the same way as `left_join()`, but it keeps every row in `y` rather than `x`.
+
+```{r}
+right_join(airlines, flight_summary_1,by="carrier")
+```
+
+Let's say we wanted to expand our analysis to also consider LGA-\>ATL flights. Here, `left_join()` still works, even though we have different carriers for each trip.
+
+```{r}
+flight_summary_2 <- flights %>%
+  filter( (str_detect(origin,"JFK") & str_detect(dest,"LAX") ) | 
+          (str_detect(origin,"LGA") & str_detect(dest,"ATL") ) ) %>%
+  mutate(trip=str_c(origin,dest,sep="-")) %>%
+  group_by(trip,carrier) %>%
+  summarise(m_air=mean(air_time,na.rm=T)) %>%
+  ungroup()
+left_join(flight_summary_2, airlines)
+```
+
+We could also use `inner_join()`, which only keeps matching observations in `x` and `y`.
+
+```{r}
+inner_join(flight_summary_2,airlines)
+```
+
+However, `full_join()`, which keeps **all observations in `x`** and `y` , is inappropriate here, because not all carriers occur in our table.
+
+```{r}
+full_join(flight_summary_2,airlines)
+```
+
+We can also pipe through a dataframe, and `left_join()` will treat it as the argument `x`.
+
+```{r}
+flight_summary_2 %>%
+  left_join(airlines)
+```
+
+Say we want to get the airport names into the data frame, as the `LAX`,`JFK` , `ATL`, and `LGA` labels are not helpful to folks unfamiliar with these specific airport acronyms.
+
+Here, we need to combine pivoting and joining.
+
+After joining with `airlines`, separate out `trip` into `origin` and `dest`. Next, we use `pivot_longer()` to spread these values across rows. We make sure to put the airport codes into a column called `faa`, as that is how airport keys are referred to in the `airports` dataframe, which we will be referencing.
+
+We then use `left_join()` to match airports to our df, `select()` to pick out the columns we need (note that we no longer need `faa` ), and then `pivot_wider()` again.
+
+```{r}
+flight_summary_2 %>%
+  left_join(airlines) %>%
+  rename(airline=name) %>%
+  separate(trip,into=c("origin","dest"),sep="-") %>%
+  pivot_longer(c(origin,dest),names_to = "tmp",values_to = "faa") %>%
+  left_join(airports,by="faa") %>%
+  select(airline,m_air,tmp,name) %>%
+  pivot_wider(names_from = tmp,values_from = name) %>%
+  arrange(origin, m_air)
+```
+
+We now have a clean summary of the data!
+
+On average, the fastest airline going from JFK to LAX is American Airlines, while the fastest airline going from LGA to ATL is Delta.
+
+## Filtering joins  
+
+I focused much of this on *mutating* joins, as these are far more common operations. However, they are not the only type of join.
+
+As noted by R4DS:
+
+> Filtering joins match observations in the same way as mutating joins, but affect the observations, not the variables. There are two types:
+>
+> -   `semi_join(x, y)` **keeps** all observations in `x` that have a match in `y`.
+>
+> -   `anti_join(x, y)` **drops** all observations in `x` that have a match in `y`.
+
+`semi_join()` is essentially an alternative to `filter()`.
+
+Say we wanted to analyze in more detail the flights that make up our `flight_summary_2` dataframe. That is, we wanted to return to the original `flights` dataframe and do some analysis.
+
+First, we'll again separate out `trip`:
+
+```{r}
+flight_summary_3 <- flight_summary_2 %>%
+  separate(trip,into=c("origin","dest"))
+```
+
+We could run:
+
+```{r}
+flights %>%
+  filter(origin %in% flight_summary_3$origin & dest %in% flight_summary_3$dest)
+```
+
+But it's probably more efficient to run
+
+```{r}
+flights_filtered1 <- flights %>%
+  semi_join(flight_summary_3)
+flights_filtered1
+# double check
+distinct(flights_filtered1, origin, dest)
+```
+
+We could also filter our `flights` to include everything **but** these flights using `anti_join()`
+
+```{r}
+flights_filtered2 <- flights %>%
+  anti_join(flight_summary_3, by=c("origin","dest"))
+flights_filtered2
+```
+
+## 

@@ -77,7 +77,7 @@ ggplot(debt, aes(x=date, y=Total)) +
 ggplot(debt, aes(x=date, y=Total)) +
   geom_point() +
   geom_line()+
-  scale_y_continuous(limits=c(1,max(debt$Total)),labels = scales::label_number(suffix = " Trillion"))
+  scale_y_continuous(limits=c(1,16),labels = scales::label_number(suffix = " Trillion"))
   
 ```
 ### Visualizing Part-Whole Relationships
@@ -105,7 +105,7 @@ ggplot(debt_long, aes(x=date, y=total, color=Loan)) +
   scale_y_continuous(labels = scales::label_number(suffix = " Trillion"))
 
 ggplot(debt_long, aes(x=date, y=total, fill=Loan)) +
-  geom_bar(position="stack", stat="identity") +
+  geom_col(position="stack") +
   scale_y_continuous(labels = scales::label_number(suffix = " Trillion"))+
   theme(legend.position = "top") +
   guides(fill = guide_legend(nrow = 1)) +
