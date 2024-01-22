@@ -560,6 +560,19 @@
       ],
       "Hash": "cc3361e234c4a5050e29697d675764aa"
     },
+    "ggsci": {
+      "Package": "ggsci",
+      "Version": "3.0.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "ggplot2",
+        "grDevices",
+        "scales"
+      ],
+      "Hash": "93664e03010c3f4b570c890dda99ade5"
+    },
     "ggthemes": {
       "Package": "ggthemes",
       "Version": "5.0.0",
@@ -961,6 +974,17 @@
         "utils"
       ],
       "Hash": "8d1938040a05566f4f7a14af4feadd6b"
+    },
+    "nycflights13": {
+      "Package": "nycflights13",
+      "Version": "1.0.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "tibble"
+      ],
+      "Hash": "61eb941328b49a62d7f9816dfed7d959"
     },
     "openssl": {
       "Package": "openssl",

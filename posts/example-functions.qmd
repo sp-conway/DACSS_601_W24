@@ -1,0 +1,124 @@
+---
+title: "Functions"
+author: "Sean Conway"
+editor: visual
+description: "Functions"  
+date: "1/22/2024"
+editor_options: 
+  chunk_output_type: console
+format:
+  html:
+    df-print: paged
+    toc: true
+    code-fold: false
+    code-copy: true
+    code-tools: true
+    css: ".../styles.scss"
+categories:
+  - functions
+  - functional_programming
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+knitr::opts_chunk$set(echo = T)
+library(tidyverse)
+```
+
+## Overview
+
+Today we're going to discuss functions in `R`. Specifically, we will discuss how to write our own *custom* functions.
+
+## Functions
+
+A function is an object in `R` that performs a specific task. Unlike languages like Python, `R` is largely built around *functional* programming, where individual functions are used to perform data analysis tasks.[^1]
+
+[^1]: `R` does have multiple object-oriented programming systems. However, these topics are well outside the scope of this class, and these systems are largely used by developers, rather than regular users. For more info, see the [OOP section](https://adv-r.hadley.nz/oo.html) of Hadley Wickham's Advanced R book.
+
+Base `R` has many built-in functions, and the `tidyverse` packages we use provide a crucial supplement to these. However, sometimes you need to write your own functions. A good example of this is when you would otherwise need to copy and paste the same code multiple times. In this case, it's generally better to write a function.
+
+To demonstrate function syntax, below is a simple function that takes a single required argument, `x`.
+
+The function adds 1 to `x`, stores it in a new object, `y` and returns the new value (using a "return" statement).
+
+```{r}
+add_1 <- function(x){
+  y <- x+1
+  return(y) # return statements are not always needed, but it's good to make it explicit to avoid mistakes
+}
+val <- add_1(4) # returns a vector of length 1 (also called a scalar)
+val
+```
+
+Objects defined within the function stay within the function scope, unless returned and stored in the global environment. Bote that `y` in the `add_1()` function never makes its way to our global environment.
+
+A function can take as many arguments as you like. It can even take **zero** arguments!
+
+```{r}
+hello_world <- function() {
+  print("hello world!") # here we don't need a return statement, as there's nothing to return
+}
+```
+
+A function can have **REQUIRED** arguments (i.e., the function will not run unless the user defines them) or **OPTIONAL** arguments (i.e., the argument has a default value unless the user defines it)
+
+Below is a new function, `add_val()`, that always adds a value to its input. By default, it adds 5, but the user can modify the optional argument `val` to specify an value to be added.
+
+```{r}
+add_val <- function(x, val=5){
+  y <- x+val
+  return(y)
+}
+add_val(5) # automatically adds 5
+add_val(x=5,val=2) # val is defined as 2, so now adds 5 + 2
+
+```
+
+If your function is simple (i.e., only needs one line of code), you don't need to use the bracket syntax.
+
+```{r}
+add_2 <- function(x) x+2 
+add_2(5)
+```
+
+*Buuuuut* it's probably best to do it in multiple lines and include a return statement.
+
+Finally, note that many functions in `R` are **vectorized**. This means that they automatically perform their operation on each individual element of a vector.
+
+```{r}
+# our "add_val" function is automatically vectorized
+x_1 <- c(1,4,3,1,2,4,2)
+add_val(x=x_1,val=3) # adds 3 to each value in x_1
+```
+
+## A more concrete example  
+
+So far, the functions we've created have been trivial. They perform tasks so trivial that you would probably never create a function to do so.
+
+However, let's try something more technical: a function to determine the **mode** of a categorical variable.
+
+There is an `R` function called `mode()`, though as some students have noted, this does not actually compute the mode. Rather, it simply returns the storage mode of an `R` object.
+
+The function `compute_mode()` computes the mode of a categorical variable. I put in some safeguards to ensure the function will return multiple values in the event of a tie. Moreover, the function actually returns a tibble. This was done to make it easier to use the function to program with tidyverse (though it would still work fine without it).
+
+```{r}
+compute_mode <- function(x, return_count=T){
+  freqs <- table(x)
+  max_n <- max(freqs)
+  mode <- names(freqs[which(freqs==max_n)])
+  if(return_count){
+    tibble(
+      mode=mode,
+      count=max_n
+    )
+  }else{
+    tibble(mode=mode)
+  }
+}
+```
+
+## Conclusion  
+
+This has been an introduction to the world of writing your own functions. It is not always necessary to do so, but when you do, it's helpful to understand the syntax and rules of custom functions in `R`.
