@@ -52,7 +52,7 @@ val <- add_1(4) # returns a vector of length 1 (also called a scalar)
 val
 ```
 
-Objects defined within the function stay within the function scope, unless returned and stored in the global environment. Bote that `y` in the `add_1()` function never makes its way to our global environment.
+Objects defined within the function stay within the function scope, unless returned and stored in the global environment. Note that `y` in the `add_1()` function never makes its way to our global environment.
 
 A function can take as many arguments as you like. It can even take **zero** arguments!
 
@@ -93,7 +93,7 @@ x_1 <- c(1,4,3,1,2,4,2)
 add_val(x=x_1,val=3) # adds 3 to each value in x_1
 ```
 
-## A more concrete example  
+## A more concrete example
 
 So far, the functions we've created have been trivial. They perform tasks so trivial that you would probably never create a function to do so.
 
@@ -117,8 +117,12 @@ compute_mode <- function(x, return_count=T){
     tibble(mode=mode)
   }
 }
+
+z <- sample(c("a","b","c"),size=100,replace=T)
+compute_mode(z)
+compute_mode(z, return_count = F)
 ```
 
-## Conclusion  
+## Conclusion
 
 This has been an introduction to the world of writing your own functions. It is not always necessary to do so, but when you do, it's helpful to understand the syntax and rules of custom functions in `R`.
