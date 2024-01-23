@@ -381,23 +381,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">HB=</span><span class="st">"Half board"</span>,</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">SC=</span><span class="st">"Undefined"</span>),</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>         <span class="fu">across</span>(<span class="fu">c</span>(hotel, meal),as.factor)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(month, hotel, meal,<span class="at">.drop=</span>F) <span class="co"># ensures 0 is counted</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>bookings_month_hotel_meal_n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month,hotel,meal) <span class="sc">%&gt;%</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>bookings_month_hotel_meal_n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 208 × 4
+<pre><code># A tibble: 190 × 4
    month      hotel        meal                  n
    &lt;date&gt;     &lt;fct&gt;        &lt;fct&gt;             &lt;int&gt;
  1 2015-07-01 City Hotel   Bed and Breakfast  1071
- 2 2015-07-01 City Hotel   Full board            0
- 3 2015-07-01 City Hotel   Half board          312
- 4 2015-07-01 City Hotel   Undefined            15
- 5 2015-07-01 Resort Hotel Bed and Breakfast   989
- 6 2015-07-01 Resort Hotel Full board           69
- 7 2015-07-01 Resort Hotel Half board          320
- 8 2015-07-01 Resort Hotel Undefined             0
- 9 2015-08-01 City Hotel   Bed and Breakfast  1881
-10 2015-08-01 City Hotel   Full board            0
-# ℹ 198 more rows</code></pre>
+ 2 2015-07-01 City Hotel   Half board          312
+ 3 2015-07-01 City Hotel   Undefined            15
+ 4 2015-07-01 Resort Hotel Bed and Breakfast   989
+ 5 2015-07-01 Resort Hotel Full board           69
+ 6 2015-07-01 Resort Hotel Half board          320
+ 7 2015-08-01 City Hotel   Bed and Breakfast  1881
+ 8 2015-08-01 City Hotel   Half board          507
+ 9 2015-08-01 City Hotel   Undefined            92
+10 2015-08-01 Resort Hotel Bed and Breakfast   968
+# ℹ 180 more rows</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -415,11 +417,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bookings_month_hotel_meal_n,<span class="fu">aes</span>(month, n, <span class="at">col=</span>meal))<span class="sc">+</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(hotel))<span class="sc">+</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  ggsci<span class="sc">::</span><span class="fu">scale_color_futurama</span>(<span class="at">name=</span><span class="st">"Meal Type"</span>)<span class="sc">+</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>()<span class="sc">+</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Date"</span>,<span class="at">y=</span><span class="st">"Number of Bookings"</span>)<span class="sc">+</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ggsci::scale_color_futurama(name="Meal Type")+</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  see<span class="sc">::</span><span class="fu">scale_color_okabeito</span>()<span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>()<span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Date"</span>,<span class="at">y=</span><span class="st">"Number of Bookings"</span>)<span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="challenge7_solutions_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -498,10 +501,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1]     0 10000</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="ot">&lt;-</span> airb <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(price<span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">&amp;</span> price<span class="sc">&lt;</span><span class="dv">2500</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(price<span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">&amp;</span> price<span class="sc">&lt;</span><span class="dv">1500</span>)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(price))<span class="sc">+</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()<span class="sc">+</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1500</span>,<span class="dv">125</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="challenge7_solutions_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -529,69 +533,95 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="challenge7_solutions_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>What about the relationship between minimum number of nights and price?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(minimum_nights,price))<span class="sc">+</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(room_type,price))<span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(neighbourhood_group),<span class="at">scales=</span><span class="st">"free"</span>)<span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="challenge7_solutions_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>There’s probably too much variability/not enough data to draw a clear conclusion.</p>
-<p>These AirBnB data are from New York City - so let’s take a look at how the borough relates to price.</p>
+<p>What about the relationship between minimum number of nights and price?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(neighbourhood_group,price))<span class="sc">+</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(minimum_nights,price))<span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="challenge7_solutions_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>There’s probably too much variability/not enough data to draw a clear conclusion.</p>
+<p>These AirBnB data are from New York City - so let’s take a look at how the borough relates to price.</p>
+<p>We can order the boxplot by descending value of <code>price</code>, using the <code>reorder()</code> function and the <code>FUN</code> argument to specify that we’re using <em>median</em> price.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">reorder</span>(neighbourhood_group,<span class="sc">-</span>price,<span class="at">FUN =</span> median),price))<span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="challenge7_solutions_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Again, a lot of variability and skew in the data, though it makes sense that Manhattan and Brooklyn would cost the most to stay in.</p>
 <p>Let’s remake that plot, but make it a little prettier.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(neighbourhood_group,price))<span class="sc">+</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha=</span>.<span class="dv">6</span>)<span class="sc">+</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_dollar</span>())<span class="sc">+</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Borough"</span>,</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">"Price"</span>)<span class="sc">+</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="challenge7_solutions_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>price_med <span class="ot">&lt;-</span> airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(neighbourhood_group) <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_price=</span><span class="fu">median</span>(price,<span class="at">na.rm=</span>T)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>price_med</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  neighbourhood_group median_price
+  &lt;chr&gt;                      &lt;dbl&gt;
+1 Bronx                         65
+2 Brooklyn                      90
+3 Manhattan                    150
+4 Queens                        75
+5 Staten Island                 75</code></pre>
 </div>
-</div>
-<p>Let’s compute some summary statistics and plot them. We’ll compute the median (due to the skew in the data) and make bar graphs. Of course, the boxplot computes the median too, but it will be a bit easier to see when we take out the individual outliers.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">borough=</span>neighbourhood_group) <span class="sc">%&gt;%</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(borough) <span class="sc">%&gt;%</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_price=</span><span class="fu">median</span>(price)) <span class="sc">%&gt;%</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">reorder</span>(borough,<span class="sc">-</span>median_price), median_price))<span class="sc">+</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"borough"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">reorder</span>(neighbourhood_group,<span class="sc">-</span>price,<span class="at">FUN =</span> median),price))<span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha=</span>.<span class="dv">6</span>)<span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_dollar</span>())<span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Borough"</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">"Price"</span>)<span class="sc">+</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="challenge7_solutions_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>That’s better. Manhattan is a lot more expensive than the other boroughs - about double that of the Bronx!</p>
+<p>Let’s compute some summary statistics and plot them. We’ll compute the median (due to the skew in the data) and make bar graphs. Of course, the boxplot computes the median too, but it will be a bit easier to see when we take out the individual outliers.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">borough=</span>neighbourhood_group) <span class="sc">%&gt;%</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(room_type,borough) <span class="sc">%&gt;%</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(borough) <span class="sc">%&gt;%</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc=</span>(n<span class="sc">/</span><span class="fu">sum</span>(n))<span class="sc">*</span><span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(borough) <span class="sc">%&gt;%</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(room_type,perc,<span class="at">fill=</span>room_type))<span class="sc">+</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  ggsci<span class="sc">::</span><span class="fu">scale_fill_simpsons</span>(<span class="at">name=</span><span class="st">"Room Type"</span>)<span class="sc">+</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(borough),<span class="at">scales=</span><span class="st">"free_x"</span>)<span class="sc">+</span></span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Room Type"</span>,<span class="at">y=</span><span class="st">"Percent"</span>)<span class="sc">+</span></span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">borough=</span>neighbourhood_group) <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(borough) <span class="sc">%&gt;%</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_price=</span><span class="fu">median</span>(price)) <span class="sc">%&gt;%</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">reorder</span>(borough,<span class="sc">-</span>median_price), median_price))<span class="sc">+</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"borough"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="challenge7_solutions_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>That’s better. Manhattan is a lot more expensive than the other boroughs - about double that of the Bronx!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">borough=</span>neighbourhood_group) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(room_type,borough) <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(borough) <span class="sc">%&gt;%</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc=</span>(n<span class="sc">/</span><span class="fu">sum</span>(n))<span class="sc">*</span><span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(borough) <span class="sc">%&gt;%</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(room_type,perc))<span class="sc">+</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(borough),<span class="at">scales=</span><span class="st">"free_x"</span>)<span class="sc">+</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Room Type"</span>,<span class="at">y=</span><span class="st">"Percent"</span>)<span class="sc">+</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="challenge7_solutions_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -599,30 +629,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="eggs" class="level2">
 <h2 class="anchored" data-anchor-id="eggs">Eggs</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>eggs <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"eggs_tidy.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>eggs <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"eggs_tidy.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>eggs_clean <span class="ot">&lt;-</span> eggs <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>,</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"price"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name=</span><span class="fu">str_replace</span>(name,<span class="st">"extra_large"</span>,<span class="st">"extra large"</span>),</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">name=</span><span class="fu">str_replace</span>(name,<span class="st">"half_dozen"</span>,<span class="st">"half dozen"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(name,<span class="at">into=</span><span class="fu">c</span>(<span class="st">"size"</span>,<span class="st">"amount"</span>),<span class="at">sep=</span><span class="st">"_"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">str_c</span>(month, year, <span class="at">sep=</span><span class="st">" "</span>),</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">date =</span> <span class="fu">my</span>(date))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>eggs_clean <span class="ot">&lt;-</span> eggs <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"price"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name=</span><span class="fu">str_replace</span>(name,<span class="st">"extra_large"</span>,<span class="st">"extra large"</span>),</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">name=</span><span class="fu">str_replace</span>(name,<span class="st">"half_dozen"</span>,<span class="st">"half dozen"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(name,<span class="at">into=</span><span class="fu">c</span>(<span class="st">"size"</span>,<span class="st">"amount"</span>),<span class="at">sep=</span><span class="st">"_"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">str_c</span>(month, year, <span class="at">sep=</span><span class="st">" "</span>),</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">date =</span> <span class="fu">my</span>(date))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(eggs_clean,<span class="fu">aes</span>(date,price,<span class="at">col=</span>amount))<span class="sc">+</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>()<span class="sc">+</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>()<span class="sc">+</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_dollar</span>(),<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">300</span>))<span class="sc">+</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(size))<span class="sc">+</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  ggsci<span class="sc">::</span><span class="fu">scale_color_d3</span>()<span class="sc">+</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Date"</span>,<span class="at">y=</span><span class="st">"Avg. Price Per Carton"</span>)<span class="sc">+</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(eggs_clean,<span class="fu">aes</span>(date,price,<span class="at">col=</span>amount))<span class="sc">+</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span>.<span class="dv">5</span>)<span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>()<span class="sc">+</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_dollar</span>(),<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">300</span>))<span class="sc">+</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(size))<span class="sc">+</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  ggsci<span class="sc">::</span><span class="fu">scale_color_d3</span>()<span class="sc">+</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Date"</span>,<span class="at">y=</span><span class="st">"Avg. Price Per Carton"</span>)<span class="sc">+</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="challenge7_solutions_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+<p><img src="challenge7_solutions_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 
@@ -1031,333 +1061,353 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb32" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Challenge 7 Solutions"</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Sean Conway"</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Visualizing Multiple Dimensions"</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "1/22/2024"</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-copy: true</span></span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="co">  - challenge_7</span></span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="co">  - hotel_bookings</span></span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="co">  - australian_marriage</span></span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a><span class="co">  - air_bnb</span></span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a><span class="co">  - eggs</span></span>
-<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="an">editor_options:</span><span class="co"> </span></span>
-<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="co">  chunk_output_type: console</span></span>
-<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
-<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
-<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>, <span class="at">warning=</span><span class="cn">FALSE</span>, <span class="at">message=</span><span class="cn">FALSE</span>)</span>
-<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge Overview</span></span>
-<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a>Today's challenge is to:</span>
-<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a>1)  read in a data set, and describe the data set using both words and any supporting information (e.g., tables, etc)</span>
-<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>2)  tidy data (as needed, including sanity checks)</span>
-<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a>3)  mutate variables as needed (including sanity checks)</span>
-<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>4)  Recreate at least two graphs from previous exercises, but introduce at least one additional dimension that you omitted before using ggplot functionality (color, shape, line, facet, etc) The goal is not to create unneeded <span class="co">[</span><span class="ot">chart ink (Tufte)</span><span class="co">](https://www.edwardtufte.com/tufte/)</span>, but to concisely capture variation in additional dimensions that were collapsed in your earlier 2 or 3 dimensional graphs.</span>
-<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Explain why you choose the specific graph type</span>
-<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a>5) If you haven't tried in previous weeks, work this week to make your graphs "publication" ready with titles, captions, and pretty axis labels and other viewer-friendly features</span>
-<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">R Graph Gallery</span><span class="co">](https://r-graph-gallery.com/)</span> is a good starting point for thinking about what information is conveyed in standard graph types, and includes example R code. And anyone not familiar with Edward Tufte should check out his <span class="co">[</span><span class="ot">fantastic books</span><span class="co">](https://www.edwardtufte.com/tufte/books_vdqi)</span> and <span class="co">[</span><span class="ot">courses on data visualizaton.</span><span class="co">](https://www.edwardtufte.com/tufte/courses)</span></span>
-<span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a>(be sure to only include the category tags for the data you use!)</span>
-<span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hotel Bookings  </span></span>
-<span id="cb32-52"><a href="#cb32-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-53"><a href="#cb32-53" aria-hidden="true" tabindex="-1"></a><span class="fu">## Read in and clean the data  </span></span>
-<span id="cb32-54"><a href="#cb32-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-57"><a href="#cb32-57" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-58"><a href="#cb32-58" aria-hidden="true" tabindex="-1"></a>bookings_orig<span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"hotel_bookings.csv"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-59"><a href="#cb32-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>()</span>
-<span id="cb32-60"><a href="#cb32-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-61"><a href="#cb32-61" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(bookings_orig, <span class="fu">starts_with</span>(<span class="st">"arrival"</span>))</span>
-<span id="cb32-62"><a href="#cb32-62" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-63"><a href="#cb32-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-66"><a href="#cb32-66" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-67"><a href="#cb32-67" aria-hidden="true" tabindex="-1"></a>bookings<span class="ot">&lt;-</span>bookings_orig<span class="sc">%&gt;%</span></span>
-<span id="cb32-68"><a href="#cb32-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date_arrival =</span> <span class="fu">str_c</span>(arrival_date_day_of_month,</span>
-<span id="cb32-69"><a href="#cb32-69" aria-hidden="true" tabindex="-1"></a>                              arrival_date_month,</span>
-<span id="cb32-70"><a href="#cb32-70" aria-hidden="true" tabindex="-1"></a>                              arrival_date_year, <span class="at">sep=</span><span class="st">"/"</span>),</span>
-<span id="cb32-71"><a href="#cb32-71" aria-hidden="true" tabindex="-1"></a>         <span class="at">date_arrival =</span> <span class="fu">dmy</span>(date_arrival))<span class="sc">%&gt;%</span></span>
-<span id="cb32-72"><a href="#cb32-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">starts_with</span>(<span class="st">"arrival"</span>))</span>
-<span id="cb32-73"><a href="#cb32-73" aria-hidden="true" tabindex="-1"></a>bookings <span class="sc">%&gt;%</span></span>
-<span id="cb32-74"><a href="#cb32-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date_arrival)</span>
-<span id="cb32-75"><a href="#cb32-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-76"><a href="#cb32-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-77"><a href="#cb32-77" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visualization with multiple dimensions  </span></span>
-<span id="cb32-78"><a href="#cb32-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-79"><a href="#cb32-79" aria-hidden="true" tabindex="-1"></a>Previously, we viusalized the variation in number of bookings across time, split by the type of hotel (<span class="in">`City`</span> vs. <span class="in">`Resort`</span>).  </span>
-<span id="cb32-80"><a href="#cb32-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-83"><a href="#cb32-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-84"><a href="#cb32-84" aria-hidden="true" tabindex="-1"></a>bookings_month_hotel_n <span class="ot">&lt;-</span> bookings <span class="sc">%&gt;%</span></span>
-<span id="cb32-85"><a href="#cb32-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month=</span><span class="fu">floor_date</span>(date_arrival,<span class="at">unit=</span><span class="st">"month"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb32-86"><a href="#cb32-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month, hotel) <span class="sc">%&gt;%</span></span>
-<span id="cb32-87"><a href="#cb32-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb32-88"><a href="#cb32-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb32-89"><a href="#cb32-89" aria-hidden="true" tabindex="-1"></a>bookings_month_hotel_n</span>
-<span id="cb32-90"><a href="#cb32-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-91"><a href="#cb32-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-94"><a href="#cb32-94" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-95"><a href="#cb32-95" aria-hidden="true" tabindex="-1"></a>bookings_month_hotel_n <span class="sc">%&gt;%</span></span>
-<span id="cb32-96"><a href="#cb32-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(month,n,<span class="at">col=</span>hotel))<span class="sc">+</span></span>
-<span id="cb32-97"><a href="#cb32-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
-<span id="cb32-98"><a href="#cb32-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="cn">NULL</span>, <span class="at">date_labels =</span> <span class="st">"%b %y"</span>,<span class="at">breaks=</span><span class="st">"2 months"</span>)<span class="sc">+</span></span>
-<span id="cb32-99"><a href="#cb32-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">5000</span>))<span class="sc">+</span></span>
-<span id="cb32-100"><a href="#cb32-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"date"</span>,<span class="at">y=</span><span class="st">"number of bookings"</span>)<span class="sc">+</span></span>
-<span id="cb32-101"><a href="#cb32-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
-<span id="cb32-102"><a href="#cb32-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-103"><a href="#cb32-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-104"><a href="#cb32-104" aria-hidden="true" tabindex="-1"></a>Let's consider splitting the data based on <span class="in">`meal`</span>, the type of meal booked. </span>
-<span id="cb32-105"><a href="#cb32-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-108"><a href="#cb32-108" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-109"><a href="#cb32-109" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(bookings, meal)</span>
-<span id="cb32-110"><a href="#cb32-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-111"><a href="#cb32-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-112"><a href="#cb32-112" aria-hidden="true" tabindex="-1"></a>From the <span class="co">[</span><span class="ot">data source</span><span class="co">](https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand)</span>: </span>
-<span id="cb32-113"><a href="#cb32-113" aria-hidden="true" tabindex="-1"></a>*Type of meal booked. Categories are presented in standard hospitality meal packages: Undefined/SC – no meal package; BB – Bed &amp; Breakfast; HB – Half board (breakfast and one other meal – usually dinner); FB – Full board (breakfast, lunch and dinner)*  </span>
-<span id="cb32-114"><a href="#cb32-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-115"><a href="#cb32-115" aria-hidden="true" tabindex="-1"></a>Below, we recode meal to make the labels more informative, and then use <span class="in">`count()`</span> to compute the number of meal bookings for each hotel across time.  </span>
-<span id="cb32-116"><a href="#cb32-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-119"><a href="#cb32-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-120"><a href="#cb32-120" aria-hidden="true" tabindex="-1"></a>bookings_month_hotel_meal_n <span class="ot">&lt;-</span> bookings <span class="sc">%&gt;%</span></span>
-<span id="cb32-121"><a href="#cb32-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month=</span><span class="fu">floor_date</span>(date_arrival,<span class="at">unit=</span><span class="st">"month"</span>),</span>
-<span id="cb32-122"><a href="#cb32-122" aria-hidden="true" tabindex="-1"></a>         <span class="at">meal=</span><span class="fu">recode</span>(meal,</span>
-<span id="cb32-123"><a href="#cb32-123" aria-hidden="true" tabindex="-1"></a>                     <span class="at">BB=</span><span class="st">"Bed and Breakfast"</span>,</span>
-<span id="cb32-124"><a href="#cb32-124" aria-hidden="true" tabindex="-1"></a>                     <span class="at">FB=</span><span class="st">"Full board"</span>,</span>
-<span id="cb32-125"><a href="#cb32-125" aria-hidden="true" tabindex="-1"></a>                     <span class="at">HB=</span><span class="st">"Half board"</span>,</span>
-<span id="cb32-126"><a href="#cb32-126" aria-hidden="true" tabindex="-1"></a>                     <span class="at">SC=</span><span class="st">"Undefined"</span>),</span>
-<span id="cb32-127"><a href="#cb32-127" aria-hidden="true" tabindex="-1"></a>         <span class="fu">across</span>(<span class="fu">c</span>(hotel, meal),as.factor)) <span class="sc">%&gt;%</span></span>
-<span id="cb32-128"><a href="#cb32-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(month, hotel, meal,<span class="at">.drop=</span>F) <span class="co"># ensures 0 is counted</span></span>
-<span id="cb32-129"><a href="#cb32-129" aria-hidden="true" tabindex="-1"></a>bookings_month_hotel_meal_n</span>
-<span id="cb32-130"><a href="#cb32-130" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-131"><a href="#cb32-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-134"><a href="#cb32-134" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-135"><a href="#cb32-135" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bookings_month_hotel_meal_n,<span class="fu">aes</span>(month, n, <span class="at">col=</span>meal))<span class="sc">+</span></span>
-<span id="cb32-136"><a href="#cb32-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>()<span class="sc">+</span></span>
-<span id="cb32-137"><a href="#cb32-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(hotel))<span class="sc">+</span></span>
-<span id="cb32-138"><a href="#cb32-138" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>()<span class="sc">+</span></span>
-<span id="cb32-139"><a href="#cb32-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
-<span id="cb32-140"><a href="#cb32-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-141"><a href="#cb32-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-142"><a href="#cb32-142" aria-hidden="true" tabindex="-1"></a>We can then make the plot more palatable by modifying the **theme** and **color palette**. Personally, I like using the <span class="co">[</span><span class="ot">ggthemes</span><span class="co">](https://github.com/jrnold/ggthemes)</span> package to add a custom theme to my plots. I also use the <span class="co">[</span><span class="ot">ggsci</span><span class="co">](https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html)</span> package to add in a custom color palette based on the tv show Futurama. I also add in some different axis labels.  </span>
-<span id="cb32-143"><a href="#cb32-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-146"><a href="#cb32-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-147"><a href="#cb32-147" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bookings_month_hotel_meal_n,<span class="fu">aes</span>(month, n, <span class="at">col=</span>meal))<span class="sc">+</span></span>
-<span id="cb32-148"><a href="#cb32-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
-<span id="cb32-149"><a href="#cb32-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(hotel))<span class="sc">+</span></span>
-<span id="cb32-150"><a href="#cb32-150" aria-hidden="true" tabindex="-1"></a>  ggsci<span class="sc">::</span><span class="fu">scale_color_futurama</span>(<span class="at">name=</span><span class="st">"Meal Type"</span>)<span class="sc">+</span></span>
-<span id="cb32-151"><a href="#cb32-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>()<span class="sc">+</span></span>
-<span id="cb32-152"><a href="#cb32-152" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Date"</span>,<span class="at">y=</span><span class="st">"Number of Bookings"</span>)<span class="sc">+</span></span>
-<span id="cb32-153"><a href="#cb32-153" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
-<span id="cb32-154"><a href="#cb32-154" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
-<span id="cb32-155"><a href="#cb32-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-156"><a href="#cb32-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-157"><a href="#cb32-157" aria-hidden="true" tabindex="-1"></a><span class="fu">## Australian Marriage </span></span>
-<span id="cb32-158"><a href="#cb32-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-159"><a href="#cb32-159" aria-hidden="true" tabindex="-1"></a>This is another tabular data source published by the <span class="co">[</span><span class="ot">Australian Bureau of Statistics</span><span class="co">](https://www.abs.gov.au/)</span> that requires a decent amount of cleaning. In 2017, Australia conducted a postal survey to gauge citizens' opinions towards same sex marriage: "Should the law be changed to allow same-sex couples to marry?" All Australian citizens are required to vote in elections, so citizens could respond in one of four ways: vote yes, vote no, vote in an unclear way, or fail to vote. (See the "Explanatory Notes" sheet for more details.)</span>
-<span id="cb32-160"><a href="#cb32-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-161"><a href="#cb32-161" aria-hidden="true" tabindex="-1"></a>Below we read in the data, using code previously used in the challenge 3 solution. For an explanation of the code, please see that post.  </span>
-<span id="cb32-162"><a href="#cb32-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-163"><a href="#cb32-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-164"><a href="#cb32-164" aria-hidden="true" tabindex="-1"></a><span class="fu">### Read Data</span></span>
-<span id="cb32-165"><a href="#cb32-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-168"><a href="#cb32-168" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-169"><a href="#cb32-169" aria-hidden="true" tabindex="-1"></a>vote_orig <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"australian_marriage_law_postal_survey_2017_-_response_final.xls"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-170"><a href="#cb32-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_excel</span>(<span class="at">sheet=</span><span class="st">"Table 2"</span>,</span>
-<span id="cb32-171"><a href="#cb32-171" aria-hidden="true" tabindex="-1"></a>           <span class="at">skip=</span><span class="dv">7</span>,</span>
-<span id="cb32-172"><a href="#cb32-172" aria-hidden="true" tabindex="-1"></a>           <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"District"</span>, <span class="st">"Yes"</span>, <span class="st">"del"</span>, <span class="st">"No"</span>, <span class="fu">rep</span>(<span class="st">"del"</span>, <span class="dv">6</span>), <span class="st">"Illegible"</span>, <span class="st">"del"</span>, <span class="st">"No Response"</span>, <span class="fu">rep</span>(<span class="st">"del"</span>, <span class="dv">3</span>)))<span class="sc">%&gt;%</span></span>
-<span id="cb32-173"><a href="#cb32-173" aria-hidden="true" tabindex="-1"></a>  <span class="co">#select(!starts_with("del"))%&gt;%</span></span>
-<span id="cb32-174"><a href="#cb32-174" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">matches</span>(<span class="st">"del"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb32-175"><a href="#cb32-175" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(District)<span class="sc">%&gt;%</span></span>
-<span id="cb32-176"><a href="#cb32-176" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(District, <span class="st">"(Total)"</span>))<span class="sc">%&gt;%</span></span>
-<span id="cb32-177"><a href="#cb32-177" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_starts</span>(District, <span class="st">"</span><span class="sc">\\</span><span class="st">("</span>))</span>
-<span id="cb32-178"><a href="#cb32-178" aria-hidden="true" tabindex="-1"></a>vote<span class="ot">&lt;-</span> vote_orig<span class="sc">%&gt;%</span></span>
-<span id="cb32-179"><a href="#cb32-179" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Division =</span> <span class="fu">case_when</span>(</span>
-<span id="cb32-180"><a href="#cb32-180" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_ends</span>(District, <span class="st">"Divisions"</span>) <span class="sc">~</span> District,</span>
-<span id="cb32-181"><a href="#cb32-181" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span> ))<span class="sc">%&gt;%</span></span>
-<span id="cb32-182"><a href="#cb32-182" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill</span>(Division, <span class="at">.direction =</span> <span class="st">"down"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-183"><a href="#cb32-183" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(District, <span class="st">"Division|Australia"</span>))</span>
-<span id="cb32-184"><a href="#cb32-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-185"><a href="#cb32-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-186"><a href="#cb32-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-187"><a href="#cb32-187" aria-hidden="true" tabindex="-1"></a><span class="fu">### Visualization with Multiple Dimensions  </span></span>
-<span id="cb32-188"><a href="#cb32-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-191"><a href="#cb32-191" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-192"><a href="#cb32-192" aria-hidden="true" tabindex="-1"></a>vote <span class="sc">%&gt;%</span></span>
-<span id="cb32-193"><a href="#cb32-193" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Division=</span><span class="fu">str_remove</span>(Division, <span class="st">" Divisions"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb32-194"><a href="#cb32-194" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span>Yes<span class="sc">:</span><span class="st">`</span><span class="at">No Response</span><span class="st">`</span>,<span class="at">names_to =</span> <span class="st">"Response"</span>,<span class="at">values_to =</span> <span class="st">"Count"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-195"><a href="#cb32-195" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Response<span class="sc">!=</span><span class="st">"Illegible"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-196"><a href="#cb32-196" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Division, Response) <span class="sc">%&gt;%</span></span>
-<span id="cb32-197"><a href="#cb32-197" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Total_Count=</span><span class="fu">sum</span>(Count)) <span class="sc">%&gt;%</span></span>
-<span id="cb32-198"><a href="#cb32-198" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb32-199"><a href="#cb32-199" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Response=</span><span class="fu">factor</span>(Response,<span class="at">levels=</span><span class="fu">c</span>(<span class="st">"Yes"</span>,<span class="st">"No"</span>,<span class="st">"No Response"</span>),<span class="at">ordered=</span>T)) <span class="sc">%&gt;%</span></span>
-<span id="cb32-200"><a href="#cb32-200" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb32-201"><a href="#cb32-201" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Response,Total_Count,<span class="at">fill=</span><span class="fu">reorder</span>(Division,<span class="sc">-</span>Total_Count)))<span class="sc">+</span></span>
-<span id="cb32-202"><a href="#cb32-202" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)<span class="sc">+</span></span>
-<span id="cb32-203"><a href="#cb32-203" aria-hidden="true" tabindex="-1"></a>  ggsci<span class="sc">::</span><span class="fu">scale_fill_nejm</span>(<span class="at">name=</span><span class="st">"Division"</span>)<span class="sc">+</span></span>
-<span id="cb32-204"><a href="#cb32-204" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
-<span id="cb32-205"><a href="#cb32-205" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"Count"</span>)<span class="sc">+</span></span>
-<span id="cb32-206"><a href="#cb32-206" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">suffix=</span><span class="st">"K"</span>,<span class="at">scale=</span><span class="fl">1e-4</span>))<span class="sc">+</span></span>
-<span id="cb32-207"><a href="#cb32-207" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
-<span id="cb32-208"><a href="#cb32-208" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-209"><a href="#cb32-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-210"><a href="#cb32-210" aria-hidden="true" tabindex="-1"></a><span class="fu">## Air BnB  </span></span>
-<span id="cb32-211"><a href="#cb32-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-212"><a href="#cb32-212" aria-hidden="true" tabindex="-1"></a>This is a data set from air bnb. Most of this code is exactly as it was in Challenge 5, with the added work being making the plots more palatable.  </span>
-<span id="cb32-213"><a href="#cb32-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-216"><a href="#cb32-216" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-217"><a href="#cb32-217" aria-hidden="true" tabindex="-1"></a>airb<span class="ot">&lt;-</span><span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"AB_NYC_2019.csv"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-218"><a href="#cb32-218" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>()</span>
-<span id="cb32-219"><a href="#cb32-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-220"><a href="#cb32-220" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-221"><a href="#cb32-221" aria-hidden="true" tabindex="-1"></a><span class="fu">### Univariate Visualizations</span></span>
-<span id="cb32-222"><a href="#cb32-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-223"><a href="#cb32-223" aria-hidden="true" tabindex="-1"></a>First, let's take a look at the distribution of prices.  </span>
-<span id="cb32-226"><a href="#cb32-226" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-227"><a href="#cb32-227" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(airb,<span class="fu">aes</span>(price))<span class="sc">+</span></span>
-<span id="cb32-228"><a href="#cb32-228" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span>
-<span id="cb32-229"><a href="#cb32-229" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-230"><a href="#cb32-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-231"><a href="#cb32-231" aria-hidden="true" tabindex="-1"></a>Woah, there's clearly a few outliers here. </span>
-<span id="cb32-232"><a href="#cb32-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-235"><a href="#cb32-235" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-236"><a href="#cb32-236" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(airb<span class="sc">$</span>price)</span>
-<span id="cb32-237"><a href="#cb32-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-238"><a href="#cb32-238" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="ot">&lt;-</span> airb <span class="sc">%&gt;%</span></span>
-<span id="cb32-239"><a href="#cb32-239" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(price<span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">&amp;</span> price<span class="sc">&lt;</span><span class="dv">2500</span>)</span>
-<span id="cb32-240"><a href="#cb32-240" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb32-241"><a href="#cb32-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(price))<span class="sc">+</span></span>
-<span id="cb32-242"><a href="#cb32-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span>
-<span id="cb32-243"><a href="#cb32-243" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-244"><a href="#cb32-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-245"><a href="#cb32-245" aria-hidden="true" tabindex="-1"></a>That's better. The prices look right-skewed.  </span>
-<span id="cb32-246"><a href="#cb32-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-247"><a href="#cb32-247" aria-hidden="true" tabindex="-1"></a><span class="fu">### Bivariate Visualization(s)</span></span>
-<span id="cb32-248"><a href="#cb32-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-249"><a href="#cb32-249" aria-hidden="true" tabindex="-1"></a>Let's consider the different types of rooms and how they relate to price. </span>
-<span id="cb32-250"><a href="#cb32-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-253"><a href="#cb32-253" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-254"><a href="#cb32-254" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb32-255"><a href="#cb32-255" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(room_type,price))<span class="sc">+</span></span>
-<span id="cb32-256"><a href="#cb32-256" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
-<span id="cb32-257"><a href="#cb32-257" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
-<span id="cb32-258"><a href="#cb32-258" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-259"><a href="#cb32-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-262"><a href="#cb32-262" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-263"><a href="#cb32-263" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb32-264"><a href="#cb32-264" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(price))<span class="sc">+</span></span>
-<span id="cb32-265"><a href="#cb32-265" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()<span class="sc">+</span></span>
-<span id="cb32-266"><a href="#cb32-266" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(neighbourhood_group),<span class="at">scales=</span><span class="st">"free"</span>)</span>
-<span id="cb32-267"><a href="#cb32-267" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-268"><a href="#cb32-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-269"><a href="#cb32-269" aria-hidden="true" tabindex="-1"></a>What about the relationship between minimum number of nights and price?</span>
-<span id="cb32-270"><a href="#cb32-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-273"><a href="#cb32-273" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-274"><a href="#cb32-274" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb32-275"><a href="#cb32-275" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(minimum_nights,price))<span class="sc">+</span></span>
-<span id="cb32-276"><a href="#cb32-276" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
-<span id="cb32-277"><a href="#cb32-277" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-278"><a href="#cb32-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-279"><a href="#cb32-279" aria-hidden="true" tabindex="-1"></a>There's probably too much variability/not enough data to draw a clear conclusion.  </span>
-<span id="cb32-280"><a href="#cb32-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-281"><a href="#cb32-281" aria-hidden="true" tabindex="-1"></a>These AirBnB data are from New York City - so let's take a look at how the borough relates to price.</span>
-<span id="cb32-282"><a href="#cb32-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-285"><a href="#cb32-285" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-286"><a href="#cb32-286" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb32-287"><a href="#cb32-287" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(neighbourhood_group,price))<span class="sc">+</span></span>
-<span id="cb32-288"><a href="#cb32-288" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span>
-<span id="cb32-289"><a href="#cb32-289" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-290"><a href="#cb32-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-291"><a href="#cb32-291" aria-hidden="true" tabindex="-1"></a>Again, a lot of variability and skew in the data, though it makes sense that Manhattan and Brooklyn would cost the most to stay in.  </span>
-<span id="cb32-292"><a href="#cb32-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-293"><a href="#cb32-293" aria-hidden="true" tabindex="-1"></a>Let's remake that plot, but make it a little prettier.  </span>
-<span id="cb32-294"><a href="#cb32-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-297"><a href="#cb32-297" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-298"><a href="#cb32-298" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb32-299"><a href="#cb32-299" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(neighbourhood_group,price))<span class="sc">+</span></span>
-<span id="cb32-300"><a href="#cb32-300" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha=</span>.<span class="dv">6</span>)<span class="sc">+</span></span>
-<span id="cb32-301"><a href="#cb32-301" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_dollar</span>())<span class="sc">+</span></span>
-<span id="cb32-302"><a href="#cb32-302" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Borough"</span>,</span>
-<span id="cb32-303"><a href="#cb32-303" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">"Price"</span>)<span class="sc">+</span></span>
-<span id="cb32-304"><a href="#cb32-304" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()</span>
-<span id="cb32-305"><a href="#cb32-305" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-306"><a href="#cb32-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-307"><a href="#cb32-307" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-308"><a href="#cb32-308" aria-hidden="true" tabindex="-1"></a>Let's compute some summary statistics and plot them. We'll compute the median (due to the skew in the data) and make bar graphs. Of course, the boxplot computes the median too, but it will be a bit easier to see when we take out the individual outliers. </span>
-<span id="cb32-309"><a href="#cb32-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-312"><a href="#cb32-312" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-313"><a href="#cb32-313" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb32-314"><a href="#cb32-314" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">borough=</span>neighbourhood_group) <span class="sc">%&gt;%</span></span>
-<span id="cb32-315"><a href="#cb32-315" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(borough) <span class="sc">%&gt;%</span></span>
-<span id="cb32-316"><a href="#cb32-316" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_price=</span><span class="fu">median</span>(price)) <span class="sc">%&gt;%</span></span>
-<span id="cb32-317"><a href="#cb32-317" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">reorder</span>(borough,<span class="sc">-</span>median_price), median_price))<span class="sc">+</span></span>
-<span id="cb32-318"><a href="#cb32-318" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
-<span id="cb32-319"><a href="#cb32-319" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"borough"</span>)</span>
-<span id="cb32-320"><a href="#cb32-320" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-321"><a href="#cb32-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-322"><a href="#cb32-322" aria-hidden="true" tabindex="-1"></a>That's better. Manhattan is a lot more expensive than the other boroughs - about double that of the Bronx!</span>
-<span id="cb32-323"><a href="#cb32-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-326"><a href="#cb32-326" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-327"><a href="#cb32-327" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
-<span id="cb32-328"><a href="#cb32-328" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">borough=</span>neighbourhood_group) <span class="sc">%&gt;%</span></span>
-<span id="cb32-329"><a href="#cb32-329" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(room_type,borough) <span class="sc">%&gt;%</span></span>
-<span id="cb32-330"><a href="#cb32-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(borough) <span class="sc">%&gt;%</span></span>
-<span id="cb32-331"><a href="#cb32-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc=</span>(n<span class="sc">/</span><span class="fu">sum</span>(n))<span class="sc">*</span><span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-332"><a href="#cb32-332" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(borough) <span class="sc">%&gt;%</span></span>
-<span id="cb32-333"><a href="#cb32-333" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(room_type,perc,<span class="at">fill=</span>room_type))<span class="sc">+</span></span>
-<span id="cb32-334"><a href="#cb32-334" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
-<span id="cb32-335"><a href="#cb32-335" aria-hidden="true" tabindex="-1"></a>  ggsci<span class="sc">::</span><span class="fu">scale_fill_simpsons</span>(<span class="at">name=</span><span class="st">"Room Type"</span>)<span class="sc">+</span></span>
-<span id="cb32-336"><a href="#cb32-336" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
-<span id="cb32-337"><a href="#cb32-337" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(borough),<span class="at">scales=</span><span class="st">"free_x"</span>)<span class="sc">+</span></span>
-<span id="cb32-338"><a href="#cb32-338" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Room Type"</span>,<span class="at">y=</span><span class="st">"Percent"</span>)<span class="sc">+</span></span>
-<span id="cb32-339"><a href="#cb32-339" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
-<span id="cb32-340"><a href="#cb32-340" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-341"><a href="#cb32-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-342"><a href="#cb32-342" aria-hidden="true" tabindex="-1"></a><span class="fu">## Eggs  </span></span>
-<span id="cb32-343"><a href="#cb32-343" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-346"><a href="#cb32-346" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-347"><a href="#cb32-347" aria-hidden="true" tabindex="-1"></a>eggs <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"eggs_tidy.csv"</span>))</span>
-<span id="cb32-348"><a href="#cb32-348" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-349"><a href="#cb32-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-352"><a href="#cb32-352" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-353"><a href="#cb32-353" aria-hidden="true" tabindex="-1"></a>eggs_clean <span class="ot">&lt;-</span> eggs <span class="sc">%&gt;%</span></span>
-<span id="cb32-354"><a href="#cb32-354" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>,</span>
-<span id="cb32-355"><a href="#cb32-355" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"price"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-356"><a href="#cb32-356" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name=</span><span class="fu">str_replace</span>(name,<span class="st">"extra_large"</span>,<span class="st">"extra large"</span>),</span>
-<span id="cb32-357"><a href="#cb32-357" aria-hidden="true" tabindex="-1"></a>         <span class="at">name=</span><span class="fu">str_replace</span>(name,<span class="st">"half_dozen"</span>,<span class="st">"half dozen"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb32-358"><a href="#cb32-358" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(name,<span class="at">into=</span><span class="fu">c</span>(<span class="st">"size"</span>,<span class="st">"amount"</span>),<span class="at">sep=</span><span class="st">"_"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-359"><a href="#cb32-359" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">str_c</span>(month, year, <span class="at">sep=</span><span class="st">" "</span>),</span>
-<span id="cb32-360"><a href="#cb32-360" aria-hidden="true" tabindex="-1"></a>         <span class="at">date =</span> <span class="fu">my</span>(date))</span>
-<span id="cb32-361"><a href="#cb32-361" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-362"><a href="#cb32-362" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-365"><a href="#cb32-365" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-366"><a href="#cb32-366" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(eggs_clean,<span class="fu">aes</span>(date,price,<span class="at">col=</span>amount))<span class="sc">+</span></span>
-<span id="cb32-367"><a href="#cb32-367" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>()<span class="sc">+</span></span>
-<span id="cb32-368"><a href="#cb32-368" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>()<span class="sc">+</span></span>
-<span id="cb32-369"><a href="#cb32-369" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_dollar</span>(),<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">300</span>))<span class="sc">+</span></span>
-<span id="cb32-370"><a href="#cb32-370" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(size))<span class="sc">+</span></span>
-<span id="cb32-371"><a href="#cb32-371" aria-hidden="true" tabindex="-1"></a>  ggsci<span class="sc">::</span><span class="fu">scale_color_d3</span>()<span class="sc">+</span></span>
-<span id="cb32-372"><a href="#cb32-372" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Date"</span>,<span class="at">y=</span><span class="st">"Avg. Price Per Carton"</span>)<span class="sc">+</span></span>
-<span id="cb32-373"><a href="#cb32-373" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
-<span id="cb32-374"><a href="#cb32-374" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
-<span id="cb32-375"><a href="#cb32-375" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<div class="sourceCode" id="cb35" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Challenge 7 Solutions"</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Sean Conway"</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Visualizing Multiple Dimensions"</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "1/22/2024"</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-copy: true</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="co">  - challenge_7</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="co">  - hotel_bookings</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="co">  - australian_marriage</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="co">  - air_bnb</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="co">  - eggs</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="an">editor_options:</span><span class="co"> </span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a><span class="co">  chunk_output_type: console</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>, <span class="at">warning=</span><span class="cn">FALSE</span>, <span class="at">message=</span><span class="cn">FALSE</span>)</span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge Overview</span></span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a>Today's challenge is to:</span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>1)  read in a data set, and describe the data set using both words and any supporting information (e.g., tables, etc)</span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a>2)  tidy data (as needed, including sanity checks)</span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a>3)  mutate variables as needed (including sanity checks)</span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a>4)  Recreate at least two graphs from previous exercises, but introduce at least one additional dimension that you omitted before using ggplot functionality (color, shape, line, facet, etc) The goal is not to create unneeded <span class="co">[</span><span class="ot">chart ink (Tufte)</span><span class="co">](https://www.edwardtufte.com/tufte/)</span>, but to concisely capture variation in additional dimensions that were collapsed in your earlier 2 or 3 dimensional graphs.</span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Explain why you choose the specific graph type</span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true" tabindex="-1"></a>5)  If you haven't tried in previous weeks, work this week to make your graphs "publication" ready with titles, captions, and pretty axis labels and other viewer-friendly features</span>
+<span id="cb35-48"><a href="#cb35-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-49"><a href="#cb35-49" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">R Graph Gallery</span><span class="co">](https://r-graph-gallery.com/)</span> is a good starting point for thinking about what information is conveyed in standard graph types, and includes example R code. And anyone not familiar with Edward Tufte should check out his <span class="co">[</span><span class="ot">fantastic books</span><span class="co">](https://www.edwardtufte.com/tufte/books_vdqi)</span> and <span class="co">[</span><span class="ot">courses on data visualizaton.</span><span class="co">](https://www.edwardtufte.com/tufte/courses)</span></span>
+<span id="cb35-50"><a href="#cb35-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-51"><a href="#cb35-51" aria-hidden="true" tabindex="-1"></a>(be sure to only include the category tags for the data you use!)</span>
+<span id="cb35-52"><a href="#cb35-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-53"><a href="#cb35-53" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hotel Bookings</span></span>
+<span id="cb35-54"><a href="#cb35-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-55"><a href="#cb35-55" aria-hidden="true" tabindex="-1"></a><span class="fu">## Read in and clean the data</span></span>
+<span id="cb35-56"><a href="#cb35-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-59"><a href="#cb35-59" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-60"><a href="#cb35-60" aria-hidden="true" tabindex="-1"></a>bookings_orig<span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"hotel_bookings.csv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-61"><a href="#cb35-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>()</span>
+<span id="cb35-62"><a href="#cb35-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-63"><a href="#cb35-63" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(bookings_orig, <span class="fu">starts_with</span>(<span class="st">"arrival"</span>))</span>
+<span id="cb35-64"><a href="#cb35-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-65"><a href="#cb35-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-68"><a href="#cb35-68" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-69"><a href="#cb35-69" aria-hidden="true" tabindex="-1"></a>bookings<span class="ot">&lt;-</span>bookings_orig<span class="sc">%&gt;%</span></span>
+<span id="cb35-70"><a href="#cb35-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date_arrival =</span> <span class="fu">str_c</span>(arrival_date_day_of_month,</span>
+<span id="cb35-71"><a href="#cb35-71" aria-hidden="true" tabindex="-1"></a>                              arrival_date_month,</span>
+<span id="cb35-72"><a href="#cb35-72" aria-hidden="true" tabindex="-1"></a>                              arrival_date_year, <span class="at">sep=</span><span class="st">"/"</span>),</span>
+<span id="cb35-73"><a href="#cb35-73" aria-hidden="true" tabindex="-1"></a>         <span class="at">date_arrival =</span> <span class="fu">dmy</span>(date_arrival))<span class="sc">%&gt;%</span></span>
+<span id="cb35-74"><a href="#cb35-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">starts_with</span>(<span class="st">"arrival"</span>))</span>
+<span id="cb35-75"><a href="#cb35-75" aria-hidden="true" tabindex="-1"></a>bookings <span class="sc">%&gt;%</span></span>
+<span id="cb35-76"><a href="#cb35-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date_arrival)</span>
+<span id="cb35-77"><a href="#cb35-77" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-78"><a href="#cb35-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-79"><a href="#cb35-79" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visualization with multiple dimensions</span></span>
+<span id="cb35-80"><a href="#cb35-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-81"><a href="#cb35-81" aria-hidden="true" tabindex="-1"></a>Previously, we viusalized the variation in number of bookings across time, split by the type of hotel (<span class="in">`City`</span> vs. <span class="in">`Resort`</span>).</span>
+<span id="cb35-82"><a href="#cb35-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-85"><a href="#cb35-85" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-86"><a href="#cb35-86" aria-hidden="true" tabindex="-1"></a>bookings_month_hotel_n <span class="ot">&lt;-</span> bookings <span class="sc">%&gt;%</span></span>
+<span id="cb35-87"><a href="#cb35-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month=</span><span class="fu">floor_date</span>(date_arrival,<span class="at">unit=</span><span class="st">"month"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-88"><a href="#cb35-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month, hotel) <span class="sc">%&gt;%</span></span>
+<span id="cb35-89"><a href="#cb35-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb35-90"><a href="#cb35-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb35-91"><a href="#cb35-91" aria-hidden="true" tabindex="-1"></a>bookings_month_hotel_n</span>
+<span id="cb35-92"><a href="#cb35-92" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-93"><a href="#cb35-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-96"><a href="#cb35-96" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-97"><a href="#cb35-97" aria-hidden="true" tabindex="-1"></a>bookings_month_hotel_n <span class="sc">%&gt;%</span></span>
+<span id="cb35-98"><a href="#cb35-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(month,n,<span class="at">col=</span>hotel))<span class="sc">+</span></span>
+<span id="cb35-99"><a href="#cb35-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb35-100"><a href="#cb35-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="cn">NULL</span>, <span class="at">date_labels =</span> <span class="st">"%b %y"</span>,<span class="at">breaks=</span><span class="st">"2 months"</span>)<span class="sc">+</span></span>
+<span id="cb35-101"><a href="#cb35-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">5000</span>))<span class="sc">+</span></span>
+<span id="cb35-102"><a href="#cb35-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"date"</span>,<span class="at">y=</span><span class="st">"number of bookings"</span>)<span class="sc">+</span></span>
+<span id="cb35-103"><a href="#cb35-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
+<span id="cb35-104"><a href="#cb35-104" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-105"><a href="#cb35-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-106"><a href="#cb35-106" aria-hidden="true" tabindex="-1"></a>Let's consider splitting the data based on <span class="in">`meal`</span>, the type of meal booked.</span>
+<span id="cb35-107"><a href="#cb35-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-110"><a href="#cb35-110" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-111"><a href="#cb35-111" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(bookings, meal)</span>
+<span id="cb35-112"><a href="#cb35-112" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-113"><a href="#cb35-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-114"><a href="#cb35-114" aria-hidden="true" tabindex="-1"></a>From the <span class="co">[</span><span class="ot">data source</span><span class="co">](https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand)</span>: *Type of meal booked. Categories are presented in standard hospitality meal packages: Undefined/SC – no meal package; BB – Bed &amp; Breakfast; HB – Half board (breakfast and one other meal – usually dinner); FB – Full board (breakfast, lunch and dinner)*</span>
+<span id="cb35-115"><a href="#cb35-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-116"><a href="#cb35-116" aria-hidden="true" tabindex="-1"></a>Below, we recode meal to make the labels more informative, and then use <span class="in">`count()`</span> to compute the number of meal bookings for each hotel across time.</span>
+<span id="cb35-117"><a href="#cb35-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-120"><a href="#cb35-120" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-121"><a href="#cb35-121" aria-hidden="true" tabindex="-1"></a>bookings_month_hotel_meal_n <span class="ot">&lt;-</span> bookings <span class="sc">%&gt;%</span></span>
+<span id="cb35-122"><a href="#cb35-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month=</span><span class="fu">floor_date</span>(date_arrival,<span class="at">unit=</span><span class="st">"month"</span>),</span>
+<span id="cb35-123"><a href="#cb35-123" aria-hidden="true" tabindex="-1"></a>         <span class="at">meal=</span><span class="fu">recode</span>(meal,</span>
+<span id="cb35-124"><a href="#cb35-124" aria-hidden="true" tabindex="-1"></a>                     <span class="at">BB=</span><span class="st">"Bed and Breakfast"</span>,</span>
+<span id="cb35-125"><a href="#cb35-125" aria-hidden="true" tabindex="-1"></a>                     <span class="at">FB=</span><span class="st">"Full board"</span>,</span>
+<span id="cb35-126"><a href="#cb35-126" aria-hidden="true" tabindex="-1"></a>                     <span class="at">HB=</span><span class="st">"Half board"</span>,</span>
+<span id="cb35-127"><a href="#cb35-127" aria-hidden="true" tabindex="-1"></a>                     <span class="at">SC=</span><span class="st">"Undefined"</span>),</span>
+<span id="cb35-128"><a href="#cb35-128" aria-hidden="true" tabindex="-1"></a>         <span class="fu">across</span>(<span class="fu">c</span>(hotel, meal),as.factor)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-129"><a href="#cb35-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month,hotel,meal) <span class="sc">%&gt;%</span></span>
+<span id="cb35-130"><a href="#cb35-130" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb35-131"><a href="#cb35-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb35-132"><a href="#cb35-132" aria-hidden="true" tabindex="-1"></a>bookings_month_hotel_meal_n</span>
+<span id="cb35-133"><a href="#cb35-133" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-134"><a href="#cb35-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-137"><a href="#cb35-137" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-138"><a href="#cb35-138" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bookings_month_hotel_meal_n,<span class="fu">aes</span>(month, n, <span class="at">col=</span>meal))<span class="sc">+</span></span>
+<span id="cb35-139"><a href="#cb35-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>()<span class="sc">+</span></span>
+<span id="cb35-140"><a href="#cb35-140" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(hotel))<span class="sc">+</span></span>
+<span id="cb35-141"><a href="#cb35-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>()<span class="sc">+</span></span>
+<span id="cb35-142"><a href="#cb35-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
+<span id="cb35-143"><a href="#cb35-143" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-144"><a href="#cb35-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-145"><a href="#cb35-145" aria-hidden="true" tabindex="-1"></a>We can then make the plot more palatable by modifying the **theme** and **color palette**. Personally, I like using the <span class="co">[</span><span class="ot">ggthemes</span><span class="co">](https://github.com/jrnold/ggthemes)</span> package to add a custom theme to my plots. I also use the <span class="co">[</span><span class="ot">ggsci</span><span class="co">](https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html)</span> package to add in a custom color palette based on the tv show Futurama. I also add in some different axis labels.</span>
+<span id="cb35-146"><a href="#cb35-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-149"><a href="#cb35-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-150"><a href="#cb35-150" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bookings_month_hotel_meal_n,<span class="fu">aes</span>(month, n, <span class="at">col=</span>meal))<span class="sc">+</span></span>
+<span id="cb35-151"><a href="#cb35-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb35-152"><a href="#cb35-152" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(hotel))<span class="sc">+</span></span>
+<span id="cb35-153"><a href="#cb35-153" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ggsci::scale_color_futurama(name="Meal Type")+</span></span>
+<span id="cb35-154"><a href="#cb35-154" aria-hidden="true" tabindex="-1"></a>  see<span class="sc">::</span><span class="fu">scale_color_okabeito</span>()<span class="sc">+</span></span>
+<span id="cb35-155"><a href="#cb35-155" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>()<span class="sc">+</span></span>
+<span id="cb35-156"><a href="#cb35-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Date"</span>,<span class="at">y=</span><span class="st">"Number of Bookings"</span>)<span class="sc">+</span></span>
+<span id="cb35-157"><a href="#cb35-157" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
+<span id="cb35-158"><a href="#cb35-158" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
+<span id="cb35-159"><a href="#cb35-159" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-160"><a href="#cb35-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-161"><a href="#cb35-161" aria-hidden="true" tabindex="-1"></a><span class="fu">## Australian Marriage</span></span>
+<span id="cb35-162"><a href="#cb35-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-163"><a href="#cb35-163" aria-hidden="true" tabindex="-1"></a>This is another tabular data source published by the <span class="co">[</span><span class="ot">Australian Bureau of Statistics</span><span class="co">](https://www.abs.gov.au/)</span> that requires a decent amount of cleaning. In 2017, Australia conducted a postal survey to gauge citizens' opinions towards same sex marriage: "Should the law be changed to allow same-sex couples to marry?" All Australian citizens are required to vote in elections, so citizens could respond in one of four ways: vote yes, vote no, vote in an unclear way, or fail to vote. (See the "Explanatory Notes" sheet for more details.)</span>
+<span id="cb35-164"><a href="#cb35-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-165"><a href="#cb35-165" aria-hidden="true" tabindex="-1"></a>Below we read in the data, using code previously used in the challenge 3 solution. For an explanation of the code, please see that post.</span>
+<span id="cb35-166"><a href="#cb35-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-167"><a href="#cb35-167" aria-hidden="true" tabindex="-1"></a><span class="fu">### Read Data</span></span>
+<span id="cb35-168"><a href="#cb35-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-171"><a href="#cb35-171" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-172"><a href="#cb35-172" aria-hidden="true" tabindex="-1"></a>vote_orig <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"australian_marriage_law_postal_survey_2017_-_response_final.xls"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-173"><a href="#cb35-173" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_excel</span>(<span class="at">sheet=</span><span class="st">"Table 2"</span>,</span>
+<span id="cb35-174"><a href="#cb35-174" aria-hidden="true" tabindex="-1"></a>           <span class="at">skip=</span><span class="dv">7</span>,</span>
+<span id="cb35-175"><a href="#cb35-175" aria-hidden="true" tabindex="-1"></a>           <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"District"</span>, <span class="st">"Yes"</span>, <span class="st">"del"</span>, <span class="st">"No"</span>, <span class="fu">rep</span>(<span class="st">"del"</span>, <span class="dv">6</span>), <span class="st">"Illegible"</span>, <span class="st">"del"</span>, <span class="st">"No Response"</span>, <span class="fu">rep</span>(<span class="st">"del"</span>, <span class="dv">3</span>)))<span class="sc">%&gt;%</span></span>
+<span id="cb35-176"><a href="#cb35-176" aria-hidden="true" tabindex="-1"></a>  <span class="co">#select(!starts_with("del"))%&gt;%</span></span>
+<span id="cb35-177"><a href="#cb35-177" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">matches</span>(<span class="st">"del"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-178"><a href="#cb35-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(District)<span class="sc">%&gt;%</span></span>
+<span id="cb35-179"><a href="#cb35-179" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(District, <span class="st">"(Total)"</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb35-180"><a href="#cb35-180" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_starts</span>(District, <span class="st">"</span><span class="sc">\\</span><span class="st">("</span>))</span>
+<span id="cb35-181"><a href="#cb35-181" aria-hidden="true" tabindex="-1"></a>vote<span class="ot">&lt;-</span> vote_orig<span class="sc">%&gt;%</span></span>
+<span id="cb35-182"><a href="#cb35-182" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Division =</span> <span class="fu">case_when</span>(</span>
+<span id="cb35-183"><a href="#cb35-183" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_ends</span>(District, <span class="st">"Divisions"</span>) <span class="sc">~</span> District,</span>
+<span id="cb35-184"><a href="#cb35-184" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span> ))<span class="sc">%&gt;%</span></span>
+<span id="cb35-185"><a href="#cb35-185" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill</span>(Division, <span class="at">.direction =</span> <span class="st">"down"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-186"><a href="#cb35-186" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(District, <span class="st">"Division|Australia"</span>))</span>
+<span id="cb35-187"><a href="#cb35-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-188"><a href="#cb35-188" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-189"><a href="#cb35-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-190"><a href="#cb35-190" aria-hidden="true" tabindex="-1"></a><span class="fu">### Visualization with Multiple Dimensions</span></span>
+<span id="cb35-191"><a href="#cb35-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-194"><a href="#cb35-194" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-195"><a href="#cb35-195" aria-hidden="true" tabindex="-1"></a>vote <span class="sc">%&gt;%</span></span>
+<span id="cb35-196"><a href="#cb35-196" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Division=</span><span class="fu">str_remove</span>(Division, <span class="st">" Divisions"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-197"><a href="#cb35-197" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span>Yes<span class="sc">:</span><span class="st">`</span><span class="at">No Response</span><span class="st">`</span>,<span class="at">names_to =</span> <span class="st">"Response"</span>,<span class="at">values_to =</span> <span class="st">"Count"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-198"><a href="#cb35-198" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Response<span class="sc">!=</span><span class="st">"Illegible"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-199"><a href="#cb35-199" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Division, Response) <span class="sc">%&gt;%</span></span>
+<span id="cb35-200"><a href="#cb35-200" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Total_Count=</span><span class="fu">sum</span>(Count)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-201"><a href="#cb35-201" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb35-202"><a href="#cb35-202" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Response=</span><span class="fu">factor</span>(Response,<span class="at">levels=</span><span class="fu">c</span>(<span class="st">"Yes"</span>,<span class="st">"No"</span>,<span class="st">"No Response"</span>),<span class="at">ordered=</span>T)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-203"><a href="#cb35-203" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb35-204"><a href="#cb35-204" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Response,Total_Count,<span class="at">fill=</span><span class="fu">reorder</span>(Division,<span class="sc">-</span>Total_Count)))<span class="sc">+</span></span>
+<span id="cb35-205"><a href="#cb35-205" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)<span class="sc">+</span></span>
+<span id="cb35-206"><a href="#cb35-206" aria-hidden="true" tabindex="-1"></a>  ggsci<span class="sc">::</span><span class="fu">scale_fill_nejm</span>(<span class="at">name=</span><span class="st">"Division"</span>)<span class="sc">+</span></span>
+<span id="cb35-207"><a href="#cb35-207" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
+<span id="cb35-208"><a href="#cb35-208" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"Count"</span>)<span class="sc">+</span></span>
+<span id="cb35-209"><a href="#cb35-209" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">suffix=</span><span class="st">"K"</span>,<span class="at">scale=</span><span class="fl">1e-4</span>))<span class="sc">+</span></span>
+<span id="cb35-210"><a href="#cb35-210" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
+<span id="cb35-211"><a href="#cb35-211" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-212"><a href="#cb35-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-213"><a href="#cb35-213" aria-hidden="true" tabindex="-1"></a><span class="fu">## Air BnB</span></span>
+<span id="cb35-214"><a href="#cb35-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-215"><a href="#cb35-215" aria-hidden="true" tabindex="-1"></a>This is a data set from air bnb. Most of this code is exactly as it was in Challenge 5, with the added work being making the plots more palatable.</span>
+<span id="cb35-216"><a href="#cb35-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-219"><a href="#cb35-219" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-220"><a href="#cb35-220" aria-hidden="true" tabindex="-1"></a>airb<span class="ot">&lt;-</span><span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"AB_NYC_2019.csv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-221"><a href="#cb35-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>()</span>
+<span id="cb35-222"><a href="#cb35-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-223"><a href="#cb35-223" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-224"><a href="#cb35-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-225"><a href="#cb35-225" aria-hidden="true" tabindex="-1"></a><span class="fu">### Univariate Visualizations</span></span>
+<span id="cb35-226"><a href="#cb35-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-227"><a href="#cb35-227" aria-hidden="true" tabindex="-1"></a>First, let's take a look at the distribution of prices.</span>
+<span id="cb35-228"><a href="#cb35-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-231"><a href="#cb35-231" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-232"><a href="#cb35-232" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(airb,<span class="fu">aes</span>(price))<span class="sc">+</span></span>
+<span id="cb35-233"><a href="#cb35-233" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span>
+<span id="cb35-234"><a href="#cb35-234" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-235"><a href="#cb35-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-236"><a href="#cb35-236" aria-hidden="true" tabindex="-1"></a>Woah, there's clearly a few outliers here.</span>
+<span id="cb35-237"><a href="#cb35-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-240"><a href="#cb35-240" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-241"><a href="#cb35-241" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(airb<span class="sc">$</span>price)</span>
+<span id="cb35-242"><a href="#cb35-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-243"><a href="#cb35-243" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="ot">&lt;-</span> airb <span class="sc">%&gt;%</span></span>
+<span id="cb35-244"><a href="#cb35-244" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(price<span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">&amp;</span> price<span class="sc">&lt;</span><span class="dv">1500</span>)</span>
+<span id="cb35-245"><a href="#cb35-245" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb35-246"><a href="#cb35-246" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(price))<span class="sc">+</span></span>
+<span id="cb35-247"><a href="#cb35-247" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()<span class="sc">+</span></span>
+<span id="cb35-248"><a href="#cb35-248" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1500</span>,<span class="dv">125</span>))</span>
+<span id="cb35-249"><a href="#cb35-249" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-250"><a href="#cb35-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-251"><a href="#cb35-251" aria-hidden="true" tabindex="-1"></a>That's better. The prices look right-skewed.</span>
+<span id="cb35-252"><a href="#cb35-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-253"><a href="#cb35-253" aria-hidden="true" tabindex="-1"></a><span class="fu">### Bivariate Visualization(s)</span></span>
+<span id="cb35-254"><a href="#cb35-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-255"><a href="#cb35-255" aria-hidden="true" tabindex="-1"></a>Let's consider the different types of rooms and how they relate to price.</span>
+<span id="cb35-256"><a href="#cb35-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-259"><a href="#cb35-259" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-260"><a href="#cb35-260" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb35-261"><a href="#cb35-261" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(room_type,price))<span class="sc">+</span></span>
+<span id="cb35-262"><a href="#cb35-262" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb35-263"><a href="#cb35-263" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
+<span id="cb35-264"><a href="#cb35-264" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-265"><a href="#cb35-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-268"><a href="#cb35-268" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-269"><a href="#cb35-269" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb35-270"><a href="#cb35-270" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(price))<span class="sc">+</span></span>
+<span id="cb35-271"><a href="#cb35-271" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()<span class="sc">+</span></span>
+<span id="cb35-272"><a href="#cb35-272" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(neighbourhood_group),<span class="at">scales=</span><span class="st">"free"</span>)</span>
+<span id="cb35-273"><a href="#cb35-273" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-274"><a href="#cb35-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-277"><a href="#cb35-277" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-278"><a href="#cb35-278" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb35-279"><a href="#cb35-279" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(room_type,price))<span class="sc">+</span></span>
+<span id="cb35-280"><a href="#cb35-280" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb35-281"><a href="#cb35-281" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(neighbourhood_group),<span class="at">scales=</span><span class="st">"free"</span>)<span class="sc">+</span></span>
+<span id="cb35-282"><a href="#cb35-282" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
+<span id="cb35-283"><a href="#cb35-283" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-284"><a href="#cb35-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-285"><a href="#cb35-285" aria-hidden="true" tabindex="-1"></a>What about the relationship between minimum number of nights and price?</span>
+<span id="cb35-286"><a href="#cb35-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-289"><a href="#cb35-289" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-290"><a href="#cb35-290" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb35-291"><a href="#cb35-291" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(minimum_nights,price))<span class="sc">+</span></span>
+<span id="cb35-292"><a href="#cb35-292" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb35-293"><a href="#cb35-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-294"><a href="#cb35-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-295"><a href="#cb35-295" aria-hidden="true" tabindex="-1"></a>There's probably too much variability/not enough data to draw a clear conclusion.</span>
+<span id="cb35-296"><a href="#cb35-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-297"><a href="#cb35-297" aria-hidden="true" tabindex="-1"></a>These AirBnB data are from New York City - so let's take a look at how the borough relates to price.</span>
+<span id="cb35-298"><a href="#cb35-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-299"><a href="#cb35-299" aria-hidden="true" tabindex="-1"></a>We can order the boxplot by descending value of <span class="in">`price`</span>, using the <span class="in">`reorder()`</span> function and the <span class="in">`FUN`</span> argument to specify that we're using *median* price.</span>
+<span id="cb35-300"><a href="#cb35-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-303"><a href="#cb35-303" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-304"><a href="#cb35-304" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb35-305"><a href="#cb35-305" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">reorder</span>(neighbourhood_group,<span class="sc">-</span>price,<span class="at">FUN =</span> median),price))<span class="sc">+</span></span>
+<span id="cb35-306"><a href="#cb35-306" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span>
+<span id="cb35-307"><a href="#cb35-307" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-308"><a href="#cb35-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-309"><a href="#cb35-309" aria-hidden="true" tabindex="-1"></a>Again, a lot of variability and skew in the data, though it makes sense that Manhattan and Brooklyn would cost the most to stay in.</span>
+<span id="cb35-310"><a href="#cb35-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-311"><a href="#cb35-311" aria-hidden="true" tabindex="-1"></a>Let's remake that plot, but make it a little prettier.</span>
+<span id="cb35-312"><a href="#cb35-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-315"><a href="#cb35-315" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-316"><a href="#cb35-316" aria-hidden="true" tabindex="-1"></a>price_med <span class="ot">&lt;-</span> airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb35-317"><a href="#cb35-317" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(neighbourhood_group) <span class="sc">%&gt;%</span></span>
+<span id="cb35-318"><a href="#cb35-318" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_price=</span><span class="fu">median</span>(price,<span class="at">na.rm=</span>T)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-319"><a href="#cb35-319" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb35-320"><a href="#cb35-320" aria-hidden="true" tabindex="-1"></a>price_med</span>
+<span id="cb35-321"><a href="#cb35-321" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb35-322"><a href="#cb35-322" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">reorder</span>(neighbourhood_group,<span class="sc">-</span>price,<span class="at">FUN =</span> median),price))<span class="sc">+</span></span>
+<span id="cb35-323"><a href="#cb35-323" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha=</span>.<span class="dv">6</span>)<span class="sc">+</span></span>
+<span id="cb35-324"><a href="#cb35-324" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_dollar</span>())<span class="sc">+</span></span>
+<span id="cb35-325"><a href="#cb35-325" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Borough"</span>,</span>
+<span id="cb35-326"><a href="#cb35-326" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">"Price"</span>)<span class="sc">+</span></span>
+<span id="cb35-327"><a href="#cb35-327" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()</span>
+<span id="cb35-328"><a href="#cb35-328" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-329"><a href="#cb35-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-330"><a href="#cb35-330" aria-hidden="true" tabindex="-1"></a>Let's compute some summary statistics and plot them. We'll compute the median (due to the skew in the data) and make bar graphs. Of course, the boxplot computes the median too, but it will be a bit easier to see when we take out the individual outliers.</span>
+<span id="cb35-331"><a href="#cb35-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-334"><a href="#cb35-334" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-335"><a href="#cb35-335" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb35-336"><a href="#cb35-336" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">borough=</span>neighbourhood_group) <span class="sc">%&gt;%</span></span>
+<span id="cb35-337"><a href="#cb35-337" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(borough) <span class="sc">%&gt;%</span></span>
+<span id="cb35-338"><a href="#cb35-338" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_price=</span><span class="fu">median</span>(price)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-339"><a href="#cb35-339" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb35-340"><a href="#cb35-340" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">reorder</span>(borough,<span class="sc">-</span>median_price), median_price))<span class="sc">+</span></span>
+<span id="cb35-341"><a href="#cb35-341" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
+<span id="cb35-342"><a href="#cb35-342" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"borough"</span>)</span>
+<span id="cb35-343"><a href="#cb35-343" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-344"><a href="#cb35-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-345"><a href="#cb35-345" aria-hidden="true" tabindex="-1"></a>That's better. Manhattan is a lot more expensive than the other boroughs - about double that of the Bronx!</span>
+<span id="cb35-346"><a href="#cb35-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-349"><a href="#cb35-349" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-350"><a href="#cb35-350" aria-hidden="true" tabindex="-1"></a>airb_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb35-351"><a href="#cb35-351" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">borough=</span>neighbourhood_group) <span class="sc">%&gt;%</span></span>
+<span id="cb35-352"><a href="#cb35-352" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(room_type,borough) <span class="sc">%&gt;%</span></span>
+<span id="cb35-353"><a href="#cb35-353" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(borough) <span class="sc">%&gt;%</span></span>
+<span id="cb35-354"><a href="#cb35-354" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc=</span>(n<span class="sc">/</span><span class="fu">sum</span>(n))<span class="sc">*</span><span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-355"><a href="#cb35-355" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(borough) <span class="sc">%&gt;%</span></span>
+<span id="cb35-356"><a href="#cb35-356" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(room_type,perc))<span class="sc">+</span></span>
+<span id="cb35-357"><a href="#cb35-357" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
+<span id="cb35-358"><a href="#cb35-358" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
+<span id="cb35-359"><a href="#cb35-359" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(borough),<span class="at">scales=</span><span class="st">"free_x"</span>)<span class="sc">+</span></span>
+<span id="cb35-360"><a href="#cb35-360" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Room Type"</span>,<span class="at">y=</span><span class="st">"Percent"</span>)<span class="sc">+</span></span>
+<span id="cb35-361"><a href="#cb35-361" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
+<span id="cb35-362"><a href="#cb35-362" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-363"><a href="#cb35-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-364"><a href="#cb35-364" aria-hidden="true" tabindex="-1"></a><span class="fu">## Eggs</span></span>
+<span id="cb35-365"><a href="#cb35-365" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-368"><a href="#cb35-368" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-369"><a href="#cb35-369" aria-hidden="true" tabindex="-1"></a>eggs <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"posts"</span>,<span class="st">"_data"</span>,<span class="st">"eggs_tidy.csv"</span>))</span>
+<span id="cb35-370"><a href="#cb35-370" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-371"><a href="#cb35-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-374"><a href="#cb35-374" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-375"><a href="#cb35-375" aria-hidden="true" tabindex="-1"></a>eggs_clean <span class="ot">&lt;-</span> eggs <span class="sc">%&gt;%</span></span>
+<span id="cb35-376"><a href="#cb35-376" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>,</span>
+<span id="cb35-377"><a href="#cb35-377" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"price"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-378"><a href="#cb35-378" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name=</span><span class="fu">str_replace</span>(name,<span class="st">"extra_large"</span>,<span class="st">"extra large"</span>),</span>
+<span id="cb35-379"><a href="#cb35-379" aria-hidden="true" tabindex="-1"></a>         <span class="at">name=</span><span class="fu">str_replace</span>(name,<span class="st">"half_dozen"</span>,<span class="st">"half dozen"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-380"><a href="#cb35-380" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(name,<span class="at">into=</span><span class="fu">c</span>(<span class="st">"size"</span>,<span class="st">"amount"</span>),<span class="at">sep=</span><span class="st">"_"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-381"><a href="#cb35-381" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">str_c</span>(month, year, <span class="at">sep=</span><span class="st">" "</span>),</span>
+<span id="cb35-382"><a href="#cb35-382" aria-hidden="true" tabindex="-1"></a>         <span class="at">date =</span> <span class="fu">my</span>(date))</span>
+<span id="cb35-383"><a href="#cb35-383" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-384"><a href="#cb35-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-387"><a href="#cb35-387" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-388"><a href="#cb35-388" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(eggs_clean,<span class="fu">aes</span>(date,price,<span class="at">col=</span>amount))<span class="sc">+</span></span>
+<span id="cb35-389"><a href="#cb35-389" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span>.<span class="dv">5</span>)<span class="sc">+</span></span>
+<span id="cb35-390"><a href="#cb35-390" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>()<span class="sc">+</span></span>
+<span id="cb35-391"><a href="#cb35-391" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels=</span>scales<span class="sc">::</span><span class="fu">label_dollar</span>(),<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">300</span>))<span class="sc">+</span></span>
+<span id="cb35-392"><a href="#cb35-392" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(size))<span class="sc">+</span></span>
+<span id="cb35-393"><a href="#cb35-393" aria-hidden="true" tabindex="-1"></a>  ggsci<span class="sc">::</span><span class="fu">scale_color_d3</span>()<span class="sc">+</span></span>
+<span id="cb35-394"><a href="#cb35-394" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Date"</span>,<span class="at">y=</span><span class="st">"Avg. Price Per Carton"</span>)<span class="sc">+</span></span>
+<span id="cb35-395"><a href="#cb35-395" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_few</span>()<span class="sc">+</span></span>
+<span id="cb35-396"><a href="#cb35-396" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
+<span id="cb35-397"><a href="#cb35-397" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
