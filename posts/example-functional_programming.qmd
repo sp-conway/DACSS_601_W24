@@ -39,7 +39,7 @@ We'll discuss how to use functions when working with a dataset, iteration, and t
 
 We've discussed `across()` before, but we'll go over it again because it is a helpful tool when programming with functions.
 
-Imagine you want to compute the [standard error](https://en.wikipedia.org/wiki/Standard_error) for each numerical variable in your variable. In our case, we'll be working with the `mtcars` data.
+Imagine you want to compute the [standard error](https://en.wikipedia.org/wiki/Standard_error) for each numerical variable in your data. In our case, we'll be working with the `mtcars` data.
 
 ```{r}
 mtcars1 <- mtcars %>%
@@ -87,7 +87,7 @@ mtcars_summary <- mtcars1 %>%
 mtcars_summary
 ```
 
-Now, imagine this in a data pipeline, going from summary -\> pivoting -\> visualization. Say you want to visualize the mean and se for each numeric variable, split by `am` (automatic vs. manual transmission). This can be easily done using a data pipeline beginning with `summarise(across())`. \
+Now, imagine this in a data pipeline, going from summary -\> pivoting -\> visualization. Say you want to visualize the mean and se for each numeric variable, split by `am` (automatic vs. manual transmission). This can be easily done using a data pipeline beginning with `summarise(across())`.\
 First, we recode `am` to have more informative labels. Then we compute mean and se for each transmission type.
 
 Next, we do some data manipulation so each row is a distinct transmission type and variable, and then we compute the lower and upper ends of our error bars by subtracting and adding `se` from `mean`, respectively.
@@ -113,13 +113,13 @@ mtcars1 %>%
 
 Note that we did all of this without copy and pasting code, writing for loops, or making separate dataframes for each variable we summarized.
 
-## For loops  
+## For loops
 
 If you've programmed in other languages, you're probably very familiar with for loops.
 
 For loops are a way to perform an operation on each discrete element of a set of data.
 
-Below, I demonstrate how for loops work in `R`, computing a [*z-score*](https://en.wikipedia.org/wiki/Standard_score)for each value in a numeric variable.
+Below, I demonstrate how for loops work in `R`, computing a [*z-score*](https://en.wikipedia.org/wiki/Standard_score) for each value in a numeric variable.
 
 I take a sample of size `n` (`n`=100 in our case) from a normal distribution, using the `rnorm()` function.
 
@@ -159,7 +159,7 @@ Indeed, the `compute_z()` function automatically does this for us.
 
 There are indeed situations where a for loop is needed. However, the `purrr` package can often be a great substitute.
 
-## `purrr`  
+## `purrr`
 
 The `purrr` package is used to *iterate* over multiple objects, much like a for loop. However, the syntax is more succinct, more readable, and `purrr` is often faster.
 
@@ -169,6 +169,16 @@ Imagine you want to take 50 samples of size 100 from a normal distribution, each
 means <- seq(10,59,1)
 n <- 100
 samps <- map(means, rnorm, n=100)
+
+take_sample <- function(m){
+  s <- rnorm(n=100,mean=m)
+  s1 <- tibble(
+    mean=m,
+    x=s
+  )
+  return(s1)
+}
+samps1 <- map_dfr(means, take_sample)
 ```
 
 `purrr` can also take a number of return types. That is, you can specify whether the function will return a dataframe, a vector of characters, etc. See [this link](https://purrr.tidyverse.org/articles/base.html) for more details.

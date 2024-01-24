@@ -830,7 +830,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>We've discussed <span class="in">`across()`</span> before, but we'll go over it again because it is a helpful tool when programming with functions.</span>
 <span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>Imagine you want to compute the <span class="co">[</span><span class="ot">standard error</span><span class="co">](https://en.wikipedia.org/wiki/Standard_error)</span> for each numerical variable in your variable. In our case, we'll be working with the <span class="in">`mtcars`</span> data.</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>Imagine you want to compute the <span class="co">[</span><span class="ot">standard error</span><span class="co">](https://en.wikipedia.org/wiki/Standard_error)</span> for each numerical variable in your data. In our case, we'll be working with the <span class="in">`mtcars`</span> data.</span>
 <span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>mtcars1 <span class="ot">&lt;-</span> mtcars <span class="sc">%&gt;%</span></span>
@@ -878,7 +878,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb15-99"><a href="#cb15-99" aria-hidden="true" tabindex="-1"></a>mtcars_summary</span>
 <span id="cb15-100"><a href="#cb15-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb15-101"><a href="#cb15-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-102"><a href="#cb15-102" aria-hidden="true" tabindex="-1"></a>Now, imagine this in a data pipeline, going from summary -<span class="sc">\&gt;</span> pivoting -<span class="sc">\&gt;</span> visualization. Say you want to visualize the mean and se for each numeric variable, split by <span class="in">`am`</span> (automatic vs. manual transmission). This can be easily done using a data pipeline beginning with <span class="in">`summarise(across())`</span>. \</span>
+<span id="cb15-102"><a href="#cb15-102" aria-hidden="true" tabindex="-1"></a>Now, imagine this in a data pipeline, going from summary -<span class="sc">\&gt;</span> pivoting -<span class="sc">\&gt;</span> visualization. Say you want to visualize the mean and se for each numeric variable, split by <span class="in">`am`</span> (automatic vs. manual transmission). This can be easily done using a data pipeline beginning with <span class="in">`summarise(across())`</span>.\</span>
 <span id="cb15-103"><a href="#cb15-103" aria-hidden="true" tabindex="-1"></a>First, we recode <span class="in">`am`</span> to have more informative labels. Then we compute mean and se for each transmission type.</span>
 <span id="cb15-104"><a href="#cb15-104" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-105"><a href="#cb15-105" aria-hidden="true" tabindex="-1"></a>Next, we do some data manipulation so each row is a distinct transmission type and variable, and then we compute the lower and upper ends of our error bars by subtracting and adding <span class="in">`se`</span> from <span class="in">`mean`</span>, respectively.</span>
@@ -904,13 +904,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb15-127"><a href="#cb15-127" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-128"><a href="#cb15-128" aria-hidden="true" tabindex="-1"></a>Note that we did all of this without copy and pasting code, writing for loops, or making separate dataframes for each variable we summarized.</span>
 <span id="cb15-129"><a href="#cb15-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-130"><a href="#cb15-130" aria-hidden="true" tabindex="-1"></a><span class="fu">## For loops  </span></span>
+<span id="cb15-130"><a href="#cb15-130" aria-hidden="true" tabindex="-1"></a><span class="fu">## For loops</span></span>
 <span id="cb15-131"><a href="#cb15-131" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-132"><a href="#cb15-132" aria-hidden="true" tabindex="-1"></a>If you've programmed in other languages, you're probably very familiar with for loops.</span>
 <span id="cb15-133"><a href="#cb15-133" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-134"><a href="#cb15-134" aria-hidden="true" tabindex="-1"></a>For loops are a way to perform an operation on each discrete element of a set of data.</span>
 <span id="cb15-135"><a href="#cb15-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-136"><a href="#cb15-136" aria-hidden="true" tabindex="-1"></a>Below, I demonstrate how for loops work in <span class="in">`R`</span>, computing a <span class="co">[</span><span class="ot">*z-score*</span><span class="co">](https://en.wikipedia.org/wiki/Standard_score)</span>for each value in a numeric variable.</span>
+<span id="cb15-136"><a href="#cb15-136" aria-hidden="true" tabindex="-1"></a>Below, I demonstrate how for loops work in <span class="in">`R`</span>, computing a <span class="co">[</span><span class="ot">*z-score*</span><span class="co">](https://en.wikipedia.org/wiki/Standard_score)</span> for each value in a numeric variable.</span>
 <span id="cb15-137"><a href="#cb15-137" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-138"><a href="#cb15-138" aria-hidden="true" tabindex="-1"></a>I take a sample of size <span class="in">`n`</span> (<span class="in">`n`</span>=100 in our case) from a normal distribution, using the <span class="in">`rnorm()`</span> function.</span>
 <span id="cb15-139"><a href="#cb15-139" aria-hidden="true" tabindex="-1"></a></span>
@@ -950,7 +950,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb15-177"><a href="#cb15-177" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-178"><a href="#cb15-178" aria-hidden="true" tabindex="-1"></a>There are indeed situations where a for loop is needed. However, the <span class="in">`purrr`</span> package can often be a great substitute.</span>
 <span id="cb15-179"><a href="#cb15-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-180"><a href="#cb15-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## `purrr`  </span></span>
+<span id="cb15-180"><a href="#cb15-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## `purrr`</span></span>
 <span id="cb15-181"><a href="#cb15-181" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-182"><a href="#cb15-182" aria-hidden="true" tabindex="-1"></a>The <span class="in">`purrr`</span> package is used to *iterate* over multiple objects, much like a for loop. However, the syntax is more succinct, more readable, and <span class="in">`purrr`</span> is often faster.</span>
 <span id="cb15-183"><a href="#cb15-183" aria-hidden="true" tabindex="-1"></a></span>
@@ -960,13 +960,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb15-189"><a href="#cb15-189" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">10</span>,<span class="dv">59</span>,<span class="dv">1</span>)</span>
 <span id="cb15-190"><a href="#cb15-190" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
 <span id="cb15-191"><a href="#cb15-191" aria-hidden="true" tabindex="-1"></a>samps <span class="ot">&lt;-</span> <span class="fu">map</span>(means, rnorm, <span class="at">n=</span><span class="dv">100</span>)</span>
-<span id="cb15-192"><a href="#cb15-192" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb15-193"><a href="#cb15-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-194"><a href="#cb15-194" aria-hidden="true" tabindex="-1"></a><span class="in">`purrr`</span> can also take a number of return types. That is, you can specify whether the function will return a dataframe, a vector of characters, etc. See <span class="co">[</span><span class="ot">this link</span><span class="co">](https://purrr.tidyverse.org/articles/base.html)</span> for more details.</span>
-<span id="cb15-195"><a href="#cb15-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-196"><a href="#cb15-196" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
-<span id="cb15-197"><a href="#cb15-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-198"><a href="#cb15-198" aria-hidden="true" tabindex="-1"></a>This has provided an introduction to functional programming in <span class="in">`R`</span>. There's plenty more to be said, but this demonstrates the way functions provide the backbone for most <span class="in">`R`</span> operations.</span>
+<span id="cb15-192"><a href="#cb15-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-193"><a href="#cb15-193" aria-hidden="true" tabindex="-1"></a>take_sample <span class="ot">&lt;-</span> <span class="cf">function</span>(m){</span>
+<span id="cb15-194"><a href="#cb15-194" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">100</span>,<span class="at">mean=</span>m)</span>
+<span id="cb15-195"><a href="#cb15-195" aria-hidden="true" tabindex="-1"></a>  s1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb15-196"><a href="#cb15-196" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean=</span>m,</span>
+<span id="cb15-197"><a href="#cb15-197" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span>s</span>
+<span id="cb15-198"><a href="#cb15-198" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-199"><a href="#cb15-199" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(s1)</span>
+<span id="cb15-200"><a href="#cb15-200" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-201"><a href="#cb15-201" aria-hidden="true" tabindex="-1"></a>samps1 <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(means, take_sample)</span>
+<span id="cb15-202"><a href="#cb15-202" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb15-203"><a href="#cb15-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-204"><a href="#cb15-204" aria-hidden="true" tabindex="-1"></a><span class="in">`purrr`</span> can also take a number of return types. That is, you can specify whether the function will return a dataframe, a vector of characters, etc. See <span class="co">[</span><span class="ot">this link</span><span class="co">](https://purrr.tidyverse.org/articles/base.html)</span> for more details.</span>
+<span id="cb15-205"><a href="#cb15-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-206"><a href="#cb15-206" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
+<span id="cb15-207"><a href="#cb15-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-208"><a href="#cb15-208" aria-hidden="true" tabindex="-1"></a>This has provided an introduction to functional programming in <span class="in">`R`</span>. There's plenty more to be said, but this demonstrates the way functions provide the backbone for most <span class="in">`R`</span> operations.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
