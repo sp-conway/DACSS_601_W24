@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/challenge9_solutions.html",
       "/posts/challenge8_solutions.html",
       "/posts/example-functional_programming.html",
       "/posts/example-functions.html",
